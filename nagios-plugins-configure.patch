@@ -78,7 +78,7 @@
  
 +if test -n "$ac_cv_proc_meminfo"; then
 +	AC_DEFINE(HAVE_PROC_MEMINFO,1,[Define if we have /proc/meminfo])
-+	AC_DEFINE_UNQUOTED(PROC_MEMINFO,$ac_cv_proc_meminfo,[path to /proc/meminfo if name changes])
++	AC_DEFINE_UNQUOTED(PROC_MEMINFO,"$ac_cv_proc_meminfo",[path to /proc/meminfo if name changes])
 +	EXTRAS="$EXTRAS check_swap"
 +fi
 +
