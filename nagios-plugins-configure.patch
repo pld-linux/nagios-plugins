@@ -24,3 +24,59 @@
  
  dnl #### Process table test
  
+--- ./configure.in	2005-03-23 21:22:18.000000000 +0200
++++ ./configure.in~	2005-03-23 21:21:23.000000000 +0200
+@@ -581,12 +581,24 @@
+ dnl #### Process table test
+ 
+ AC_PATH_PROG(PATH_TO_PS,ps)
+-
+ AC_MSG_CHECKING(for ps syntax)
++
++AC_ARG_WITH(ps_command,--with-ps-command=<syntax> Verbatim command to execute for ps in check_procs,PS_COMMAND=$withval)
++AC_ARG_WITH(ps_format,--with-ps-format=<format> Format string for scanning ps output in check_procs,PS_FORMAT=$withval)
++AC_ARG_WITH(ps_cols,--with-cols=<number> Number of columns in ps command,PS_COLS=$withval)
++AC_ARG_WITH(ps_varlist,--with-ps-varlist=<list> Variable list for sscanf of 'ps' output,PS_VARLIST=$withval)
++
++if test -n "$PS_COMMAND" && test -n "$PS_FORMAT" && test -n "$PS_COLS" && test -n "$PS_VARLIST"; then 
++	ac_cv_ps_varlist="$PS_VARLIST"
++	ac_cv_ps_command="$PS_COMMAND"
++	ac_cv_ps_format="$PS_FORMAT"
++	ac_cv_ps_cols="$PS_COLS"
++	AC_MSG_RESULT([$ac_cv_ps_command])
++
+ dnl For OpenBSD 3.2 & 3.3. Must come before ps -weo
+ dnl Should also work for FreeBSD 5.2.1 and 5.3
+ dnl  STAT UCOMM              VSZ   RSS USER      PPID COMMAND
+-if ps -axwo 'stat comm vsz rss user uid ppid args' 2>/dev/null | \
++elif ps -axwo 'stat comm vsz rss user uid ppid args' 2>/dev/null | \
+ 	egrep -i ["^ *STAT +[UCOMAND]+ +VSZ +RSS +USER +UID +PPID +COMMAND"] > /dev/null
+ then
+ 	ac_cv_ps_varlist="[procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos]"
+--- ../nagios-plugins-1.4/configure.in	2005-03-23 21:34:43.000000000 +0200
++++ ./configure.in	2005-03-23 21:35:08.000000000 +0200
+@@ -583,10 +583,23 @@
+ AC_PATH_PROG(PATH_TO_PS,ps)
+ 
+ AC_MSG_CHECKING(for ps syntax)
++
++AC_ARG_WITH(ps_command,--with-ps-command=<syntax> Verbatim command to execute for ps in check_procs,PS_COMMAND=$withval)
++AC_ARG_WITH(ps_format,--with-ps-format=<format> Format string for scanning ps output in check_procs,PS_FORMAT=$withval)
++AC_ARG_WITH(ps_cols,--with-cols=<number> Number of columns in ps command,PS_COLS=$withval)
++AC_ARG_WITH(ps_varlist,--with-ps-varlist=<list> Variable list for sscanf of 'ps' output,PS_VARLIST=$withval)
++
++if test -n "$PS_COMMAND" && test -n "$PS_FORMAT" && test -n "$PS_COLS" && test -n "$PS_VARLIST"; then 
++	ac_cv_ps_varlist="$PS_VARLIST"
++	ac_cv_ps_command="$PS_COMMAND"
++	ac_cv_ps_format="$PS_FORMAT"
++	ac_cv_ps_cols="$PS_COLS"
++	AC_MSG_RESULT([(command-line) $ac_cv_ps_command])
++
+ dnl For OpenBSD 3.2 & 3.3. Must come before ps -weo
+ dnl Should also work for FreeBSD 5.2.1 and 5.3
+ dnl  STAT UCOMM              VSZ   RSS USER      PPID COMMAND
+-if ps -axwo 'stat comm vsz rss user uid ppid args' 2>/dev/null | \
++elif ps -axwo 'stat comm vsz rss user uid ppid args' 2>/dev/null | \
+ 	egrep -i ["^ *STAT +[UCOMAND]+ +VSZ +RSS +USER +UID +PPID +COMMAND"] > /dev/null
+ then
+ 	ac_cv_ps_varlist="[procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos]"
