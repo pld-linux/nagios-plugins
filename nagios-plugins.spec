@@ -8,6 +8,8 @@ Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	0078c9c8137694181a4cdf596fdbd74f
 URL:		http://nagiosplug.sourceforge.net/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
@@ -18,10 +20,10 @@ Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Plugins for Nagios
+Plugins for Nagios.
 
 %description -l pl
-Wtyczki dla Nagiosa
+Wtyczki dla Nagiosa.
 
 %prep
 %setup -q
@@ -39,7 +41,8 @@ rm -f missing
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
