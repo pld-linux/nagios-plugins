@@ -85,3 +85,55 @@
  AC_PATH_PROG(PATH_TO_DIG,dig)
  AC_DEFINE_UNQUOTED(PATH_TO_DIG,"$PATH_TO_DIG",[Path to dig command, if present])
  if test -n "$PATH_TO_DIG"; then
+--- ./configure.in~	2005-02-08 16:25:52.000000000 +0200
++++ ./configure.in	2005-03-27 22:51:34.000000000 +0300
+@@ -1089,29 +1100,34 @@
+ fi
+ fi
+ 
+-AC_PATH_PROG(PATH_TO_NSLOOKUP,nslookup)
+ 
+ AC_MSG_CHECKING(for nslookup syntax)
+-if test -n "$PATH_TO_NSLOOKUP"
+-then
+-	if $PATH_TO_NSLOOKUP -sil 127.0.0.1 2>&1 | grep ["Invalid option: sil"] >/dev/null
++AC_ARG_WITH(nslookup_command,--with-nslookup-command=<syntax> sets syntax for nslookup,ac_cv_nslookup_command=$withval)
++if test -n "$$ac_cv_nslookup_command"; then
++	AC_MSG_RESULT([(command line) $ac_cv_nslookup_command])
++else
++	AC_PATH_PROG(PATH_TO_NSLOOKUP,nslookup)
++	if test -n "$PATH_TO_NSLOOKUP"
+ 	then
+-		ac_cv_nslookup_command="$PATH_TO_NSLOOKUP"
+-		AC_MSG_RESULT([$ac_cv_nslookup_command])
++		if $PATH_TO_NSLOOKUP -sil 127.0.0.1 2>&1 | grep ["Invalid option: sil"] >/dev/null
++		then
++			ac_cv_nslookup_command="$PATH_TO_NSLOOKUP"
++			AC_MSG_RESULT([$ac_cv_nslookup_command])
+ 
+-	else
+-		ac_cv_nslookup_command="$PATH_TO_NSLOOKUP -sil"
+-		AC_MSG_RESULT([$ac_cv_nslookup_command])
++		else
++			ac_cv_nslookup_command="$PATH_TO_NSLOOKUP -sil"
++			AC_MSG_RESULT([$ac_cv_nslookup_command])
+ 
++		fi
++	else
++		AC_MSG_WARN([nslookup command not found])
+ 	fi
+-	EXTRAS="$EXTRAS check_dns"
+-
+-else
+-	AC_MSG_WARN([nslookup command not found])
+ fi
+ 
+-AC_DEFINE_UNQUOTED(NSLOOKUP_COMMAND,"$ac_cv_nslookup_command",
+-	[path and args for nslookup])
++if test -n "$ac_cv_nslookup_command"; then
++	EXTRAS="$EXTRAS check_dns"
++	AC_DEFINE_UNQUOTED(NSLOOKUP_COMMAND,"$ac_cv_nslookup_command", [path and args for nslookup])
++fi
+ 
+ AC_PATH_PROG(PATH_TO_HOST,host)
+ if test -n "$ac_cv_path_PATH_TO_HOST"
