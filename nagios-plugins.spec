@@ -5,7 +5,7 @@
 #   REQUIREMENTS explains the dependencies.
 #
 Summary:	Host/service/network monitoring program plugins for Nagios
-Summary(pl):	Wtyczki dla Nagiosa
+Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
 Release:	2.13
@@ -43,125 +43,189 @@ Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Nagios is a program that will monitor hosts and services on your network, and
-to email or page you when a problem arises or is resolved. Nagios runs on a
-unix server as a background or daemon process, intermittently running checks on
-various services that you specify. The actual service checks are performed by
-separate "plugin" programs which return the status of the checks to Nagios.
+Nagios is a program that will monitor hosts and services on your
+network, and to email or page you when a problem arises or is
+resolved. Nagios runs on a Unix server as a background or daemon
+process, intermittently running checks on various services that you
+specify. The actual service checks are performed by separate "plugin"
+programs which return the status of the checks to Nagios.
 
-This package contains the basic plugins necessary for use with the Nagios
-package.
+This package contains the basic plugins necessary for use with the
+nagios package.
 
 %description -l pl
-Wtyczki dla Nagiosa.
+Nagios to program monitoruj±cy hosty i us³ugi w sieci i powiadamiaj±cy
+poczt± elektroniczn± lub na pager o wyst±pieniu lub rozwi±zaniu
+problemów. Nagios dzia³a na serwerze uniksowym w tle lub jako demon,
+regularnie przeprowadzaj±c kontrolê ró¿nych podanych mu us³ug. Sama
+kontrola us³ug jest wykonywana poprzez oddzielne "wtyczki" - programy
+zwracajace stan danej us³ugi do Nagiosa.
+
+Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 
 %package snmp
-Summary:	Nagios plugins using SNMP protocol to query information.
+Summary:	Nagios plugins using SNMP protocol to query information
+Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
 
 %description snmp
 Nagios plugins using SNMP protocol to query information.
 
+%description snmp -l pl
+Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji.
+
 %package samba
-Summary:	Nagios plugin to check remote disk using smbclient.
+Summary:	Nagios plugin to check remote disk using smbclient
+Summary(pl):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z u¿yciem smbclienta
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	samba-client
 
 %description samba
 Perl Check SMB Disk plugin for Nagios.
 
+%description samba -l pl
+Perlowa wtyczka dla Nagiosa sprawdzaj±ca dyski SMB.
+
 %package sensors
-Summary:	Nagios plugin to check hardware status using the lm_sensors package.
+Summary:	Nagios plugin to check hardware status using the lm_sensors package
+Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu sprzêtu przy u¿yciu pakietu lm_sensors
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	lm_sensors
 
 %description sensors
 This plugin checks hardware status using the lm_sensors package.
 
+%description sensors -l pl
+Ta wtyczka sprawdza stan sprzêtu przy u¿yciu pakietu lm_sensors.
+
 %package mysql
-Summary:	Nagios plugin to tests a MySQL DBMS.
+Summary:	Nagios plugin to test a MySQL DBMS
+Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	mysql-libs
 
 %description mysql
-This plugin tests a MySQL DBMS to determine whether it is active and accepting
-queries.
+This plugin tests a MySQL DBMS to determine whether it is active and
+accepting queries.
+
+%description mysql -l pl
+Ta wtyczka sprawdza serwer baz danych MySQL, aby okre¶liæ, czy jest
+aktywny i przyjmuje zapytania.
 
 %package pgsql
-Summary:	Nagios plugin to tests a PostgreSQL DBMS.
+Summary:	Nagios plugin to test a PostgreSQL DBMS
+Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	postgresql-libs
 
 %description pgsql
-This plugin tests a PostgreSQL DBMS to determine whether it is active and
-accepting queries. In its current operation, it simply connects to the
-specified database, and then disconnects. If no database is specified, it
-connects to the template1 database, which is present in every functioning
-PostgreSQL DBMS.
+This plugin tests a PostgreSQL DBMS to determine whether it is active
+and accepting queries. In its current operation, it simply connects to
+the specified database, and then disconnects. If no database is
+specified, it connects to the template1 database, which is present in
+every functioning PostgreSQL DBMS.
+
+%description pgsql -l pl
+Ta wtyczka sprawdza serwer baz danych PostgreSQL, aby okre¶liæ, czy
+jest aktywny i przyjmuje zapytania. Aktualnie po prostu ³±czy siê do
+okre¶lonej bazy danych i roz³±cza. Je¶li nie podano bazy danych, ³±czy
+siê do bazy danych template1, obecnej w ka¿dym dzia³aj±cym systemie
+PostgreSQL.
 
 %package radius
-Summary:	Nagios plugin to test a radius server to see if it is accepting connections.
+Summary:	Nagios plugin to test a radius server to see if it is accepting connections
+Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera radius pod k±tem przyjmowania po³±czeñ
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	radiusclient
 
 %description radius
 This plugin tests a radius server to see if it is accepting connections.
 
+%description radius -l pl
+Ta wtyczka sprawdza serwer us³ugi radius, aby zobaczyæ, czy przyjmuje
+po³±czenia.
+
 %package qstat
-Summary:	Nagios plugin to check status of Internet game servers.
+Summary:	Nagios plugin to check status of Internet game servers
+Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu serwerów gier internetowych
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	qstat
 
 %description qstat
-This plugin uses the 'qstat' command, the popular game server status query
-tool.
+This plugin uses the 'qstat' command, the popular game server status
+query tool.
 
-QStat is a command-line program that displays information about Internet game
-servers.
+QStat is a command-line program that displays information about
+Internet game servers.
 
-The servers are either down, non-responsive, or running a game.  For servers
-running a game, the server name, map name, current number of players, and
-response time are displayed.  Server rules and player information may also be
-displayed.
+The servers are either down, non-responsive, or running a game. For
+servers running a game, the server name, map name, current number of
+players, and response time are displayed. Server rules and player
+information may also be displayed.
+
+%description qstat -l pl
+Ta wtyczka u¿ywa polecenia 'qstat' - popularnego narzêdzia do
+zapytañ o stan serwerów gier.
+
+QStat to program dzia³aj±cy z linii poleceñ wy¶wietlaj±cy informacje o
+serwerach gier internetowych.
+
+Serwery mog± byæ wy³±czone, nie odpowiadaæ, b±d¼ mieæ uruchomion± grê.
+Dla serwerów z grami wy¶wietlanea s±: nazwa serwera, nazwa mapy,
+aktualna liczba graczy i czas odpowiedzi. Mog± byæ dodatkowo
+wy¶wietlone regu³y serwera i informacje o graczach.
 
 %package ldap
-Summary:	Nagios plugin to check LDAP servers.
+Summary:	Nagios plugin to check LDAP servers
+Summary(pl):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
 Group:		Networking
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Requires:	openldap-libs
 
 %description ldap
 Nagios plugin to check LDAP servers.
 
+%description ldap -l pl
+Wtyczka Nagiosa do sprawdzania serwerów LDAP.
+
 # nsclient not packaged in PLD
 #%package nsclient
-#Summary:	Nagios plugin to check NT server with NSClient.
+#Summary:	Nagios plugin to check NT server with NSClient
+#Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy u¿yciu NSClienta
 #Group:		Networking
-#Requires:	%{name} = %{version}
+#Requires:	%{name} = %{version}-%{release}
 #Requires:	nsclient
 #
 #%description nsclient
 #Nagios plugin to check NT server with NSClient.
+#
+#%description nsclient -l pl
+#Wtyczka Nagiosa do sprawdzania serwera NT przy u¿yciu NSClienta.
 
 # requisite not packaged in PLD
 #%package nwstat
 #Summary:	Nagios plugin nwstat
+#Summary(pl):	Wtyczka nwstat do Nagiosa
 #Group:		Networking
-#Requires:	%{name} = %{version}
+#Requires:	%{name} = %{version}-%{release}
 #Requires:	mrtgext
 #
 #%description nsclient
 #Nagios plugin using MRTGEXT module
-#http://forge.novell.com/modules/xfmod/project/?mrtgext
+#(http://forge.novell.com/modules/xfmod/project/?mrtgext).
+#
+#%description nsclient -l pl
+#Wtyczka nagiosa u¿ywaj±ca modu³u MRTGEXT
+#(http://forge.novell.com/modules/xfmod/project/?mrtgext).
 
 %prep
 %setup -q
@@ -171,7 +235,6 @@ Nagios plugin to check LDAP servers.
 %patch3 -p0
 
 %build
-rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__autoheader}
@@ -179,7 +242,8 @@ rm -f missing
 
 # need /usr/sbin in PATH,
 # otherwise configure will fail locating ntpq and few others.
-%configure PATH=${PATH}:/usr/sbin \
+%configure \
+	PATH=${PATH}:/usr/sbin \
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--with-cgiurl=/nagios/cgi-bin \
 	--with-ping_command='/bin/ping -n %%s -c %%d' \
