@@ -3,12 +3,13 @@
 # - see anything useful from contrib/
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
+# - check_ping crashes
 #
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.1
+Release:	0.12
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -17,6 +18,7 @@ Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
 Patch2:		%{name}-subst.patch
 Patch3:		%{name}-check_swap.c.patch
+Patch4:		%{name}-contrib-API.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -234,10 +236,35 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 %package contrib
 Summary:	Contributed nagios plugins
 Group:		Networking
+# for utils.pm, utils.sh
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+# check_apache
+Requires:	perl-libwww
+Requires:	perl-URI
+# check_apc_ups.pl, check_breeze.pl
+Requires:	net-snmp-utils
+# check_arping.pl
+#Requires:	perl(Net::Arping) - not found
+# check_bgpstate.pl
+Requires:	whois
+Requires:	perl-Net-SNMP
+# check_traceroute.pl
+Requires:	traceroute
+# check_traceroute-pure_perl.pl
+Requires:	perl-Net-Traceroute
+# check_mysqlslave.pl
+Requires:	perl-DBI
+# check_temp_fsc
+Requires:	perl-SNMP_Session
+# check_smart.pl
+Requires:	smartmontools
+# check_smb.sh
+Requires:	samba
+# check_adptraid.sh
+Requires:	dptutil
 
 %description contrib
-Contributed nagios plugins. Some of them work, some do
+Contributed nagios plugins. Some of them work, some do not.
 
 %prep
 %setup -q
@@ -245,11 +272,28 @@ Contributed nagios plugins. Some of them work, some do
 %patch1 -p0
 #%patch2 -p0
 #%patch3 -p0
+%patch4 -p1
 
 # bring contribs into shape...
-mv contrib/check_compaq_insight.pl{,msg}
+cd contrib
+mv check_compaq_insight.{pl,msg}
 sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
-	contrib/check_compaq_insight.pl.msg > contrib/check_compaq_insight.pl
+	check_compaq_insight.msg > check_compaq_insight.pl
+
+sed -i -e '1s,#!.*/bin/perl,#!%{__perl},' \
+	check_{oracle_tbs,{snmp_{{disk,process}_monitor,printer},nagios_db,flexlm,mysql}.pl}
+
+sed -i -e "
+	s,use lib '/usr/local/nagios/libexec/',use lib '%{_plugindir}',
+	s,require '/usr/libexec/nagios/plugins',require '%{_plugindir}',
+	s,use lib utils.pm,use lib '%{_plugindir}',
+" *.pl
+
+mv check_appletalk.{pl,orig}
+sed -ne '/---/!p;/---/q' < check_appletalk.orig > check_appletalk.pl
+
+chmod a+x check_*.{pl,sh,py}
+chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
 
 %build
 %{__gettextize}
@@ -258,13 +302,13 @@ sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
 %{__autoheader}
 %{__automake}
 
-# need /usr/sbin in PATH,
+# Need /usr/sbin in PATH,
 # otherwise configure will fail locating ntpq and few others.
 %configure \
 	PATH=${PATH}:/usr/sbin \
 	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
-	--with-ping_command='/bin/ping -n %%s -c %%d' \
+	--with-ping-command='/bin/ping -n %%s -c %%d' \
 	--with-df-command="/bin/df" \
 	--with-mailq-command="/usr/bin/mailq" \
 	--with-host-command="/usr/bin/host" \
@@ -286,14 +330,8 @@ sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
 %{__make}
 
 
-%install
-rm -rf $RPM_BUILD_ROOT
-
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
-
+# contrib. mostly useless. but you'll never know
 cd contrib
-# work in progress, currently in install section for faster testing (--short-circuit is my friend)
 
 %{__cc} %{rpmcflags} check_cluster.c -o check_cluster
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
@@ -302,9 +340,8 @@ cd contrib
 #%{__cc} %{rpmcflags} check_ipxping.c -o check_ipxping
 #%{__cc} %{rpmcflags} check_logins.c -o check_logins
 
-%{__cc} %{rpmcflags} check_mysql.o -o check_mysql $(mysql_config --libs)
 %{__cc} %{rpmcflags} check_mysql.c -c $(mysql_config --cflags) -I../plugins -I.. -I../lib
-mv check_mysql check_mysql2
+%{__cc} %{rpmcflags} check_mysql.o -o check_mysql2 $(mysql_config --libs)
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_rbl.c
 %{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o
@@ -314,14 +351,20 @@ mv check_mysql check_mysql2
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_uptime.c
 %{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o
 
-chmod a+x check_*.{pl,sh,py}
-chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
+%install
+rm -rf $RPM_BUILD_ROOT
 
-sed -i -e "s,use lib '/usr/local/nagios/libexec/',use lib '/usr/lib/nagios/plugins'," *.pl
-
-find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT/%{_plugindir}
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang %{name}
+
+cd contrib
+# work in progress, currently in install section for faster testing (--short-circuit is my friend)
+
+# all files with exec permissions are check plugins.
+find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT/%{_plugindir}
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
