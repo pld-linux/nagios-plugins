@@ -310,10 +310,11 @@ rm -f check_{breeze,wave}.pl
 	--with-pgsql \
 	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
 	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
-    --with-ps-command="/bin/ps axwo 'stat uid ppid vsz rss pcpu comm args'" \
-    --with-ps-format="%%s %%d %%d %%d %%d %%f %%s %%n" \
-    --with-ps-cols=8 \
-    --with-ps-varlist="procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos" \
+	--with-ps-command="/bin/ps axwo 'stat uid ppid vsz rss pcpu comm args'" \
+	--with-ps-format="%%s %%d %%d %%d %%d %%f %%s %%n" \
+	--with-ps-cols=8 \
+	--with-ps-varlist="procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos" \
+	--with-proc-meminfo=/proc/meminfo \
 
 %{__make}
 
