@@ -1,21 +1,28 @@
---- plugins-scripts/subst.in~	2002-06-06 07:16:56.000000000 +0300
-+++ plugins-scripts/subst.in	2004-12-08 14:58:28.000000000 +0200
-@@ -44,9 +44,6 @@
+do the utils.pm substitution AFTER path based substitution
+otherwise if 'nagios' is in $PATH somewhy, then wrong perl library path is
+substituted to perl programs
+
+glen, 2004-12-08
+
+--- ./plugins-scripts/subst.in~	2003-07-02 18:01:22.000000000 +0300
++++ ./plugins-scripts/subst.in	2005-04-02 00:11:24.000000000 +0300
+@@ -44,10 +44,6 @@
  /^#! ?\/.*\/[a-z]{0,2}awk/ {sub(/^#! ?\/.*\/[a-z]{0,2}awk/,"#! @AWK@");}
  /^#! ?\/.*\/sh/ {sub(/^#! ?\/.*\/sh/,"#! @SHELL@");}
  
 -# add to libexecdir to INC for perl utils.pm
--/^use/ { if (/lib/) { if (/utils.pm/ ) {sub(/utils.pm/,led() )} } }
+-/^use/ { if (/lib/) { if (/utils.pm|"."/ ) {sub(/utils.pm|"."/,led() )} } }
 -
- 
+-
  # Trusted path mechanism (deprecated)
  
-@@ -68,6 +65,9 @@
+ /^[ \t]*\$ENV[ \t]*\{[ \t'"]*PATH[ \t"']*\}[ \t]*=/ {
+@@ -68,6 +64,9 @@
  	sub(c,which(c,path));
  }
  
 +# add to libexecdir to INC for perl utils.pm
-+/^use/ { if (/lib/) { if (/utils.pm/ ) {sub(/utils.pm/,led() )} } }
++/^use/ { if (/lib/) { if (/utils.pm|"."/ ) {sub(/utils.pm|"."/,led() )} } }
 +
  {
  	print;
