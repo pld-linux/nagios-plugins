@@ -1,6 +1,5 @@
 #
 # TODO:
-# - swap patch from gentoo (for 2.6 kernels)
 # - see anything useful from contrib/
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
@@ -14,6 +13,7 @@ Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
 Patch2:		%{name}-subst.patch
+Patch3:		%{name}-check_swap.c.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -135,6 +135,7 @@ displayed.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p0
+%patch3 -p0
 
 %build
 rm -f missing
