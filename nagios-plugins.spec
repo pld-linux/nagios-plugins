@@ -2,7 +2,7 @@ Summary:	Plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
