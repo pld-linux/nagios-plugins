@@ -7,6 +7,7 @@ License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	0078c9c8137694181a4cdf596fdbd74f
+Patch0:		%{name}-configure.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -27,6 +28,7 @@ Wtyczki dla Nagiosa.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 rm -f missing
@@ -36,7 +38,22 @@ rm -f missing
 %{__automake}
 %configure \
 	--libexecdir=%{_libdir}/nagios/plugins \
-	--with-df-command="/bin/df"
+	--with-ping-command="/bin/ping" \
+	--with-df-command="/bin/df" \
+	--with-mailq-command="/usr/bin/mailq" \
+	--with-host-command="/usr/bin/host" \
+	--with-nslookup-command="/usr/bin/nslookup -sil" \
+	--with-uptime-command="/usr/bin/uptime" \
+	--with-smbclient-command="/usr/bin/smbclient" \
+	--with-ps-command="/bin/ps -weo 'vsz comm'" \
+	--with-ps-format="%d %s" \
+	--with-ps-raw-command="/bin/ps -weo 'stat user ppid args'" \
+	--with-ps-varlist="procstat,&procuid,&procppid,procprog,&pos" \
+	--with-rss-command="/bin/ps -weo \'vsz comm\' -weo \'rss comm'" \
+	--with-rss-format="%d %s" \
+	--with-vsz-command="/bin/ps -weo 'vsz comm' -weo 'vsz comm'" \
+	--with-vsz-format="%d %s" \
+	--with-ssh-command="/usr/bin/ssh"
 %{__make}
 
 %install
