@@ -285,9 +285,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog FAQ NEWS README REQUIREMENTS SUPPORT CODING
-%defattr(755,root,root,755)
+%doc ACKNOWLEDGEMENTS AUTHORS BUGS CHANGES CODING ChangeLog
+%doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
+%defattr(755,root,root,755)
 # utils
 %{_plugindir}/negate
 %{_plugindir}/urlize
