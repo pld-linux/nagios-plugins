@@ -1,10 +1,117 @@
---- ./configure.in~	2005-03-08 02:42:40.562147519 +0200
-+++ ./configure.in	2005-03-08 02:54:45.648208868 +0200
-@@ -843,6 +843,7 @@
- 	if test -n "$ac_cv_ping_packets_first"
- 	then
- 		ac_cv_ping_packets_first=yes
-+		ac_cv_ping_has_timeout=yes
- 	fi
+--- configure.in.org	2004-08-29 20:40:02.000000000 +0000
++++ configure.in	2004-08-30 00:13:59.000000000 +0000
+@@ -411,13 +411,32 @@
+                [AC_DEFINE(SOCKET_SIZE_TYPE, int, [Define type of socket size])
+                 AC_MSG_RESULT(int)])
  
- elif [[ "z$ac_cv_uname_s" = "zUnixWare" ]] && \
+-if test -f "/proc/loadavg"
+-then
+-  AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
+-  AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
+-fi
++AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
++AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
+ 
+ AC_PATH_PROG(PATH_TO_PS,ps)
++
++AC_ARG_WITH(ps_command,--with-ps-command=<syntax> sets syntax for ps,PS_COMMAND=$withval)
++AC_ARG_WITH(ps_format,--with-ps-format=<syntax> sets syntax for ps,PS_FORMAT=$withval)
++AC_ARG_WITH(ps_raw_command,--with-ps-raw-command=<syntax> sets syntax for ps,PS_RAW_COMMAND=$withval)
++AC_ARG_WITH(ps_varlist,--with-ps-varlist=<syntax> sets syntax for ps,PS_VARLIST=$withval)
++AC_ARG_WITH(rss_command,--with-rss-command=<syntax> sets syntax for ps,RSS_COMMAND=$withval)
++AC_ARG_WITH(rss_format,--with-rss-format=<syntax> sets syntax for ps,RSS_FORMAT=$withval)
++AC_ARG_WITH(vsz_command,--with-vsz-command=<syntax> sets syntax for ps,VSZ_COMMAND=$withval)
++AC_ARG_WITH(vsz_format,--with-vsz-format=<syntax> sets syntax for ps,VSZ_FORMAT=$withval)
++
++if test -n "$PS_COMMAND" && test -n "$PS_FORMAT" && test -n "$PS_RAW_COMMAND" && test -n "$PS_VARLIST" && test -n "$RSS_COMMAND" && test -n "$RSS_FORMAT" && test -n "$VSZ_COMMAND" && test -n "$VSZ_FORMAT"
++then
++AC_DEFINE_UNQUOTED(PS_COMMAND,"$PS_COMMAND",[])
++AC_DEFINE_UNQUOTED(PS_FORMAT,"$PS_FORMAT",[])
++AC_DEFINE_UNQUOTED(PS_RAW_COMMAND,"$PS_RAW_COMMAND",[])
++AC_DEFINE_UNQUOTED(PS_VARLIST,"$PS_VARLIST",[])
++AC_DEFINE_UNQUOTED(RSS_COMMAND,"$RSS_COMMAND",[])
++AC_DEFINE_UNQUOTED(RSS_FORMAT,"$RSS_FORMAT",[])
++AC_DEFINE_UNQUOTED(VSZ_COMMAND,"$VSZ_COMMAND",[])
++AC_DEFINE_UNQUOTED(VSZ_FORMAT,"$VSZ_FORMAT",[])
++AC_DEFINE(USE_PS_VARS,1,[Define if we use custom variable list for sscanf])
++else
+ dnl For OpenBSD 3.2 & 3.3. Must come before ps -weo
+ dnl  STAT UCOMM              VSZ   RSS USER      PPID COMMAND
+ if ps -axwo 'stat comm vsz rss user uid ppid args' 2>/dev/null | egrep -i ["^ *STAT +UCOMM +VSZ +RSS +USER +UID +PPID +COMMAND"] > /dev/null
+@@ -686,6 +705,7 @@
+ else
+ 	echo "** Unable to find usable ps syntax"
+ fi
++fi
+ 
+ AC_ARG_WITH(df_command,--with-df-command=<syntax> sets syntax for df,DF_COMMAND=$withval)
+ if test -n "$DF_COMMAND"
+@@ -793,13 +813,28 @@
+ 	AC_MSG_WARN([nslookup command not found])
+ fi
+ 
++AC_ARG_WITH(nslookup_command,--with-nslookup-command=<syntax> sets syntax for nslookup,PATH_TO_NSLOOKUP=$withval)
++if test -n "PATH_TO_NSLOOKUP"
++then
++	EXTRAS="$EXTRAS check_dns"
++	AC_DEFINE_UNQUOTED(NSLOOKUP_COMMAND,"$PATH_TO_NSLOOKUP",[path and args for nslookup])
++fi
++
+ AC_PATH_PROG(PATH_TO_HOST,host)
+ if test -n "$ac_cv_path_PATH_TO_HOST"
+ then
+ 	EXTRAS="$EXTRAS check_dns"
+ fi
+ 
++AC_ARG_WITH(host_command,--with-host-command=<syntax> sets syntax for host,HOST_COMMAND=$withval)
++if test -n "$HOST_COMMAND"
++then
++	EXTRAS="$EXTRAS check_dns"
++	AC_DEFINE_UNQUOTED(HOST_COMMAND,"$HOST_COMMAND",[path and args for host command])
++fi
++
+ AC_PATH_PROG(PATH_TO_UPTIME,uptime)
++AC_ARG_WITH(uptime_command,--with-uptime-command=<syntax> sets syntax for uptime,PATH_TO_UPTIME=$withval)
+ AC_DEFINE_UNQUOTED(PATH_TO_UPTIME,"$PATH_TO_UPTIME",[path to uptime binary])
+ 
+ AC_PATH_PROG(PATH_TO_RPCINFO,rpcinfo)
+@@ -825,7 +860,8 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_SMBCLIENT,smbclient)
+-if test -x "$PATH_TO_SMBCLIENT"
++AC_ARG_WITH(smbclient_command,--with-smbclient-command=<syntax> sets syntax for smbclient,PATH_TO_SMBCLIENT=$withval)
++if test -n "$PATH_TO_SMBCLIENT"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_SMBCLIENT,"$PATH_TO_SMBCLIENT",[path to smbclient binary])
+ else
+@@ -888,7 +924,8 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_SSH,ssh)
+-if test -x "$PATH_TO_SSH"
++AC_ARG_WITH(ssh_command,--with-ssh-command=<syntax> sets syntax for ssh,PATH_TO_SSH=$withval)
++if test -n "$PATH_TO_SSH"
+ then
+ 	AC_DEFINE_UNQUOTED(SSH_COMMAND,"$PATH_TO_SSH",[path to ssh binary])
+ 	EXTRAS="$EXTRAS check_by_ssh"
+@@ -898,7 +935,8 @@
+ 
+ 
+ AC_PATH_PROG(PATH_TO_MAILQ,mailq)
+-if test -x "$PATH_TO_MAILQ"
++AC_ARG_WITH(mailq_command,--with-mailq-command=<syntax> sets syntax for mailq,PATH_TO_MAILQ=$withval)
++if test -n "$PATH_TO_MAILQ"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_MAILQ,"$PATH_TO_MAILQ",[path to mailq])
+ else
+@@ -960,6 +998,9 @@
+ 	echo "        using HP-UX format HP-UX"
+ fi
+ 
++AC_DEFINE_UNQUOTED(PROC_MEMINFO,"/proc/meminfo",[path to /proc/meminfo if name changes])
++	
++
+ AC_PATH_PROG(PATH_TO_DIG,dig)
+ AC_DEFINE_UNQUOTED(PATH_TO_DIG,"$PATH_TO_DIG",[Path to dig command, if present])
+ if test -n "$PATH_TO_DIG"; then
