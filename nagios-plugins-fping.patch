@@ -1,0 +1,12 @@
+--- configure.in~	2004-12-08 12:18:03.000000000 +0200
++++ configure.in	2004-12-08 12:24:07.000000000 +0200
+@@ -915,7 +915,8 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_FPING,fping)
+-if test -x "$PATH_TO_FPING"
++# we ignore execute test check, as by default we don't have access to it
++if test -f "$PATH_TO_FPING"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_FPING,"$PATH_TO_FPING",[path to fping])
+ 	EXTRAS="$EXTRAS check_fping"
