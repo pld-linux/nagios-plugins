@@ -1,9 +1,7 @@
 #
 # TODO:
-# - see anything useful from contrib/
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - remove BR that are only needed for path check (patch configure.in)
 #
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
@@ -16,9 +14,7 @@ Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
-Patch2:		%{name}-subst.patch
-Patch3:		%{name}-check_swap.c.patch
-Patch4:		%{name}-contrib-API.patch
+Patch2:		%{name}-contrib-API.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -28,7 +24,6 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	gettext-devel
-# Not really neccesary at build time
 BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
@@ -38,15 +33,15 @@ BuildRequires:	qstat
 BuildRequires:	samba-client
 # for rpcinfo
 BuildRequires:	glibc-misc
-# for host and nslookup
+# for host and nslookup, check_dig, check_dns
 BuildRequires:	bind-utils
 BuildRequires:	ntp
-PreReq:	nagios
+PreReq:		nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	_plugindir	%{_libdir}/nagios/plugins
+%define		_plugindir	%{_libdir}/nagios/plugins
 
 %description
 Nagios is a program that will monitor hosts and services on your
@@ -261,7 +256,7 @@ Requires:	smartmontools
 # check_smb.sh
 Requires:	samba
 # check_adptraid.sh
-Requires:	dptutil
+#Requires:	dptutil
 
 %description contrib
 Contributed nagios plugins. Some of them work, some do not.
@@ -270,9 +265,7 @@ Contributed nagios plugins. Some of them work, some do not.
 %setup -q
 %patch0 -p1
 %patch1 -p0
-#%patch2 -p0
-#%patch3 -p0
-%patch4 -p1
+%patch2 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -313,23 +306,6 @@ chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fs
 	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
 	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
 
-# configure.in not patched yet
-#	--with-df-command="/bin/df" \
-#	--with-mailq-command="/usr/bin/mailq" \
-#	--with-host-command="/usr/bin/host" \
-#	--with-nslookup-command="/usr/bin/nslookup -sil" \
-#	--with-uptime-command="/usr/bin/uptime" \
-#	--with-smbclient-command="/usr/bin/smbclient" \
-#	--with-ps-command="/bin/ps -weo 'vsz comm'" \
-#	--with-ps-format="%d %s" \
-#	--with-ps-raw-command="/bin/ps -weo 'stat user ppid args'" \
-#	--with-ps-varlist="procstat,&procuid,&procppid,procprog,&pos" \
-#	--with-rss-command="/bin/ps -weo \'vsz comm\' -weo \'rss comm'" \
-#	--with-rss-format="%d %s" \
-#	--with-vsz-command="/bin/ps -weo 'vsz comm' -weo 'vsz comm'" \
-#	--with-vsz-format="%d %s" \
-#	--with-ssh-command="/usr/bin/ssh" \
-
 %{__make}
 
 
@@ -338,10 +314,6 @@ cd contrib
 
 %{__cc} %{rpmcflags} check_cluster.c -o check_cluster
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
-#%{__cc} %{rpmcflags} check_hltherm.c -o check_hltherm
-#%{__cc} %{rpmcflags} check_http-with-client-certificate.c -o check_http-with-client-certificate
-#%{__cc} %{rpmcflags} check_ipxping.c -o check_ipxping
-#%{__cc} %{rpmcflags} check_logins.c -o check_logins
 
 %{__cc} %{rpmcflags} check_mysql.c -c $(mysql_config --cflags) -I../plugins -I.. -I../lib
 %{__cc} %{rpmcflags} check_mysql.o -o check_mysql2 $(mysql_config --libs)
@@ -363,11 +335,8 @@ rm -rf $RPM_BUILD_ROOT
 %find_lang %{name}
 
 cd contrib
-# work in progress, currently in install section for faster testing (--short-circuit is my friend)
-
-# all files with exec permissions are check plugins.
+# all files with exec permissions are plugins.
 find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT/%{_plugindir}
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -386,13 +355,16 @@ rm -rf $RPM_BUILD_ROOT
 
 # plugins
 %{_plugindir}/check_by_ssh
+%{_plugindir}/check_dhcp
 %{_plugindir}/check_dig
 %{_plugindir}/check_disk
 %{_plugindir}/check_dns
 %{_plugindir}/check_dummy
+%{_plugindir}/check_file_age
 %{_plugindir}/check_fping
 %{_plugindir}/check_ftp
 %{_plugindir}/check_http
+%{_plugindir}/check_icmp
 %{_plugindir}/check_imap
 %{_plugindir}/check_ircd
 %{_plugindir}/check_load
@@ -416,7 +388,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_udp
 %{_plugindir}/check_ups
 %{_plugindir}/check_users
-#%{_plugindir}/check_vsz
 %{_plugindir}/check_swap
 
 # segfaults under 2.6
@@ -430,11 +401,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_oracle
 
 %{_plugindir}/check_nagios
-
-# new
-%{_plugindir}/check_dhcp
-%{_plugindir}/check_file_age
-%{_plugindir}/check_icmp
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
