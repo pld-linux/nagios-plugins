@@ -3,13 +3,13 @@
 # - see anything useful from contrib/
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - check_ping crashes
+# - remove BR that are only needed for path check (patch configure.in)
 #
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.12
+Release:	0.16
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -268,7 +268,7 @@ Contributed nagios plugins. Some of them work, some do not.
 
 %prep
 %setup -q
-#%patch0 -p0
+%patch0 -p1
 %patch1 -p0
 #%patch2 -p0
 #%patch3 -p0
@@ -308,24 +308,27 @@ chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fs
 	PATH=${PATH}:/usr/sbin \
 	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
-	--with-ping-command='/bin/ping -n %%s -c %%d' \
-	--with-df-command="/bin/df" \
-	--with-mailq-command="/usr/bin/mailq" \
-	--with-host-command="/usr/bin/host" \
-	--with-nslookup-command="/usr/bin/nslookup -sil" \
-	--with-uptime-command="/usr/bin/uptime" \
-	--with-smbclient-command="/usr/bin/smbclient" \
-	--with-ps-command="/bin/ps -weo 'vsz comm'" \
-	--with-ps-format="%d %s" \
-	--with-ps-raw-command="/bin/ps -weo 'stat user ppid args'" \
-	--with-ps-varlist="procstat,&procuid,&procppid,procprog,&pos" \
-	--with-rss-command="/bin/ps -weo \'vsz comm\' -weo \'rss comm'" \
-	--with-rss-format="%d %s" \
-	--with-vsz-command="/bin/ps -weo 'vsz comm' -weo 'vsz comm'" \
-	--with-vsz-format="%d %s" \
-	--with-ssh-command="/usr/bin/ssh" \
 	--with-mysql \
 	--with-pgsql \
+	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
+	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
+
+# configure.in not patched yet
+#	--with-df-command="/bin/df" \
+#	--with-mailq-command="/usr/bin/mailq" \
+#	--with-host-command="/usr/bin/host" \
+#	--with-nslookup-command="/usr/bin/nslookup -sil" \
+#	--with-uptime-command="/usr/bin/uptime" \
+#	--with-smbclient-command="/usr/bin/smbclient" \
+#	--with-ps-command="/bin/ps -weo 'vsz comm'" \
+#	--with-ps-format="%d %s" \
+#	--with-ps-raw-command="/bin/ps -weo 'stat user ppid args'" \
+#	--with-ps-varlist="procstat,&procuid,&procppid,procprog,&pos" \
+#	--with-rss-command="/bin/ps -weo \'vsz comm\' -weo \'rss comm'" \
+#	--with-rss-format="%d %s" \
+#	--with-vsz-command="/bin/ps -weo 'vsz comm' -weo 'vsz comm'" \
+#	--with-vsz-format="%d %s" \
+#	--with-ssh-command="/usr/bin/ssh" \
 
 %{__make}
 
