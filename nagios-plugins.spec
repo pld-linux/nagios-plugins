@@ -1,11 +1,14 @@
 #
 # TODO:
 # - see anything useful from contrib/
+# - package requisites for unifished packages -nsclient and -nwstat
+#   REQUIREMENTS explains the dependencies.
+#
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	2.12
+Release:	2.13
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -130,6 +133,36 @@ running a game, the server name, map name, current number of players, and
 response time are displayed.  Server rules and player information may also be
 displayed.
 
+%package ldap
+Summary:	Nagios plugin to check LDAP servers.
+Group:		Networking
+Requires:	%{name} = %{version}
+Requires:	openldap-libs
+
+%description ldap
+Nagios plugin to check LDAP servers.
+
+# nsclient not packaged in PLD
+#%package nsclient
+#Summary:	Nagios plugin to check NT server with NSClient.
+#Group:		Networking
+#Requires:	%{name} = %{version}
+#Requires:	nsclient
+#
+#%description nsclient
+#Nagios plugin to check NT server with NSClient.
+
+# requisite not packaged in PLD
+#%package nwstat
+#Summary:	Nagios plugin nwstat
+#Group:		Networking
+#Requires:	%{name} = %{version}
+#Requires:	mrtgext
+#
+#%description nsclient
+#Nagios plugin using MRTGEXT module
+#http://forge.novell.com/modules/xfmod/project/?mrtgext
+
 %prep
 %setup -q
 %patch0 -p0
@@ -201,16 +234,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/nagios/plugins/check_http
 %{_libdir}/nagios/plugins/check_imap
 %{_libdir}/nagios/plugins/check_ircd
-%{_libdir}/nagios/plugins/check_ldap
 %{_libdir}/nagios/plugins/check_load
 %{_libdir}/nagios/plugins/check_log
 %{_libdir}/nagios/plugins/check_mailq
 %{_libdir}/nagios/plugins/check_mrtg
 %{_libdir}/nagios/plugins/check_mrtgtraf
 %{_libdir}/nagios/plugins/check_nntp
-%{_libdir}/nagios/plugins/check_nt
 %{_libdir}/nagios/plugins/check_ntp
-%{_libdir}/nagios/plugins/check_nwstat
 %{_libdir}/nagios/plugins/check_overcr
 %{_libdir}/nagios/plugins/check_ping
 %{_libdir}/nagios/plugins/check_pop
@@ -242,7 +272,6 @@ rm -rf $RPM_BUILD_ROOT
 
 # not there.
 #%{_libdir}/nagios/plugins/check_nagios
-
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
@@ -280,3 +309,15 @@ rm -rf $RPM_BUILD_ROOT
 %files qstat
 %defattr(755,root,root,755)
 %{_libdir}/nagios/plugins/check_game
+
+%files ldap
+%defattr(755,root,root,755)
+%{_libdir}/nagios/plugins/check_ldap
+
+#%files nsclient
+#%defattr(755,root,root,755)
+#%{_libdir}/nagios/plugins/check_nt
+
+#%files nwstat
+#%defattr(755,root,root,755)
+#%{_libdir}/nagios/plugins/check_nwstat
