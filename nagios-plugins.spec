@@ -321,8 +321,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/nagios/plugins/check_ups
 %{_libdir}/nagios/plugins/check_users
 %{_libdir}/nagios/plugins/check_vsz
-
-# 2.6 patch needed
 %{_libdir}/nagios/plugins/check_swap
 
 # segfaults under 2.6
