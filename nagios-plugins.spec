@@ -7,14 +7,15 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.18
+Release:	0.19
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
-Patch2:		%{name}-contrib-API.patch
+Patch2:		%{name}-tainted.patch
+Patch3:		%{name}-contrib-API.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -236,7 +237,7 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 # check_apache
 Requires:	perl-libwww
 Requires:	perl-URI
-# check_apc_ups.pl, check_breeze.pl
+# check_apc_ups.pl
 Requires:	net-snmp-utils
 # check_arping.pl
 #Requires:	perl(Net::Arping) - not found
@@ -266,6 +267,7 @@ Contributed nagios plugins. Some of them work, some do not.
 %patch0 -p1
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -287,6 +289,9 @@ sed -ne '/---/!p;/---/q' < check_appletalk.orig > check_appletalk.pl
 
 chmod a+x check_*.{pl,sh,py}
 chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
+
+# same as in main
+rm -f check_{breeze,wave}.pl
 
 %build
 %{__gettextize}
@@ -336,7 +341,7 @@ rm -rf $RPM_BUILD_ROOT
 
 cd contrib
 # all files with exec permissions are plugins.
-find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT/%{_plugindir}
+find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_plugindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -372,11 +377,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_mailq
 %{_plugindir}/check_mrtg
 %{_plugindir}/check_mrtgtraf
+%{_plugindir}/check_nagios
 %{_plugindir}/check_nntp
 %{_plugindir}/check_ntp
 %{_plugindir}/check_overcr
 %attr(2755,root,adm) %{_plugindir}/check_ping
 %{_plugindir}/check_pop
+%{_plugindir}/check_procs
 %{_plugindir}/check_real
 %{_plugindir}/check_rpc
 %{_plugindir}/check_simap
@@ -390,17 +397,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_users
 %{_plugindir}/check_swap
 
-# segfaults under 2.6
-%{_plugindir}/check_procs
-
 # requries license.dat
 %{_plugindir}/check_flexlm
 
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
 %{_plugindir}/check_oracle
-
-%{_plugindir}/check_nagios
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
@@ -409,10 +411,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_hpjd
 %{_plugindir}/check_ifoperstatus
 %{_plugindir}/check_ifstatus
-
-# syntax errors, incomplete file paths
 %{_plugindir}/check_wave
-# syntax errors
 %{_plugindir}/check_breeze
 
 %files samba
@@ -462,7 +461,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_axis.sh
 %{_plugindir}/check_backup.pl
 %{_plugindir}/check_bgpstate.pl
-%{_plugindir}/check_breeze.pl
 %{_plugindir}/check_cluster
 %{_plugindir}/check_cluster2
 %{_plugindir}/check_compaq_insight.pl
@@ -539,7 +537,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_plugindir}/check_traceroute.pl
 %{_plugindir}/check_uptime
 %{_plugindir}/check_vcs.pl
-%{_plugindir}/check_wave.pl
-
 %{_plugindir}/check_mysql2
 %{_plugindir}/check_wins.pl
