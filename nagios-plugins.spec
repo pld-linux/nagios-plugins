@@ -6,6 +6,7 @@ Release:	0.9
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
+# Source0-md5:	74ce3383cb39c85df78a1db7ac50838b
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
