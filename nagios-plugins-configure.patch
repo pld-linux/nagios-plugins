@@ -64,7 +64,7 @@
  AC_MSG_CHECKING([for /proc/meminfo])
 -if [cat /proc/meminfo > /dev/null 2>&1]
 -then
-+if -n "$ac_cv_proc_meminfo"; then
++if test -n "$ac_cv_proc_meminfo"; then
 +	AC_MSG_RESULT([(command line) $ac_cv_proc_meminfo])
 +elif [cat /proc/meminfo > /dev/null 2>&1]; then
  	AC_MSG_RESULT([found /proc/meminfo])
