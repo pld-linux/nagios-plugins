@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	2.10
+Release:	2.12
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -53,13 +53,14 @@ package.
 Wtyczki dla Nagiosa.
 
 %package snmp
-Summary:	snmp
+Summary:	Nagios plugins using SNMP protocol to query information.
 Group:		Networking
 Requires:	%{name} = %{version}
+Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
 
 %description snmp
-snmp
+Nagios plugins using SNMP protocol to query information.
 
 %package samba
 Summary:	Nagios plugin to check remote disk using smbclient.
@@ -196,7 +197,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/nagios/plugins/check_dummy
 %{_libdir}/nagios/plugins/check_fping
 %{_libdir}/nagios/plugins/check_ftp
-%{_libdir}/nagios/plugins/check_hpjd
 %{_libdir}/nagios/plugins/check_http
 %{_libdir}/nagios/plugins/check_imap
 %{_libdir}/nagios/plugins/check_ircd
@@ -217,7 +217,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/nagios/plugins/check_rpc
 %{_libdir}/nagios/plugins/check_simap
 %{_libdir}/nagios/plugins/check_smtp
-%{_libdir}/nagios/plugins/check_snmp
 %{_libdir}/nagios/plugins/check_spop
 %{_libdir}/nagios/plugins/check_ssh
 %{_libdir}/nagios/plugins/check_tcp
@@ -233,9 +232,6 @@ rm -rf $RPM_BUILD_ROOT
 # segfaults under 2.6
 %{_libdir}/nagios/plugins/check_procs
 
-# syntax errors
-%{_libdir}/nagios/plugins/check_breeze
-
 # requries license.dat
 %{_libdir}/nagios/plugins/check_flexlm
 
@@ -250,10 +246,15 @@ rm -rf $RPM_BUILD_ROOT
 # Not to be confused with nagios-snmp-plugins
 %files snmp
 %defattr(755,root,root,755)
-# syntax errors, incomplete file paths
-%{_libdir}/nagios/plugins/check_wave
+%{_libdir}/nagios/plugins/check_snmp
+%{_libdir}/nagios/plugins/check_hpjd
 %{_libdir}/nagios/plugins/check_ifoperstatus
 %{_libdir}/nagios/plugins/check_ifstatus
+
+# syntax errors, incomplete file paths
+%{_libdir}/nagios/plugins/check_wave
+# syntax errors
+%{_libdir}/nagios/plugins/check_breeze
 
 %files samba
 %defattr(755,root,root,755)
