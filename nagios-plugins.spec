@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	2.9
+Release:	2.10
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -111,13 +111,13 @@ Requires:	radiusclient
 %description radius
 This plugin tests a radius server to see if it is accepting connections.
 
-%package game
+%package qstat
 Summary:	Nagios plugin to check status of Internet game servers.
 Group:		Networking
 Requires:	%{name} = %{version}
 Requires:	qstat
 
-%description game
+%description qstat
 This plugin uses the 'qstat' command, the popular game server status query
 tool.
 
@@ -275,6 +275,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(755,root,root,755)
 %{_libdir}/nagios/plugins/check_radius
 
-%files game
+%files qstat
 %defattr(755,root,root,755)
 %{_libdir}/nagios/plugins/check_game
