@@ -231,12 +231,25 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 #Wtyczka nagiosa u¿ywaj±ca modu³u MRTGEXT
 #(http://forge.novell.com/modules/xfmod/project/?mrtgext).
 
+%package contrib
+Summary:	Contributed nagios plugins
+Group:		Networking
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description contrib
+Contributed nagios plugins. Some of them work, some do
+
 %prep
 %setup -q
 #%patch0 -p0
 %patch1 -p0
 #%patch2 -p0
 #%patch3 -p0
+
+# bring contribs into shape...
+mv contrib/check_compaq_insight.pl{,msg}
+sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
+	contrib/check_compaq_insight.pl.msg > contrib/check_compaq_insight.pl
 
 %build
 %{__gettextize}
@@ -272,11 +285,41 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 
 %{__make}
 
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+cd contrib
+# work in progress, currently in install section for faster testing (--short-circuit is my friend)
+
+%{__cc} %{rpmcflags} check_cluster.c -o check_cluster
+%{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
+#%{__cc} %{rpmcflags} check_hltherm.c -o check_hltherm
+#%{__cc} %{rpmcflags} check_http-with-client-certificate.c -o check_http-with-client-certificate
+#%{__cc} %{rpmcflags} check_ipxping.c -o check_ipxping
+#%{__cc} %{rpmcflags} check_logins.c -o check_logins
+
+%{__cc} %{rpmcflags} check_mysql.o -o check_mysql $(mysql_config --libs)
+%{__cc} %{rpmcflags} check_mysql.c -c $(mysql_config --cflags) -I../plugins -I.. -I../lib
+mv check_mysql check_mysql2
+
+%{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_rbl.c
+%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o
+
+%{__cc} %{rpmcflags} check_timeout.c -o check_timeout
+
+%{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_uptime.c
+%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o
+
+chmod a+x check_*.{pl,sh,py}
+chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
+
+sed -i -e "s,use lib '/usr/local/nagios/libexec/',use lib '/usr/lib/nagios/plugins'," *.pl
+
+find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT/%{_plugindir}
 
 %find_lang %{name}
 
@@ -395,3 +438,96 @@ rm -rf $RPM_BUILD_ROOT
 #%files nwstat
 #%defattr(755,root,root,755)
 #%{_plugindir}/check_nwstat
+
+%files contrib
+%defattr(755,root,root,755)
+%{_plugindir}/check_adptraid.sh
+%{_plugindir}/check_apache.pl
+%{_plugindir}/check_apc_ups.pl
+%{_plugindir}/check_appletalk.pl
+%{_plugindir}/check_arping.pl
+%{_plugindir}/check_asterisk.pl
+%{_plugindir}/check_axis.sh
+%{_plugindir}/check_backup.pl
+%{_plugindir}/check_bgpstate.pl
+%{_plugindir}/check_breeze.pl
+%{_plugindir}/check_cluster
+%{_plugindir}/check_cluster2
+%{_plugindir}/check_compaq_insight.pl
+#%{_plugindir}/check_cpqarray
+%{_plugindir}/check_digitemp.pl
+%{_plugindir}/check_disk_snmp.pl
+%{_plugindir}/check_dl_size.pl
+%{_plugindir}/check_dlswcircuit.pl
+%{_plugindir}/check_dns_random.pl
+%{_plugindir}/check_email_loop.pl
+%{_plugindir}/check_fan_cpq_present
+%{_plugindir}/check_fan_fsc_present
+%{_plugindir}/check_flexlm.pl
+%{_plugindir}/check_frontpage
+%{_plugindir}/check_ftpget.pl
+#%{_plugindir}/check_hltherm.c
+%{_plugindir}/check_hprsc.pl
+#%{_plugindir}/check_http-with-client-certificate.c
+%{_plugindir}/check_hw.sh
+%{_plugindir}/check_ica_master_browser.pl
+%{_plugindir}/check_ica_metaframe_pub_apps.pl
+%{_plugindir}/check_ica_program_neigbourhood.pl
+%{_plugindir}/check_inodes-freebsd.pl
+%{_plugindir}/check_inodes.pl
+#%{_plugindir}/check_ipxping.c
+%{_plugindir}/check_javaproc.pl
+%{_plugindir}/check_joy.sh
+%{_plugindir}/check_linux_raid.pl
+%{_plugindir}/check_lmmon.pl
+%{_plugindir}/check_log2.pl
+#%{_plugindir}/check_logins.c
+%{_plugindir}/check_lotus.pl
+%{_plugindir}/check_maxchannels.pl
+%{_plugindir}/check_maxwanstate.pl
+%{_plugindir}/check_mem.pl
+%{_plugindir}/check_ms_spooler.pl
+%{_plugindir}/check_mssql.sh
+#%{_plugindir}/check_mysql.c
+%{_plugindir}/check_mysql.pl
+%{_plugindir}/check_mysqlslave.pl
+%{_plugindir}/check_nagios.pl
+%{_plugindir}/check_nagios_db.pl
+%{_plugindir}/check_nagios_db_pg.pl
+%{_plugindir}/check_netapp.pl
+%{_plugindir}/check_nmap.py
+%{_plugindir}/check_nt
+%{_plugindir}/check_nwstat
+%{_plugindir}/check_nwstat.pl
+%{_plugindir}/check_ora_table_space.pl
+%{_plugindir}/check_oracle_instance.pl
+%{_plugindir}/check_oracle_tbs
+%{_plugindir}/check_pcpmetric.py
+%{_plugindir}/check_pfstate
+%{_plugindir}/check_pop3.pl
+%{_plugindir}/check_procl.sh
+%{_plugindir}/check_procr.sh
+%{_plugindir}/check_qmailq.pl
+%{_plugindir}/check_rbl
+%{_plugindir}/check_remote_nagios_status.pl
+%{_plugindir}/check_rrd_data.pl
+%{_plugindir}/check_sap.sh
+%{_plugindir}/check_smart.pl
+%{_plugindir}/check_smb.sh
+%{_plugindir}/check_snmp_disk_monitor.pl
+%{_plugindir}/check_snmp_printer.pl
+%{_plugindir}/check_snmp_process_monitor.pl
+%{_plugindir}/check_snmp_procs.pl
+%{_plugindir}/check_sockets.pl
+%{_plugindir}/check_sybase
+%{_plugindir}/check_temp_cpq
+%{_plugindir}/check_temp_fsc
+%{_plugindir}/check_timeout
+%{_plugindir}/check_traceroute-pure_perl.pl
+%{_plugindir}/check_traceroute.pl
+%{_plugindir}/check_uptime
+%{_plugindir}/check_vcs.pl
+%{_plugindir}/check_wave.pl
+
+%{_plugindir}/check_mysql2
+%{_plugindir}/check_wins.pl
