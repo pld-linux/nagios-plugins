@@ -1,0 +1,62 @@
+--- ./plugins-scripts/check_breeze.pl~	2005-03-15 00:05:04.000000000 +0200
++++ ./plugins-scripts/check_breeze.pl	2005-03-23 20:16:43.123595875 +0200
+@@ -15,6 +15,7 @@
+ $ENV{'PATH'}='';
+ $ENV{'BASH_ENV'}=''; 
+ $ENV{'ENV'}='';
++$ENV{'CDPATH'}='';
+ 
+ Getopt::Long::Configure('bundling');
+ GetOptions
+--- ./plugins-scripts/check_wave.pl~	2005-03-23 20:20:48.076385198 +0200
++++ ./plugins-scripts/check_wave.pl	2005-03-23 20:21:02.774789652 +0200
+@@ -19,6 +19,7 @@
+ $ENV{'PATH'}='';
+ $ENV{'BASH_ENV'}='';
+ $ENV{'ENV'}='';
++$ENV{'CDPATH'}='';
+ 
+ Getopt::Long::Configure('bundling');
+ GetOptions
+@@ -50,34 +51,34 @@
+ ($opt_w) || ($opt_w = shift) || ($opt_w = 60);
+ my $warning = $1 if ($opt_w =~ /([0-9]+)/);
+ 
+-$low1 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.8.1`;
++$low1 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.8.1`;
+ @test = split(/ /,$low1);
+ $low1 = $test[2];
+ 
+-$med1 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.9.1`;
++$med1 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.9.1`;
+ @test = split(/ /,$med1);
+ $med1 = $test[2];
+ 
+-$high1 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.10.1`;
++$high1 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.10.1`;
+ @test = split(/ /,$high1);
+ $high1 = $test[2];
+ 
+ sleep(2);
+ 
+-$snr = `snmpget $host public .1.3.6.1.4.1.762.2.5.2.1.17.1`;
++$snr = `/usr/bin/snmpget $host public .1.3.6.1.4.1.762.2.5.2.1.17.1`;
+ @test = split(/ /,$snr);
+ $snr = $test[2];
+ $snr = int($snr*25);
+ 
+-$low2 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.8.1`;
++$low2 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.8.1`;
+ @test = split(/ /,$low2);
+ $low2 = $test[2];
+ 
+-$med2 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.9.1`;
++$med2 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.9.1`;
+ @test = split(/ /,$med2);
+ $med2 = $test[2];
+ 
+-$high2 = `snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.10.1`;
++$high2 = `/usr/bin/snmpget $host public .1.3.6.1.4.1.74.2.21.1.2.1.10.1`;
+ @test = split(/ /,$high2);
+ $high2 = $test[2];
+ 
