@@ -7,7 +7,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.20
+Release:	0.22
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -31,12 +31,12 @@ BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
 BuildRequires:	fping
 BuildRequires:	qstat
-BuildRequires:	samba-client
+#BuildRequires:	samba-client
 # for rpcinfo
-BuildRequires:	glibc-misc
+#BuildRequires:	glibc-misc
 # for host and nslookup, check_dig, check_dns
-BuildRequires:	bind-utils
-BuildRequires:	ntp
+#BuildRequires:	bind-utils
+#BuildRequires:	ntp
 PreReq:		nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
@@ -315,6 +315,11 @@ rm -f check_{breeze,wave}.pl
 	--with-ps-cols=8 \
 	--with-ps-varlist="procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos" \
 	--with-proc-meminfo=/proc/meminfo \
+	--with-nslookup-command="/usr/bin/nslookup -sil" \
+	--with-uptime-command=/usr/bin/uptime \
+	--with-rpcinfo-command=/usr/sbin/rpcinfo \
+	--with-ntpdate-command=/usr/sbin/ntpdate \
+	--with-smbclient-command=/usr/bin/smbclient \
 
 %{__make}
 
