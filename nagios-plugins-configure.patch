@@ -51,3 +51,37 @@
  	egrep -i ["^ *STAT +[UCOMAND]+ +VSZ +RSS +USER +UID +PPID +COMMAND"] > /dev/null
  then
  	ac_cv_ps_varlist="[procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos]"
+--- ./configure.in~	2005-02-08 16:25:52.000000000 +0200
++++ ./configure.in	2005-03-23 21:50:10.000000000 +0200
+@@ -1426,20 +1424,26 @@
+ 		[Conversion factor to MB])
+ fi
+ 
++AC_ARG_WITH(proc-meminfo,--with-proc-meminfo=<path> path to /proc/meminfo if name changes,ac_cv_proc_meminfo=$withval)
+ dnl dunno why this does not work below - use hack (kbd)
+ dnl fine on linux, broken on solaris
+ dnl if /bin/test -e "/proc/meminfo"
+ AC_MSG_CHECKING([for /proc/meminfo])
+-if [cat /proc/meminfo > /dev/null 2>&1]
+-then
++if -n "$ac_cv_proc_meminfo"; then
++	AC_MSG_RESULT([(command line) $ac_cv_proc_meminfo])
++elif [cat /proc/meminfo > /dev/null 2>&1]; then
+ 	AC_MSG_RESULT([found /proc/meminfo])
+-	AC_DEFINE(HAVE_PROC_MEMINFO,1,[Define if we have /proc/meminfo])
+-	AC_DEFINE_UNQUOTED(PROC_MEMINFO,"/proc/meminfo",[path to /proc/meminfo if name changes])
+-	EXTRAS="$EXTRAS check_swap"
++	ac_cv_proc_meminfo="/proc/meminfo"
+ else
+ 	AC_MSG_RESULT([no])
+ fi
+ 
++if test -n "$ac_cv_proc_meminfo"; then
++	AC_DEFINE(HAVE_PROC_MEMINFO,1,[Define if we have /proc/meminfo])
++	AC_DEFINE_UNQUOTED(PROC_MEMINFO,$ac_cv_proc_meminfo,[path to /proc/meminfo if name changes])
++	EXTRAS="$EXTRAS check_swap"
++fi
++
+ AC_PATH_PROG(PATH_TO_DIG,dig)
+ AC_DEFINE_UNQUOTED(PATH_TO_DIG,"$PATH_TO_DIG",[Path to dig command, if present])
+ if test -n "$PATH_TO_DIG"; then
