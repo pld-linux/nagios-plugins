@@ -306,8 +306,8 @@ rm -f check_{breeze,wave}.pl
 	PATH=${PATH}:/usr/sbin \
 	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
-	--with-mysql \
-	--with-pgsql \
+	--with-mysql=%{_prefix} \
+	--with-pgsql=%{_prefix} \
 	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
 	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
 	--with-ps-command="/bin/ps axwo 'stat uid ppid vsz rss pcpu comm args'" \
