@@ -7,12 +7,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.3.1
-Release:	3
+Version:	1.4
+Release:	0.1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	0078c9c8137694181a4cdf596fdbd74f
+# Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
 Patch2:		%{name}-subst.patch
@@ -25,6 +25,7 @@ BuildRequires:	net-snmp-utils
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	gettext-devel
 # Not really neccesary at build time
 BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
@@ -42,6 +43,8 @@ Requires:	nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define	_plugindir	%{_libdir}/nagios/plugins
 
 %description
 Nagios is a program that will monitor hosts and services on your
@@ -68,7 +71,7 @@ Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
 
@@ -82,7 +85,7 @@ Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji.
 Summary:	Nagios plugin to check remote disk using smbclient
 Summary(pl):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z u¿yciem smbclienta
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	samba-client
 
 %description samba
@@ -95,7 +98,7 @@ Perlowa wtyczka dla Nagiosa sprawdzaj±ca dyski SMB.
 Summary:	Nagios plugin to check hardware status using the lm_sensors package
 Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu sprzêtu przy u¿yciu pakietu lm_sensors
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	lm_sensors
 
 %description sensors
@@ -108,7 +111,7 @@ Ta wtyczka sprawdza stan sprzêtu przy u¿yciu pakietu lm_sensors.
 Summary:	Nagios plugin to test a MySQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	mysql-libs
 
 %description mysql
@@ -123,7 +126,7 @@ aktywny i przyjmuje zapytania.
 Summary:	Nagios plugin to test a PostgreSQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	postgresql-libs
 
 %description pgsql
@@ -144,7 +147,7 @@ PostgreSQL.
 Summary:	Nagios plugin to test a radius server to see if it is accepting connections
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera radius pod k±tem przyjmowania po³±czeñ
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	radiusclient
 
 %description radius
@@ -158,7 +161,7 @@ po³±czenia.
 Summary:	Nagios plugin to check status of Internet game servers
 Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu serwerów gier internetowych
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	qstat
 
 %description qstat
@@ -189,7 +192,7 @@ wy¶wietlone regu³y serwera i informacje o graczach.
 Summary:	Nagios plugin to check LDAP servers
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
 Group:		Networking
-Requires:	nagios
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	openldap-libs
 
 %description ldap
@@ -230,13 +233,14 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 
 %prep
 %setup -q
-%patch0 -p0
+#%patch0 -p0
 %patch1 -p0
-%patch2 -p0
-%patch3 -p0
+#%patch2 -p0
+#%patch3 -p0
 
 %build
-%{__aclocal}
+%{__gettextize}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -245,7 +249,7 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 # otherwise configure will fail locating ntpq and few others.
 %configure \
 	PATH=${PATH}:/usr/sbin \
-	--libexecdir=%{_libdir}/nagios/plugins \
+	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
 	--with-ping_command='/bin/ping -n %%s -c %%d' \
 	--with-df-command="/bin/df" \
@@ -274,113 +278,119 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%find_lang %{name}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog FAQ NEWS README REQUIREMENTS SUPPORT CODING
 %defattr(755,root,root,755)
 
 # utils
-%{_libdir}/nagios/plugins/negate
-%{_libdir}/nagios/plugins/urlize
-%{_libdir}/nagios/plugins/utils.pm
-%{_libdir}/nagios/plugins/utils.sh
+%{_plugindir}/negate
+%{_plugindir}/urlize
+%{_plugindir}/utils.pm
+%{_plugindir}/utils.sh
 
 # plugins
-%{_libdir}/nagios/plugins/check_by_ssh
-%{_libdir}/nagios/plugins/check_dig
-%{_libdir}/nagios/plugins/check_disk
-%{_libdir}/nagios/plugins/check_dns
-%{_libdir}/nagios/plugins/check_dummy
-%{_libdir}/nagios/plugins/check_fping
-%{_libdir}/nagios/plugins/check_ftp
-%{_libdir}/nagios/plugins/check_http
-%{_libdir}/nagios/plugins/check_imap
-%{_libdir}/nagios/plugins/check_ircd
-%{_libdir}/nagios/plugins/check_load
-%{_libdir}/nagios/plugins/check_log
-%{_libdir}/nagios/plugins/check_mailq
-%{_libdir}/nagios/plugins/check_mrtg
-%{_libdir}/nagios/plugins/check_mrtgtraf
-%{_libdir}/nagios/plugins/check_nntp
-%{_libdir}/nagios/plugins/check_ntp
-%{_libdir}/nagios/plugins/check_overcr
-%{_libdir}/nagios/plugins/check_ping
-%{_libdir}/nagios/plugins/check_pop
-%{_libdir}/nagios/plugins/check_real
-%{_libdir}/nagios/plugins/check_rpc
-%{_libdir}/nagios/plugins/check_simap
-%{_libdir}/nagios/plugins/check_smtp
-%{_libdir}/nagios/plugins/check_spop
-%{_libdir}/nagios/plugins/check_ssh
-%{_libdir}/nagios/plugins/check_tcp
-%{_libdir}/nagios/plugins/check_time
-%{_libdir}/nagios/plugins/check_udp
-%{_libdir}/nagios/plugins/check_ups
-%{_libdir}/nagios/plugins/check_users
-%{_libdir}/nagios/plugins/check_vsz
-%{_libdir}/nagios/plugins/check_swap
+%{_plugindir}/check_by_ssh
+%{_plugindir}/check_dig
+%{_plugindir}/check_disk
+%{_plugindir}/check_dns
+%{_plugindir}/check_dummy
+%{_plugindir}/check_fping
+%{_plugindir}/check_ftp
+%{_plugindir}/check_http
+%{_plugindir}/check_imap
+%{_plugindir}/check_ircd
+%{_plugindir}/check_load
+%{_plugindir}/check_log
+%{_plugindir}/check_mailq
+%{_plugindir}/check_mrtg
+%{_plugindir}/check_mrtgtraf
+%{_plugindir}/check_nntp
+%{_plugindir}/check_ntp
+%{_plugindir}/check_overcr
+%{_plugindir}/check_ping
+%{_plugindir}/check_pop
+%{_plugindir}/check_real
+%{_plugindir}/check_rpc
+%{_plugindir}/check_simap
+%{_plugindir}/check_smtp
+%{_plugindir}/check_spop
+%{_plugindir}/check_ssh
+%{_plugindir}/check_tcp
+%{_plugindir}/check_time
+%{_plugindir}/check_udp
+%{_plugindir}/check_ups
+%{_plugindir}/check_users
+#%{_plugindir}/check_vsz
+%{_plugindir}/check_swap
 
 # segfaults under 2.6
-%{_libdir}/nagios/plugins/check_procs
+%{_plugindir}/check_procs
 
 # requries license.dat
-%{_libdir}/nagios/plugins/check_flexlm
+%{_plugindir}/check_flexlm
 
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
-%{_libdir}/nagios/plugins/check_oracle
+%{_plugindir}/check_oracle
 
-# not there.
-#%{_libdir}/nagios/plugins/check_nagios
+%{_plugindir}/check_nagios
+
+# new
+%{_plugindir}/check_dhcp
+%{_plugindir}/check_file_age
+%{_plugindir}/check_icmp
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_snmp
-%{_libdir}/nagios/plugins/check_hpjd
-%{_libdir}/nagios/plugins/check_ifoperstatus
-%{_libdir}/nagios/plugins/check_ifstatus
+%{_plugindir}/check_snmp
+%{_plugindir}/check_hpjd
+%{_plugindir}/check_ifoperstatus
+%{_plugindir}/check_ifstatus
 
 # syntax errors, incomplete file paths
-%{_libdir}/nagios/plugins/check_wave
+%{_plugindir}/check_wave
 # syntax errors
-%{_libdir}/nagios/plugins/check_breeze
+%{_plugindir}/check_breeze
 
 %files samba
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_disk_smb
+%{_plugindir}/check_disk_smb
 
 %files sensors
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_sensors
+%{_plugindir}/check_sensors
 
 %files mysql
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_mysql
+%{_plugindir}/check_mysql
 
 %files pgsql
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_pgsql
+%{_plugindir}/check_pgsql
 
 %files radius
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_radius
+%{_plugindir}/check_radius
 
 %files qstat
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_game
+%{_plugindir}/check_game
 
 %files ldap
 %defattr(755,root,root,755)
-%{_libdir}/nagios/plugins/check_ldap
+%{_plugindir}/check_ldap
 
 #%files nsclient
 #%defattr(755,root,root,755)
-#%{_libdir}/nagios/plugins/check_nt
+#%{_plugindir}/check_nt
 
 #%files nwstat
 #%defattr(755,root,root,755)
-#%{_libdir}/nagios/plugins/check_nwstat
+#%{_plugindir}/check_nwstat
