@@ -8,3 +8,19 @@
  	fi
  
  elif [[ "z$ac_cv_uname_s" = "zUnixWare" ]] && \
+--- ./configure.in~	2005-03-23 20:54:25.000000000 +0200
++++ ./configure.in	2005-03-23 21:09:57.000000000 +0200
+@@ -575,11 +575,8 @@
+ AC_DEFINE_UNQUOTED(SOCKET_SIZE_TYPE, $ac_cv_socket_size_type ,
+ 	[Define type of socket size])
+ 
+-if test -f "/proc/loadavg"
+-then
+-  AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
+-  AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
+-fi
++AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
++AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
+ 
+ dnl #### Process table test
+ 
