@@ -8,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	2.13
+Release:	2.14
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -21,6 +21,7 @@ URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	mysql-devel
+BuildRequires:	net-snmp-utils
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
