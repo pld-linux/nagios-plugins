@@ -137,3 +137,56 @@
  
  AC_PATH_PROG(PATH_TO_HOST,host)
  if test -n "$ac_cv_path_PATH_TO_HOST"
+--- ./configure.in~	2005-02-08 16:25:52.000000000 +0200
++++ ./configure.in	2005-03-27 23:09:00.000000000 +0300
+@@ -1120,15 +1136,18 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_UPTIME,uptime)
++AC_ARG_WITH(uptime_command,--with-uptime-command=<path> sets path to uptime,PATH_TO_UPTIME=$withval)
+ AC_DEFINE_UNQUOTED(PATH_TO_UPTIME,"$PATH_TO_UPTIME",[path to uptime binary])
+ 
+ AC_PATH_PROG(PATH_TO_RPCINFO,rpcinfo)
++AC_ARG_WITH(rpcinfo_command,--with-rpcinfo-command=<path> sets path to rpcinfo,PATH_TO_RPCINFO=$withval)
+ AC_DEFINE_UNQUOTED(PATH_TO_RPCINFO,"$PATH_TO_RPCINFO",[path to rpcinfo binary])
+ 
+ AC_PATH_PROG(PATH_TO_NTPDATE,ntpdate)
++AC_ARG_WITH(ntpdate_command,--with-ntpdate-command=<path> sets path to ntpdate,PATH_TO_NTPDATE=$withval)
+ AC_PATH_PROGS(PATH_TO_NTPDC,ntpdc xntpdc)
+ AC_PATH_PROGS(PATH_TO_NTPQ,ntpq)
+-if (test -x "$PATH_TO_NTPDATE" || test -x "$PATH_TO_NTPQ")
++if (test -n "$PATH_TO_NTPDATE" || test -n "$PATH_TO_NTPQ")
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_NTPQ,"$PATH_TO_NTPQ",[path to ntpq binary])
+ 	AC_DEFINE_UNQUOTED(PATH_TO_NTPDATE,"$PATH_TO_NTPDATE",[path to ntpdate binary])
+@@ -1145,7 +1164,8 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_SMBCLIENT,smbclient)
+-if test -x "$PATH_TO_SMBCLIENT"
++AC_ARG_WITH(smbclient_command,--with-smbclient-command=<path> sets path to smbclient,PATH_TO_SMBCLIENT=$withval)
++if test -n "$PATH_TO_SMBCLIENT"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_SMBCLIENT,"$PATH_TO_SMBCLIENT",[path to smbclient binary])
+ else
+@@ -1221,8 +1241,8 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_SSH,ssh)
+-
+-if test -x "$PATH_TO_SSH"
++AC_ARG_WITH(ssh_command,--with-ssh-command=<path > sets path for ssh,PATH_TO_SSH=$withval)
++if test -n "$PATH_TO_SSH"
+ then
+ 	AC_DEFINE_UNQUOTED(SSH_COMMAND,"$PATH_TO_SSH",[path to ssh binary])
+ 	EXTRAS="$EXTRAS check_by_ssh"
+@@ -1232,7 +1252,8 @@
+ 
+ 
+ AC_PATH_PROG(PATH_TO_MAILQ,mailq)
+-if test -x "$PATH_TO_MAILQ"
++AC_ARG_WITH(mailq_command,--with-mailq-command=<path> sets path to mailq,PATH_TO_MAILQ=$withval)
++if test -n "$PATH_TO_MAILQ"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_MAILQ,"$PATH_TO_MAILQ",[path to mailq])
+ else
