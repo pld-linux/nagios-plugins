@@ -13,7 +13,7 @@ BuildRequires:	automake
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	postgresql-devel
 Requires:	nagios
 Obsoletes:	netsaint-plugins
