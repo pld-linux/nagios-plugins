@@ -1,6 +1,7 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
+# - check_ping doesn't work on my test machine, somewhy
 
 %bcond_without	gettext0143		# without gettext-0.14.3
 Summary:	Host/service/network monitoring program plugins for Nagios
