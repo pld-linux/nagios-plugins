@@ -35,7 +35,8 @@ rm -f missing
 %{__autoheader}
 %{__automake}
 %configure \
-	--libexecdir=%{_libdir}/nagios/plugins
+	--libexecdir=%{_libdir}/nagios/plugins \
+	--with-df-command="/bin/df"
 %{__make}
 
 %install
