@@ -1,13 +1,13 @@
-#
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-#
+
+%bcond_without	gettext0143		# without gettext-0.14.3
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.22
+Release:	0.24
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -16,6 +16,8 @@ Patch0:		%{name}-configure.patch
 Patch1:		%{name}-fping.patch
 Patch2:		%{name}-tainted.patch
 Patch3:		%{name}-contrib-API.patch
+Patch4:		%{name}-gettext.patch
+Patch5:		%{name}-subst.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -24,7 +26,11 @@ BuildRequires:	net-snmp-utils
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+%if %{with gettext0143}
+BuildRequires:	gettext-devel >= gettext-0.14.3
+%else
 BuildRequires:	gettext-devel
+%endif
 BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
@@ -268,6 +274,8 @@ Contributed nagios plugins. Some of them work, some do not.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%{?with_gettext0143:%patch4 -p1}
+%patch5 -p1
 
 # bring contribs into shape...
 cd contrib
