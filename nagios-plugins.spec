@@ -1,12 +1,12 @@
 Summary:	Plugins for Nagios
 Summary(pl):	Wtyczki dla Nagiosa
 Name:		nagios-plugins
-Version:	1.3.0
+Version:	1.3.1
 Release:	0.9
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	74ce3383cb39c85df78a1db7ac50838b
+# Source0-md5:	0078c9c8137694181a4cdf596fdbd74f
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
