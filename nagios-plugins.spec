@@ -7,7 +7,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.19
+Release:	0.20
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -310,6 +310,10 @@ rm -f check_{breeze,wave}.pl
 	--with-pgsql \
 	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
 	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
+    --with-ps-command="/bin/ps axwo 'stat uid ppid vsz rss pcpu comm args'" \
+    --with-ps-format="%%s %%d %%d %%d %%d %%f %%s %%n" \
+    --with-ps-cols=8 \
+    --with-ps-varlist="procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos" \
 
 %{__make}
 
