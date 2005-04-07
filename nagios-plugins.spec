@@ -8,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.3.1
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -38,6 +38,7 @@ BuildRequires:	glibc-misc
 # for host and nslookup
 BuildRequires:	bind-utils
 BuildRequires:	ntp
+BuildRequires:  rpmbuild(macros) >= 1.177
 Requires:	nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
@@ -276,6 +277,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerun -- %{name} <= 1.3.1-2
+%banner -e %{name} <<EOF
+Plugins for snmp, samba, sensors, mysql, pgsql, radius, qstat
+have been separated into subpackages.
+Please install %{name}-PACKAGE if you need these plugins.
+
+EOF
 
 %files
 %defattr(644,root,root,755)
