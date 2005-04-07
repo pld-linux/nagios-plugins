@@ -38,7 +38,7 @@ BuildRequires:	glibc-misc
 # for host and nslookup
 BuildRequires:	bind-utils
 BuildRequires:	ntp
-BuildRequires:  rpmbuild(macros) >= 1.177
+BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
