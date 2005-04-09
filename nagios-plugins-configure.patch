@@ -190,3 +190,17 @@
  then
  	AC_DEFINE_UNQUOTED(PATH_TO_MAILQ,"$PATH_TO_MAILQ",[path to mailq])
  else
+--- ./configure.in~	2005-03-27 23:12:00.000000000 +0300
++++ ./configure.in	2005-04-09 18:29:55.000000000 +0300
+@@ -1468,9 +1468,10 @@
+ fi
+ 
+ AC_PATH_PROG(PATH_TO_DIG,dig)
+-AC_DEFINE_UNQUOTED(PATH_TO_DIG,"$PATH_TO_DIG",[Path to dig command, if present])
++AC_ARG_WITH(dig_command,--with-dig-command=<path> Path to dig command,PATH_TO_DIG=$withval)
+ if test -n "$PATH_TO_DIG"; then
+ 	EXTRAS="$EXTRAS check_dig"
++	AC_DEFINE_UNQUOTED(PATH_TO_DIG,"$PATH_TO_DIG",[Path to dig command, if present])
+ fi
+ 
+ if test -f plugins/check_nt.c ; then
