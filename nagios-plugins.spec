@@ -35,7 +35,8 @@ BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
-PreReq:		nagios
+BuildRequires:	rpmbuild(macros) >= 1.177
+PreReq:		nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -354,6 +355,14 @@ find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_p
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerun -- %{name} <= 1.3.1-2
+%banner -e %{name} <<EOF
+Plugins for snmp, samba, sensors, mysql, pgsql, radius, qstat
+have been separated into subpackages.
+Please install %{name}-PACKAGE if you need these plugins.
+
+EOF
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
