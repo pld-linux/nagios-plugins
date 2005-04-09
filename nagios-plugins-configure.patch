@@ -234,3 +234,15 @@
  then
  	ac_cv_path_to_qstat="$PATH_TO_QSTAT"
  	EXTRAS="$EXTRAS check_game"
+--- ./configure.in~	2005-04-09 19:34:08.000000000 +0300
++++ ./configure.in	2005-04-09 20:32:24.000000000 +0300
+@@ -1186,7 +1186,8 @@
+ 	[path and arguments for invoking 'who'])
+ 
+ AC_PATH_PROG(PATH_TO_SNMPGET,snmpget)
+-if test -x "$PATH_TO_SNMPGET"
++AC_ARG_WITH(snmpget_command,--with-snmpget-command=<path> Path to snmpget command,PATH_TO_SNMPGET=$withval)
++if test -n "$PATH_TO_SNMPGET"
+ then
+ 	AC_DEFINE_UNQUOTED(PATH_TO_SNMPGET,"$PATH_TO_SNMPGET",[path to snmpget binary])
+ 	EXTRAS="$EXTRAS check_hpjd check_snmp"
