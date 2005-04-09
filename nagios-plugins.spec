@@ -2,13 +2,14 @@
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
 # - check_ping doesn't work on my test machine, somewhy
+# - subpackages for check_{ntp,dns,ssh} due extra req's?
 
 %bcond_without	gettext0143		# without gettext-0.14.3
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.26
+Release:	0.27
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -22,7 +23,6 @@ URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	mysql-devel
-BuildRequires:	net-snmp-utils
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -36,6 +36,14 @@ BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
+# check_ntp
+Requires:	ntp-client
+# check_dns, check_dig
+Requires:	bind-utils
+# check_by_ssh
+Requires:	openssh-clients
+# check_uptime
+Requires:	procps
 PreReq:		nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
@@ -320,6 +328,8 @@ rm -f check_{breeze,wave}.pl
 	--with-dig-command=/usr/bin/dig \
 	--with-fping-command=/usr/sbin/fping \
 	--with-qstat-command=/usr/bin/qstat \
+	--with-ssh-command=/usr/bin/ssh \
+	--with-snmpget-command=/usr/bin/snmpget \
 
 %{__make}
 
@@ -384,7 +394,7 @@ EOF
 %{_plugindir}/check_dns
 %{_plugindir}/check_dummy
 %{_plugindir}/check_file_age
-%{_plugindir}/check_fping
+%attr(2755,root,adm) %{_plugindir}/check_fping
 %{_plugindir}/check_ftp
 %{_plugindir}/check_http
 %{_plugindir}/check_icmp
@@ -398,6 +408,7 @@ EOF
 %{_plugindir}/check_nagios
 %{_plugindir}/check_nntp
 %{_plugindir}/check_ntp
+# req: over-cr >= 0.99.53 http://www.molitor.org/overcr
 %{_plugindir}/check_overcr
 %attr(2755,root,adm) %{_plugindir}/check_ping
 %{_plugindir}/check_pop
@@ -415,7 +426,7 @@ EOF
 %{_plugindir}/check_users
 %{_plugindir}/check_swap
 
-# requries license.dat
+# requires license.dat
 %{_plugindir}/check_flexlm
 
 # Cannot determine ORACLE_HOME for sid
