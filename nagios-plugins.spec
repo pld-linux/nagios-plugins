@@ -8,13 +8,12 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.24
+Release:	0.26
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
 Patch0:		%{name}-configure.patch
-Patch1:		%{name}-fping.patch
 Patch2:		%{name}-tainted.patch
 Patch3:		%{name}-contrib-API.patch
 Patch4:		%{name}-gettext.patch
@@ -28,7 +27,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %if %{with gettext0143}
-BuildRequires:	gettext-devel >= gettext-0.14.3
+BuildRequires:	gettext-devel >= 0.14.3
 %else
 BuildRequires:	gettext-devel
 %endif
@@ -36,14 +35,6 @@ BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
-BuildRequires:	fping
-BuildRequires:	qstat
-#BuildRequires:	samba-client
-# for rpcinfo
-#BuildRequires:	glibc-misc
-# for host and nslookup, check_dig, check_dns
-#BuildRequires:	bind-utils
-#BuildRequires:	ntp
 PreReq:		nagios
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
@@ -272,7 +263,6 @@ Contributed nagios plugins. Some of them work, some do not.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p0
 %patch2 -p1
 %patch3 -p1
 %{?with_gettext0143:%patch4 -p1}
@@ -309,10 +299,7 @@ rm -f check_{breeze,wave}.pl
 %{__autoheader}
 %{__automake}
 
-# Need /usr/sbin in PATH,
-# otherwise configure will fail locating ntpq and few others.
 %configure \
-	PATH=${PATH}:/usr/sbin \
 	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
 	--with-mysql=%{_prefix} \
@@ -329,6 +316,9 @@ rm -f check_{breeze,wave}.pl
 	--with-rpcinfo-command=/usr/sbin/rpcinfo \
 	--with-ntpdate-command=/usr/sbin/ntpdate \
 	--with-smbclient-command=/usr/bin/smbclient \
+	--with-dig-command=/usr/bin/dig \
+	--with-fping-command=/usr/sbin/fping \
+	--with-qstat-command=/usr/bin/qstat \
 
 %{__make}
 
