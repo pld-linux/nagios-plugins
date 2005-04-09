@@ -44,6 +44,8 @@ Requires:	bind-utils
 Requires:	openssh-clients
 # check_uptime
 Requires:	procps
+# check_fping
+Requires:	fping
 PreReq:		nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
