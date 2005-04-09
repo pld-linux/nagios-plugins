@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.27
+Release:	0.28
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -76,6 +76,7 @@ Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
 Group:		Networking
+# for utils.pm
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
@@ -90,6 +91,7 @@ Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji.
 Summary:	Nagios plugin to check remote disk using smbclient
 Summary(pl):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z u¿yciem smbclienta
 Group:		Networking
+# for utils.pm
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	samba-client
 
@@ -103,6 +105,7 @@ Perlowa wtyczka dla Nagiosa sprawdzaj±ca dyski SMB.
 Summary:	Nagios plugin to check hardware status using the lm_sensors package
 Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu sprzêtu przy u¿yciu pakietu lm_sensors
 Group:		Networking
+# for utils.sh
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	lm_sensors
 
@@ -116,7 +119,7 @@ Ta wtyczka sprawdza stan sprzêtu przy u¿yciu pakietu lm_sensors.
 Summary:	Nagios plugin to test a MySQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
 Group:		Networking
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nagios-core
 Requires:	mysql-libs
 
 %description mysql
@@ -131,7 +134,7 @@ aktywny i przyjmuje zapytania.
 Summary:	Nagios plugin to test a PostgreSQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nagios-core
 Requires:	postgresql-libs
 
 %description pgsql
@@ -152,7 +155,7 @@ PostgreSQL.
 Summary:	Nagios plugin to test a radius server to see if it is accepting connections
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera radius pod k±tem przyjmowania po³±czeñ
 Group:		Networking
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nagios-core
 Requires:	radiusclient
 
 %description radius
@@ -166,7 +169,7 @@ po³±czenia.
 Summary:	Nagios plugin to check status of Internet game servers
 Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu serwerów gier internetowych
 Group:		Networking
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nagios-core
 Requires:	qstat
 
 %description qstat
@@ -197,7 +200,7 @@ wy¶wietlone regu³y serwera i informacje o graczach.
 Summary:	Nagios plugin to check LDAP servers
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
 Group:		Networking
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nagios-core
 Requires:	openldap-libs
 
 %description ldap
