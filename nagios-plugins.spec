@@ -36,6 +36,7 @@ BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
+# TODO: move these to subpackages to kill deps from main nagios-plugins package?
 # check_ntp
 Requires:	ntp-client
 # check_dns, check_dig
