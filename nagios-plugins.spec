@@ -3,7 +3,6 @@
 #   REQUIREMENTS explains the dependencies.
 # - subpackages for check_{ntp,dns,ssh} due extra req's?
 
-%bcond_without	gettext0143		# without gettext-0.14.3
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
@@ -26,11 +25,7 @@ BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
-%if %{with gettext0143}
 BuildRequires:	gettext-devel >= 0.14.3
-%else
-BuildRequires:	gettext-devel
-%endif
 BuildRequires:	iputils-ping
 BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
@@ -280,7 +275,7 @@ Contributed nagios plugins. Some of them work, some do not.
 %patch0 -p1
 %patch2 -p1
 %patch3 -p1
-%{?with_gettext0143:%patch4 -p1}
+%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 
