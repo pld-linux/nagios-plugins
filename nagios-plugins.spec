@@ -1,7 +1,6 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - check_ping doesn't work on my test machine, somewhy. LOCALE PROBLEM. works with LC_ALL=C
 # - subpackages for check_{ntp,dns,ssh} due extra req's?
 
 %bcond_without	gettext0143		# without gettext-0.14.3
@@ -9,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.29
+Release:	0.30
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -19,6 +18,7 @@ Patch2:		%{name}-tainted.patch
 Patch3:		%{name}-contrib-API.patch
 Patch4:		%{name}-gettext.patch
 Patch5:		%{name}-subst.patch
+Patch6:		%{name}-ping-locale.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -282,6 +282,7 @@ Contributed nagios plugins. Some of them work, some do not.
 %patch3 -p1
 %{?with_gettext0143:%patch4 -p1}
 %patch5 -p1
+%patch6 -p1
 
 # bring contribs into shape...
 cd contrib
