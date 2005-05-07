@@ -7,7 +7,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.30
+Release:	0.33
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -31,17 +31,6 @@ BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
-# TODO: move these to subpackages to kill deps from main nagios-plugins package?
-# check_ntp
-Requires:	ntp-client
-# check_dns, check_dig
-Requires:	bind-utils
-# check_by_ssh
-Requires:	openssh-clients
-# check_uptime
-Requires:	procps
-# check_fping
-Requires:	fping
 PreReq:		nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
@@ -207,6 +196,66 @@ Nagios plugin to check LDAP servers.
 %description ldap -l pl
 Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 
+%package ntp
+Summary:	Nagios plugin to check time using NTP protocol
+Group:		Networking
+Requires:	nagios-core
+Requires:	ntp-client
+
+%description ntp
+Checks the local timestamp offset versus <host> with ntpdate. Checks
+the jitter/dispersion of clock signal between <host> and its sys.peer
+with ntpq.
+
+%package dns
+Summary:	Nagios plugin to check DNS with nslookup
+Group:		Networking
+Requires:	nagios-core
+Requires:	bind-utils
+
+%description dns
+This plugin uses the nslookup program to obtain the IP address for the
+given host/domain query. A optional DNS server to use may be
+specified.  If no DNS server is specified, the default server(s)
+specified in /etc/resolv.conf will be used.
+
+%package dig
+Summary:	Nagios plugin to check DNS servers with dig
+Group:		Networking
+Requires:	nagios-core
+Requires:	bind-utils
+
+%description dig
+Test the DNS service on the specified host using dig.
+
+%package ssh
+Summary:	Nagios plugins to check remote services via SSH
+Group:		Networking
+Requires:	nagios-core
+Requires:	openssh-clients
+
+%description ssh
+This plugin uses SSH to execute commands on a remote host.
+
+%package procps
+Summary:	Nagios plugin to check uptime using procps
+Group:		Networking
+Requires:	nagios-core
+Requires:	procps
+
+%description procps
+Nagios plugin to check uptime using procps.
+
+%package fping
+Summary:	Nagios plugin to check host up state with fping
+Group:		Networking
+Requires:	nagios-core
+Requires:	procps
+
+%description fping
+This plugin will use the /bin/fping command to ping the specified host
+for a fast check if the host is alive.
+
 # nsclient not packaged in PLD
 #%package nsclient
 #Summary:	Nagios plugin to check NT server with NSClient
@@ -368,11 +417,14 @@ find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_p
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerun -- %{name} <= 1.3.1-2
+%triggerun -- %{name} <= 1.4-0.33
 %banner -e %{name} <<EOF
-Plugins for snmp, samba, sensors, mysql, pgsql, radius, qstat
-have been separated into subpackages.
+Several Nagios plugins have been separated to multiple packages to cut
+down unneccessary deps on main package.
+
 Please install %{name}-PACKAGE if you need these plugins.
+To revert to previous state just run:
+poldek -u nagios-plugins-{snmp,samba,sensors,mysql,pgsql,radius,qstat,ntp,dns,ssh,procps,fping}
 
 EOF
 
@@ -389,27 +441,21 @@ EOF
 %{_plugindir}/utils.sh
 
 # plugins
-%{_plugindir}/check_by_ssh
 %{_plugindir}/check_dhcp
-%{_plugindir}/check_dig
 %{_plugindir}/check_disk
-%{_plugindir}/check_dns
 %{_plugindir}/check_dummy
 %{_plugindir}/check_file_age
-%attr(2755,root,adm) %{_plugindir}/check_fping
 %{_plugindir}/check_ftp
 %{_plugindir}/check_http
 %{_plugindir}/check_icmp
 %{_plugindir}/check_imap
 %{_plugindir}/check_ircd
-%{_plugindir}/check_load
 %{_plugindir}/check_log
 %{_plugindir}/check_mailq
 %{_plugindir}/check_mrtg
 %{_plugindir}/check_mrtgtraf
 %{_plugindir}/check_nagios
 %{_plugindir}/check_nntp
-%{_plugindir}/check_ntp
 # req: over-cr >= 0.99.53 http://www.molitor.org/overcr
 %{_plugindir}/check_overcr
 %attr(2755,root,adm) %{_plugindir}/check_ping
@@ -472,6 +518,30 @@ EOF
 %files ldap
 %defattr(755,root,root,755)
 %{_plugindir}/check_ldap
+
+%files ntp
+%defattr(755,root,root,755)
+%{_plugindir}/check_ntp
+
+%files dns
+%defattr(755,root,root,755)
+%{_plugindir}/check_dns
+
+%files dig
+%defattr(755,root,root,755)
+%{_plugindir}/check_dig
+
+%files ssh
+%defattr(755,root,root,755)
+%{_plugindir}/check_by_ssh
+
+%files procps
+%defattr(755,root,root,755)
+%{_plugindir}/check_load
+
+%files fping
+%defattr(755,root,root,755)
+%attr(2755,root,adm) %{_plugindir}/check_fping
 
 #%files nsclient
 #%defattr(755,root,root,755)
