@@ -21,14 +21,14 @@ Patch6:		%{name}-ping-locale.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	gettext-devel >= 0.14.3
+BuildRequires:	iputils-ping
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
-BuildRequires:	gettext-devel >= 0.14.3
-BuildRequires:	iputils-ping
-BuildRequires:	postgresql-devel
 BuildRequires:	perl-Net-SNMP
+BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
 PreReq:		nagios-core
@@ -198,6 +198,7 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 
 %package ntp
 Summary:	Nagios plugin to check time using NTP protocol
+Summary(pl):	Wtyczka Nagiosa do sprawdzania czasu przy u¿yciu protoko³u NTP
 Group:		Networking
 Requires:	nagios-core
 Requires:	ntp-client
@@ -207,8 +208,14 @@ Checks the local timestamp offset versus <host> with ntpdate. Checks
 the jitter/dispersion of clock signal between <host> and its sys.peer
 with ntpq.
 
+%description ntp -l pl
+Ta wtyczka sprawdza przesuniêcie lokalnego czasu wzglêdem danego hosta
+przy u¿yciu ntpdate. Sprawdza wahania/dyspersjê sygna³u zegara
+pomiêdzy hostem a jego sys.peer przy u¿yciu ntpq.
+
 %package dns
 Summary:	Nagios plugin to check DNS with nslookup
+Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu nslookup
 Group:		Networking
 Requires:	nagios-core
 Requires:	bind-utils
@@ -216,11 +223,18 @@ Requires:	bind-utils
 %description dns
 This plugin uses the nslookup program to obtain the IP address for the
 given host/domain query. A optional DNS server to use may be
-specified.  If no DNS server is specified, the default server(s)
+specified. If no DNS server is specified, the default server(s)
 specified in /etc/resolv.conf will be used.
+
+%description dns -l pl
+Ta wtyczka u¿ywa programu nslookup do uzyskania adresu IP danego dla
+danego zapytania o host/domenê. Mo¿na opcjonalnie podaæ serwer DNS,
+który ma byæ u¿yty. Je¶li nie podano serwera DNS, u¿ywany jest
+domy¶lny serwer (lub serwery) podany w /etc/resolv.conf.
 
 %package dig
 Summary:	Nagios plugin to check DNS servers with dig
+Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu programu dig
 Group:		Networking
 Requires:	nagios-core
 Requires:	bind-utils
@@ -228,8 +242,13 @@ Requires:	bind-utils
 %description dig
 Test the DNS service on the specified host using dig.
 
+%description dig -l pl
+Ta wtyczka sprawdza us³ugê DNS na podanym ho¶cie przy u¿yciu programu
+dig.
+
 %package ssh
 Summary:	Nagios plugins to check remote services via SSH
+Summary(pl):	Wtyczki Nagiosa do sprawdzania zdalnych us³ug po SSH
 Group:		Networking
 Requires:	nagios-core
 Requires:	openssh-clients
@@ -237,8 +256,12 @@ Requires:	openssh-clients
 %description ssh
 This plugin uses SSH to execute commands on a remote host.
 
+%description ssh -l pl
+Ta wtyczka u¿ywa SSH do wykonywania poleceñ na zdalnym ho¶cie.
+
 %package procps
 Summary:	Nagios plugin to check uptime using procps
+Summary(pl):	Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps
 Group:		Networking
 Requires:	nagios-core
 Requires:	procps
@@ -246,8 +269,12 @@ Requires:	procps
 %description procps
 Nagios plugin to check uptime using procps.
 
+%description procps -l pl
+Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps.
+
 %package fping
 Summary:	Nagios plugin to check host up state with fping
+Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu fping
 Group:		Networking
 Requires:	nagios-core
 Requires:	procps
@@ -255,6 +282,10 @@ Requires:	procps
 %description fping
 This plugin will use the /bin/fping command to ping the specified host
 for a fast check if the host is alive.
+
+%description fping -l pl
+Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
+dany host dzia³a.
 
 # nsclient not packaged in PLD
 #%package nsclient
@@ -288,6 +319,7 @@ for a fast check if the host is alive.
 
 %package contrib
 Summary:	Contributed nagios plugins
+Summary(pl):	Wtyczki przekazane do projektu Nagios
 Group:		Networking
 # for utils.pm, utils.sh
 Requires:	%{name} = %{epoch}:%{version}-%{release}
@@ -318,6 +350,9 @@ Requires:	samba
 
 %description contrib
 Contributed nagios plugins. Some of them work, some do not.
+
+%description contrib -l pl
+Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
 
 %prep
 %setup -q
