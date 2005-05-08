@@ -11,11 +11,11 @@ Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
 Patch0:		%{name}-configure.patch
-Patch2:		%{name}-tainted.patch
-Patch3:		%{name}-contrib-API.patch
-Patch4:		%{name}-gettext.patch
-Patch5:		%{name}-subst.patch
-Patch6:		%{name}-ping-locale.patch
+Patch1:		%{name}-tainted.patch
+Patch2:		%{name}-contrib-API.patch
+Patch3:		%{name}-gettext.patch
+Patch4:		%{name}-subst.patch
+Patch5:		%{name}-ping-locale.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -359,11 +359,11 @@ Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # bring contribs into shape...
 cd contrib
