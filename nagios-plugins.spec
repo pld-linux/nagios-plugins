@@ -1,13 +1,11 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - subpackages for check_{ntp,dns,ssh} due extra req's?
-
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4
-Release:	0.33
+Release:	0.35
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -59,6 +57,9 @@ zwracajace stan danej us³ugi do Nagiosa.
 
 Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 
+# NOTE for sub package requires:
+# use Requires:	%{name} = %{epoch}:%{version}-%{release} for utils.sh or utils.pm
+# and Requires:	nagios-core if just plugins directory needed
 %package snmp
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
@@ -200,7 +201,8 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 Summary:	Nagios plugin to check time using NTP protocol
 Summary(pl):	Wtyczka Nagiosa do sprawdzania czasu przy u¿yciu protoko³u NTP
 Group:		Networking
-Requires:	nagios-core
+# for utils.pm
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	ntp-client
 
 %description ntp
@@ -452,14 +454,14 @@ find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_p
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerun -- %{name} <= 1.4-0.33
+%triggerun -- %{name} <= 1.4-0.34
 %banner -e %{name} <<EOF
 Several Nagios plugins have been separated to multiple packages to cut
 down unneccessary deps on main package.
 
 Please install %{name}-PACKAGE if you need these plugins.
 To revert to previous state just run:
-poldek -u nagios-plugins-{snmp,samba,sensors,mysql,pgsql,radius,qstat,ntp,dns,ssh,procps,fping}
+poldek -u nagios-plugins-{snmp,samba,sensors,mysql,pgsql,radius,qstat,ldap,ntp,dns,ssh,procps,fping}
 
 EOF
 
