@@ -418,6 +418,7 @@ rm -f check_{breeze,wave}.pl
 	--with-qstat-command=/usr/bin/qstat \
 	--with-ssh-command=/usr/bin/ssh \
 	--with-snmpget-command=/usr/bin/snmpget \
+	--with-df-command='/bin/df -P' \
 
 %{__make}
 
