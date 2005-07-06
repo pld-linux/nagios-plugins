@@ -29,6 +29,7 @@ BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
+BuildRequires:	rpm-pythonprov
 PreReq:		nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
