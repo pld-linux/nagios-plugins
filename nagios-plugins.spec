@@ -4,19 +4,18 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4
+Version:	1.4.2
 Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	9b21b92acc4b2b0dbb2d12bca6b27582
+# Source0-md5:	1f2bee15ade3d98ec79964a43479e328
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-tainted.patch
 Patch2:		%{name}-contrib-API.patch
 Patch3:		%{name}-gettext.patch
 Patch4:		%{name}-subst.patch
 Patch5:		%{name}-ping-locale.patch
-Patch6:		%{name}-check_mysql-4.1.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -341,8 +340,6 @@ Requires:	perl-Net-SNMP
 Requires:	traceroute
 # check_traceroute-pure_perl.pl
 Requires:	perl-Net-Traceroute
-# check_mysqlslave.pl
-Requires:	perl-DBI
 # check_temp_fsc
 Requires:	perl-SNMP_Session
 # check_smart.pl
@@ -368,7 +365,6 @@ Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -377,7 +373,7 @@ sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
 	check_compaq_insight.msg > check_compaq_insight.pl
 
 sed -i -e '1s,#!.*/bin/perl,#!%{__perl},' \
-	check_{oracle_tbs,{snmp_{{disk,process}_monitor,printer},nagios_db,flexlm,mysql}.pl}
+	check_{oracle_tbs,{snmp_{{disk,process}_monitor,printer},nagios_db,flexlm}.pl}
 
 sed -i -e "
 	s,use lib '/usr/local/nagios/libexec/',use lib '%{_plugindir}',
@@ -423,6 +419,7 @@ rm -f check_{breeze,wave}.pl
 	--with-qstat-command=/usr/bin/qstat \
 	--with-ssh-command=/usr/bin/ssh \
 	--with-snmpget-command=/usr/bin/snmpget \
+	--with-snmpgetnext-command=/usr/bin/snmpgetnext \
 	--with-df-command='/bin/df -P' \
 
 %{__make}
@@ -433,9 +430,6 @@ cd contrib
 
 %{__cc} %{rpmcflags} check_cluster.c -o check_cluster
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
-
-%{__cc} %{rpmcflags} check_mysql.c -c $(mysql_config --cflags) -I../plugins -I.. -I../lib
-%{__cc} %{rpmcflags} check_mysql.o -o check_mysql2 $(mysql_config --libs)
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_rbl.c
 %{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o
@@ -586,14 +580,6 @@ EOF
 %defattr(755,root,root,755)
 %attr(2755,root,adm) %{_plugindir}/check_fping
 
-#%files nsclient
-#%defattr(755,root,root,755)
-#%{_plugindir}/check_nt
-
-#%files nwstat
-#%defattr(755,root,root,755)
-#%{_plugindir}/check_nwstat
-
 %files contrib
 %defattr(755,root,root,755)
 %{_plugindir}/check_adptraid.sh
@@ -608,10 +594,8 @@ EOF
 %{_plugindir}/check_cluster
 %{_plugindir}/check_cluster2
 %{_plugindir}/check_compaq_insight.pl
-#%{_plugindir}/check_cpqarray
 %{_plugindir}/check_digitemp.pl
 %{_plugindir}/check_disk_snmp.pl
-%{_plugindir}/check_dl_size.pl
 %{_plugindir}/check_dlswcircuit.pl
 %{_plugindir}/check_dns_random.pl
 %{_plugindir}/check_email_loop.pl
@@ -619,32 +603,24 @@ EOF
 %{_plugindir}/check_fan_fsc_present
 %{_plugindir}/check_flexlm.pl
 %{_plugindir}/check_frontpage
-%{_plugindir}/check_ftpget.pl
-#%{_plugindir}/check_hltherm.c
 %{_plugindir}/check_hprsc.pl
-#%{_plugindir}/check_http-with-client-certificate.c
 %{_plugindir}/check_hw.sh
 %{_plugindir}/check_ica_master_browser.pl
 %{_plugindir}/check_ica_metaframe_pub_apps.pl
 %{_plugindir}/check_ica_program_neigbourhood.pl
 %{_plugindir}/check_inodes-freebsd.pl
 %{_plugindir}/check_inodes.pl
-#%{_plugindir}/check_ipxping.c
 %{_plugindir}/check_javaproc.pl
 %{_plugindir}/check_joy.sh
 %{_plugindir}/check_linux_raid.pl
 %{_plugindir}/check_lmmon.pl
 %{_plugindir}/check_log2.pl
-#%{_plugindir}/check_logins.c
 %{_plugindir}/check_lotus.pl
 %{_plugindir}/check_maxchannels.pl
 %{_plugindir}/check_maxwanstate.pl
 %{_plugindir}/check_mem.pl
 %{_plugindir}/check_ms_spooler.pl
 %{_plugindir}/check_mssql.sh
-#%{_plugindir}/check_mysql.c
-%{_plugindir}/check_mysql.pl
-%{_plugindir}/check_mysqlslave.pl
 %{_plugindir}/check_nagios.pl
 %{_plugindir}/check_nagios_db.pl
 %{_plugindir}/check_nagios_db_pg.pl
@@ -652,15 +628,11 @@ EOF
 %{_plugindir}/check_nmap.py
 %{_plugindir}/check_nt
 %{_plugindir}/check_nwstat
-%{_plugindir}/check_nwstat.pl
 %{_plugindir}/check_ora_table_space.pl
 %{_plugindir}/check_oracle_instance.pl
 %{_plugindir}/check_oracle_tbs
 %{_plugindir}/check_pcpmetric.py
 %{_plugindir}/check_pfstate
-%{_plugindir}/check_pop3.pl
-%{_plugindir}/check_procl.sh
-%{_plugindir}/check_procr.sh
 %{_plugindir}/check_qmailq.pl
 %{_plugindir}/check_rbl
 %{_plugindir}/check_remote_nagios_status.pl
@@ -681,5 +653,4 @@ EOF
 %{_plugindir}/check_traceroute.pl
 %{_plugindir}/check_uptime
 %{_plugindir}/check_vcs.pl
-%{_plugindir}/check_mysql2
 %{_plugindir}/check_wins.pl
