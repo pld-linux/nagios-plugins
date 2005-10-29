@@ -8,22 +8,29 @@
  	fi
  
  elif [[ "z$ac_cv_uname_s" = "zUnixWare" ]] && \
---- ./configure.in~	2005-03-23 20:54:25.000000000 +0200
-+++ ./configure.in	2005-03-23 21:09:57.000000000 +0200
-@@ -575,11 +575,8 @@
+--- ./configure.in~	2005-10-29 17:05:06.000000000 +0300
++++ ./configure.in	2005-10-29 17:05:10.000000000 +0300
+@@ -619,8 +619,18 @@
  AC_DEFINE_UNQUOTED(SOCKET_SIZE_TYPE, $ac_cv_socket_size_type ,
  	[Define type of socket size])
  
 -if test -f "/proc/loadavg"
 -then
--  AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
--  AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
--fi
-+AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
-+AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
- 
- dnl #### Process table test
- 
++AC_ARG_WITH(proc-loadavg,--with-proc-loadavg=<path> path to /proc/loadavg if name changes,ac_cv_proc_loadavg=$withval)
++AC_MSG_CHECKING([for /proc/loadavg])
++if test -n "$ac_cv_proc_loadavg"; then
++  AC_MSG_RESULT([(command line) $ac_cv_proc_loadavg])
++elif test -f "/proc/loadavg"; then
++  AC_MSG_RESULT([found /proc/loadavg])
++  ac_cv_proc_meminfo="/proc/loadavg"
++else
++  AC_MSG_RESULT([no])
++fi
++
++if test -n "$ac_cv_proc_loadavg"; then
+   AC_DEFINE(HAVE_PROC_LOADAVG,1,[Define if /proc/loadavg or similar exists])
+   AC_DEFINE_UNQUOTED(PROC_LOADAVG,"/proc/loadavg",[Location of /proc/loadavg])
+ fi
 --- ./configure.in~	2005-02-08 16:25:52.000000000 +0200
 +++ ./configure.in	2005-03-23 21:50:10.000000000 +0200
 @@ -1426,20 +1424,26 @@
