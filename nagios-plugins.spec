@@ -5,9 +5,11 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	2
+Release:	2.1
 License:	GPL v2
 Group:		Networking
+#define	_snap	200510290447
+#Source0:	http://nagiosplug.sourceforge.net/snapshot/%{name}-HEAD-%{_snap}.tar.gz
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	1f2bee15ade3d98ec79964a43479e328
 Patch0:		%{name}-configure.patch
@@ -15,7 +17,6 @@ Patch1:		%{name}-tainted.patch
 Patch2:		%{name}-contrib-API.patch
 Patch3:		%{name}-gettext.patch
 Patch4:		%{name}-subst.patch
-Patch5:		%{name}-ping-locale.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -30,7 +31,7 @@ BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
 BuildRequires:	rpmbuild(macros) >= 1.177
 BuildRequires:	rpm-pythonprov
-PreReq:		nagios-core
+Requires:	nagios-core
 Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -148,7 +149,8 @@ Requires:	nagios-core
 Requires:	radiusclient
 
 %description radius
-This plugin tests a radius server to see if it is accepting connections.
+This plugin tests a radius server to see if it is accepting
+connections.
 
 %description radius -l pl
 Ta wtyczka sprawdza serwer us³ugi radius, aby zobaczyæ, czy przyjmuje
@@ -174,8 +176,8 @@ players, and response time are displayed. Server rules and player
 information may also be displayed.
 
 %description qstat -l pl
-Ta wtyczka u¿ywa polecenia 'qstat' - popularnego narzêdzia do
-zapytañ o stan serwerów gier.
+Ta wtyczka u¿ywa polecenia 'qstat' - popularnego narzêdzia do zapytañ
+o stan serwerów gier.
 
 QStat to program dzia³aj±cy z linii poleceñ wy¶wietlaj±cy informacje o
 serwerach gier internetowych.
@@ -358,13 +360,12 @@ your own risk.
 Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
 
 %prep
-%setup -q
+%setup -q %{?_snap:-n %{name}-HEAD-%{_snap}}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 # bring contribs into shape...
 cd contrib
