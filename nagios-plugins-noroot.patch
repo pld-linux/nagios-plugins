@@ -1,0 +1,13 @@
+--- ./plugins-root/Makefile.am~	2005-10-19 15:59:55.000000000 +0300
++++ ./plugins-root/Makefile.am	2005-11-05 03:52:30.000000000 +0200
+@@ -40,10 +40,6 @@
+ 	p=$$f; \
+ 	echo " $(INSTALL_PROGRAM) $$p $(DESTDIR)$(libexecdir)/$$p"; \
+ 	$(INSTALL_PROGRAM) $$p $(DESTDIR)$(libexecdir)/$$p; \
+-	echo " chown root $(DESTDIR)$(libexecdir)/$$p"; \
+-	chown root $(DESTDIR)$(libexecdir)/$$p; \
+-	echo " chmod $(setuid_root_mode) $(DESTDIR)$(libexecdir)/$$p"; \
+-	chmod $(setuid_root_mode) $(DESTDIR)$(libexecdir)/$$p; \
+ 	done
+ 
+ install-root: $(EXTRA_PROGRAMS)
