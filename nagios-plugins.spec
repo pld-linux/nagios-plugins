@@ -5,7 +5,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	2.1
+Release:	3
 License:	GPL v2
 Group:		Networking
 #define	_snap	200510290447
@@ -24,7 +24,7 @@ BuildRequires:	gettext-devel >= 0.14.3
 BuildRequires:	iputils-ping
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
-BuildRequires:	openldap-devel
+BuildRequires:	openldap-devel >= 2.3.0
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
