@@ -5,7 +5,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Networking
 #define	_snap	200510290447
@@ -17,11 +17,11 @@ Patch1:		%{name}-tainted.patch
 Patch2:		%{name}-contrib-API.patch
 Patch3:		%{name}-gettext.patch
 Patch4:		%{name}-subst.patch
+Patch5:		%{name}-check_ping-socket-filter-warning.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel >= 0.14.3
-BuildRequires:	iputils-ping
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel >= 2.3.0
@@ -29,11 +29,11 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
-BuildRequires:	rpmbuild(macros) >= 1.177
 BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	nagios-core
-Conflicts:	iputils-ping < 1:ss020124
 Obsoletes:	netsaint-plugins
+Conflicts:	iputils-ping < 1:ss021109-3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_plugindir	%{_libdir}/nagios/plugins
@@ -109,8 +109,8 @@ Ta wtyczka sprawdza stan sprzêtu przy u¿yciu pakietu lm_sensors.
 Summary:	Nagios plugin to test a MySQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
 Group:		Networking
-Requires:	nagios-core
 Requires:	mysql-libs
+Requires:	nagios-core
 
 %description mysql
 This plugin tests a MySQL DBMS to determine whether it is active and
@@ -222,8 +222,8 @@ pomiêdzy hostem a jego sys.peer przy u¿yciu ntpq.
 Summary:	Nagios plugin to check DNS with nslookup
 Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu nslookup
 Group:		Networking
-Requires:	nagios-core
 Requires:	bind-utils
+Requires:	nagios-core
 
 %description dns
 This plugin uses the nslookup program to obtain the IP address for the
@@ -241,8 +241,8 @@ domy¶lny serwer (lub serwery) podany w /etc/resolv.conf.
 Summary:	Nagios plugin to check DNS servers with dig
 Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu programu dig
 Group:		Networking
-Requires:	nagios-core
 Requires:	bind-utils
+Requires:	nagios-core
 
 %description dig
 Test the DNS service on the specified host using dig.
@@ -329,15 +329,15 @@ Group:		Networking
 # for utils.pm, utils.sh
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 # check_apache
-Requires:	perl-libwww
 Requires:	perl-URI
+Requires:	perl-libwww
 # check_apc_ups.pl
 Requires:	net-snmp-utils
 # check_arping.pl
 #Requires:	perl(Net::Arping) - not found
 # check_bgpstate.pl
-Requires:	whois
 Requires:	perl-Net-SNMP
+Requires:	whois
 # check_traceroute.pl
 Requires:	traceroute
 # check_traceroute-pure_perl.pl
