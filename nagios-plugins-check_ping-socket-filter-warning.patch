@@ -1,0 +1,12 @@
+--- nagios-plugins-1.4.2/plugins/check_ping.c~	2005-09-14 17:40:20.000000000 +0300
++++ nagios-plugins-1.4.2/plugins/check_ping.c	2006-03-14 15:14:24.000000000 +0200
+@@ -453,7 +453,8 @@
+ 
+ 	/* check stderr, setting at least WARNING if there is output here */
+ 	while (fgets (buf, MAX_INPUT_BUFFER - 1, child_stderr))
+-		if (! strstr(buf,"WARNING - no SO_TIMESTAMP support, falling back to SIOCGSTAMP"))
++		if (! strstr(buf,"WARNING - no SO_TIMESTAMP support, falling back to SIOCGSTAMP") ||
++            ! strstr(buf,"WARNING: failed to install socket filter: Protocol not available"))
+ 			result = max_state (STATE_WARNING, error_scan (buf, addr));
+ 
+ 	(void) fclose (child_stderr);
