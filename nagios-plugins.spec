@@ -5,7 +5,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	4
+Release:	4.2
 License:	GPL v2
 Group:		Networking
 #define	_snap	200510290447
@@ -62,6 +62,7 @@ Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 # NOTE for sub package requires:
 # use Requires:	%{name} = %{epoch}:%{version}-%{release} for utils.sh or utils.pm
 # and Requires:	nagios-core if just plugins directory needed
+
 %package snmp
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
@@ -292,6 +293,16 @@ for a fast check if the host is alive.
 Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
 dany host dzia³a.
 
+%package cluster
+Summary:	Nagios plugin to check host and service clusters
+Group:		Networking
+URL:		http://nagios.sourceforge.net/docs/2_0/clusters.html
+Requires:	nagios-core
+
+%description cluster
+This package contains plugin check_cluster2 to check host and service
+clusters.
+
 # nsclient not packaged in PLD
 #%package nsclient
 #Summary:	Nagios plugin to check NT server with NSClient
@@ -430,7 +441,6 @@ rm -f check_{breeze,wave}.pl
 # contrib. mostly useless. but you'll never know
 cd contrib
 
-%{__cc} %{rpmcflags} check_cluster.c -o check_cluster
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_rbl.c
@@ -582,6 +592,10 @@ EOF
 %defattr(755,root,root,755)
 %attr(2755,root,adm) %{_plugindir}/check_fping
 
+%files cluster
+%defattr(755,root,root,755)
+%{_plugindir}/check_cluster2
+
 %files contrib
 %defattr(755,root,root,755)
 %{_plugindir}/check_adptraid.sh
@@ -593,8 +607,6 @@ EOF
 %{_plugindir}/check_axis.sh
 %{_plugindir}/check_backup.pl
 %{_plugindir}/check_bgpstate.pl
-%{_plugindir}/check_cluster
-%{_plugindir}/check_cluster2
 %{_plugindir}/check_compaq_insight.pl
 %{_plugindir}/check_digitemp.pl
 %{_plugindir}/check_disk_snmp.pl
