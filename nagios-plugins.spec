@@ -5,7 +5,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	4.2
+Release:	4.3
 License:	GPL v2
 Group:		Networking
 #define	_snap	200510290447
@@ -32,6 +32,7 @@ BuildRequires:	radiusclient-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	nagios-core
+Obsoletes:	nagios-plugins-cluster
 Obsoletes:	netsaint-plugins
 Conflicts:	iputils-ping < 1:ss021109-3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -293,16 +294,6 @@ for a fast check if the host is alive.
 Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
 dany host dzia³a.
 
-%package cluster
-Summary:	Nagios plugin to check host and service clusters
-Group:		Networking
-URL:		http://nagios.sourceforge.net/docs/2_0/clusters.html
-Requires:	nagios-core
-
-%description cluster
-This package contains plugin check_cluster2 to check host and service
-clusters.
-
 # nsclient not packaged in PLD
 #%package nsclient
 #Summary:	Nagios plugin to check NT server with NSClient
@@ -490,6 +481,7 @@ EOF
 %{_plugindir}/utils.sh
 
 # plugins
+%{_plugindir}/check_cluster2
 %{_plugindir}/check_dhcp
 %{_plugindir}/check_disk
 %{_plugindir}/check_dummy
@@ -591,10 +583,6 @@ EOF
 %files fping
 %defattr(755,root,root,755)
 %attr(2755,root,adm) %{_plugindir}/check_fping
-
-%files cluster
-%defattr(755,root,root,755)
-%{_plugindir}/check_cluster2
 
 %files contrib
 %defattr(755,root,root,755)
