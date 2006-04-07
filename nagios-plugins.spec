@@ -1,11 +1,12 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
+%include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.2
-Release:	4.3
+Release:	4.8
 License:	GPL v2
 Group:		Networking
 #define	_snap	200510290447
@@ -29,6 +30,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
+BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	nagios-core
@@ -38,6 +40,8 @@ Conflicts:	iputils-ping < 1:ss021109-3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_plugindir	%{_libdir}/nagios/plugins
+# Not available in Ac
+%define		_noautoreq	'perl(DBD::Oracle)' 'perl(Net::Arping)' 'perl(RRD::File)' 'perl(a)' 'perl(packet_utils)' 'perl(snmputil)'
 
 %description
 Nagios is a program that will monitor hosts and services on your
@@ -379,9 +383,15 @@ sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
 sed -i -e '1s,#!.*/bin/perl,#!%{__perl},' \
 	check_{oracle_tbs,{snmp_{{disk,process}_monitor,printer},nagios_db,flexlm}.pl}
 
+sed -i -e '1s,#!.*/bin/env,#!%{__python},' \
+	check_pcpmetric.py
+
+sed -i -e '1s,#!.*/bin/bash,#!/bin/sh,' \
+	check_smb.sh
+
 sed -i -e "
 	s,use lib '/usr/local/nagios/libexec/',use lib '%{_plugindir}',
-	s,require '/usr/libexec/nagios/plugins',require '%{_plugindir}',
+	s,require '/usr/libexec/nagios/plugins,require '%{_plugindir},
 	s,use lib utils.pm,use lib '%{_plugindir}',
 " *.pl
 
