@@ -1,13 +1,12 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - gnutls vs openssl
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
-Release:	0.2
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -412,8 +411,9 @@ rm check_{breeze,wave}.pl
 %configure \
 	--libexecdir=%{_plugindir} \
 	--with-cgiurl=/nagios/cgi-bin \
-	--with-mysql=%{_prefix} \
-	--with-pgsql=%{_prefix} \
+	--with-mysql=/usr \
+	--with-pgsql=/usr \
+	--with-openssl=/usr \
 	--with-ping-command='/bin/ping -n -U -w %%d -c %%d %%s' \
 	--with-ping6-command='/bin/ping6 -n -U -w %%d -c %%d %%s' \
 	--with-ps-command="/bin/ps axwo 'stat uid ppid vsz rss pcpu comm args'" \
