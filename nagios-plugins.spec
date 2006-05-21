@@ -1,23 +1,22 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
+# - gnutls vs openssl
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.2
-Release:	4.8
+Version:	1.4.3
+Release:	0.2
 License:	GPL v2
 Group:		Networking
-#define	_snap	200510290447
-#Source0:	http://nagiosplug.sourceforge.net/snapshot/%{name}-HEAD-%{_snap}.tar.gz
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	1f2bee15ade3d98ec79964a43479e328
-Patch0:		%{name}-configure.patch
-Patch1:		%{name}-tainted.patch
-Patch2:		%{name}-contrib-API.patch
-Patch3:		%{name}-gettext.patch
-Patch4:		%{name}-subst.patch
+# Source0-md5:	2c40fc69d51cc979e85150870a1daa93
+Patch0:		%{name}-tainted.patch
+Patch1:		%{name}-contrib-API.patch
+Patch2:		%{name}-gettext.patch
+Patch3:		%{name}-subst.patch
+Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
@@ -34,9 +33,8 @@ BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	nagios-core
-Obsoletes:	nagios-plugins-cluster
 Obsoletes:	netsaint-plugins
-Conflicts:	iputils-ping < 1:ss021109-3.1
+Conflicts:	iputils-ping < 1:ss020124
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_plugindir	%{_libdir}/nagios/plugins
@@ -390,7 +388,7 @@ sed -i -e '1s,#!.*/bin/bash,#!/bin/sh,' \
 	check_smb.sh
 
 sed -i -e "
-	s,use lib '/usr/local/nagios/libexec/',use lib '%{_plugindir}',
+	s,use lib '.*/nagios/libexec/',use lib '%{_plugindir}',
 	s,require '/usr/libexec/nagios/plugins,require '%{_plugindir},
 	s,use lib utils.pm,use lib '%{_plugindir}',
 " *.pl
@@ -401,8 +399,8 @@ sed -ne '/---/!p;/---/q' < check_appletalk.orig > check_appletalk.pl
 chmod a+x check_*.{pl,sh,py}
 chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
 
-# same as in main
-rm -f check_{breeze,wave}.pl
+# exists in main
+rm check_{breeze,wave}.pl
 
 %build
 %{__gettextize}
@@ -423,6 +421,7 @@ rm -f check_{breeze,wave}.pl
 	--with-ps-cols=8 \
 	--with-ps-varlist="procstat,&procuid,&procppid,&procvsz,&procrss,&procpcpu,procprog,&pos" \
 	--with-proc-meminfo=/proc/meminfo \
+	--with-proc-loadavg=/proc/loadavg \
 	--with-nslookup-command="/usr/bin/nslookup -sil" \
 	--with-uptime-command=/usr/bin/uptime \
 	--with-rpcinfo-command=/usr/sbin/rpcinfo \
@@ -456,6 +455,9 @@ cd contrib
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+%{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang %{name}
@@ -492,13 +494,11 @@ EOF
 
 # plugins
 %{_plugindir}/check_cluster2
-%{_plugindir}/check_dhcp
 %{_plugindir}/check_disk
 %{_plugindir}/check_dummy
 %{_plugindir}/check_file_age
 %{_plugindir}/check_ftp
 %{_plugindir}/check_http
-%{_plugindir}/check_icmp
 %{_plugindir}/check_imap
 %{_plugindir}/check_ircd
 %{_plugindir}/check_log
@@ -524,6 +524,10 @@ EOF
 %{_plugindir}/check_ups
 %{_plugindir}/check_users
 %{_plugindir}/check_swap
+
+# these plugins need suid bit to operate
+%{_plugindir}/check_dhcp
+%{_plugindir}/check_icmp
 
 # requires license.dat
 %{_plugindir}/check_flexlm
@@ -553,6 +557,7 @@ EOF
 %files mysql
 %defattr(755,root,root,755)
 %{_plugindir}/check_mysql
+%{_plugindir}/check_mysql_query
 
 %files pgsql
 %defattr(755,root,root,755)
