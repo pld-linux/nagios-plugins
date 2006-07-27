@@ -304,22 +304,22 @@ Requires:	nagios-core
 Provides:	nagios-plugins-fping = %{version}-%{release}
 Obsoletes:	nagios-plugins-fping
 
-%description  -n nagios-plugin-check_fping
+%description -n nagios-plugin-check_fping
 This plugin will use the /bin/fping command to ping the specified host
 for a fast check if the host is alive.
 
-%description  -n nagios-plugin-check_fping -l pl
+%description -n nagios-plugin-check_fping -l pl
 Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
 dany host dzia³a.
 
-%package  -n nagios-plugin-check_ping
+%package -n nagios-plugin-check_ping
 Summary:	Nagios plugin to check host up state with ping
 Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu ping
 Group:		Networking
 Requires:	iputils-ping >= 1:ss021109-3.1
 Requires:	nagios-core
 
-%description  -n nagios-plugin-check_ping
+%description -n nagios-plugin-check_ping
 This plugin will use the /bin/ping command to ping the specified host
 if the host is alive.
 
