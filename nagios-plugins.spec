@@ -297,12 +297,16 @@ dany host dzia³a.
 
 %package perl
 Summary:	Nagios plugins written in Perl
+Summary(pl):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description perl
 This package contains Nagios plugins written in Perl.
+
+%description perl -l pl
+Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 
 # nsclient not packaged in PLD
 #%package nsclient
