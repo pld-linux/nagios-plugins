@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
-Release:	2
+Release:	2.1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -295,6 +295,15 @@ for a fast check if the host is alive.
 Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
 dany host dzia³a.
 
+%package perl
+Summary:	Nagios plugins written in Perl
+Group:		Networking
+# for utils.pm
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+
+%description perl
+This package contains Nagios plugins written in Perl.
+
 # nsclient not packaged in PLD
 #%package nsclient
 #Summary:	Nagios plugin to check NT server with NSClient
@@ -496,13 +505,10 @@ EOF
 %{_plugindir}/check_cluster2
 %{_plugindir}/check_disk
 %{_plugindir}/check_dummy
-%{_plugindir}/check_file_age
 %{_plugindir}/check_ftp
 %{_plugindir}/check_http
 %{_plugindir}/check_imap
-%{_plugindir}/check_ircd
 %{_plugindir}/check_log
-%{_plugindir}/check_mailq
 %{_plugindir}/check_mrtg
 %{_plugindir}/check_mrtgtraf
 %{_plugindir}/check_nagios
@@ -513,7 +519,6 @@ EOF
 %{_plugindir}/check_pop
 %{_plugindir}/check_procs
 %{_plugindir}/check_real
-%{_plugindir}/check_rpc
 %{_plugindir}/check_simap
 %{_plugindir}/check_smtp
 %{_plugindir}/check_spop
@@ -529,12 +534,20 @@ EOF
 %{_plugindir}/check_dhcp
 %{_plugindir}/check_icmp
 
-# requires license.dat
-%{_plugindir}/check_flexlm
 
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
 %{_plugindir}/check_oracle
+
+%files perl
+%defattr(755,root,root,755)
+%{_plugindir}/check_file_age
+%{_plugindir}/check_ircd
+%{_plugindir}/check_mailq
+%{_plugindir}/check_rpc
+
+# requires license.dat
+%{_plugindir}/check_flexlm
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
