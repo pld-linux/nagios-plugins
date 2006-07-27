@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
-Release:	2.4
+Release:	2.8
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -62,7 +62,7 @@ zwracajace stan danej us³ugi do Nagiosa.
 Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 
 # NOTE for sub package requires:
-# use Requires:	%{name} = %{epoch}:%{version}-%{release} for utils.sh or utils.pm
+# use Requires:	%{name} = %{version}-%{release} for utils.sh or utils.pm
 # and Requires:	nagios-core if just plugins directory needed
 
 %package snmp
@@ -70,7 +70,7 @@ Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
 
@@ -85,7 +85,7 @@ Summary:	Nagios plugin to check remote disk using smbclient
 Summary(pl):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z u¿yciem smbclienta
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	samba-client
 
 %description samba
@@ -99,10 +99,10 @@ Summary:	Nagios plugin to check hardware status using the lm_sensors package
 Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu sprzêtu przy u¿yciu pakietu lm_sensors
 Group:		Networking
 # for utils.sh
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	lm_sensors
-Obsoletes:	%{name}-sensors
-Provides:	%{name}-sensors
+Provides:	nagios-plugins-sensors = %{version}-%{release}
+Obsoletes:	nagios-plugins-sensors
 
 %description -n nagios-plugin-check_sensors
 This plugin checks hardware status using the lm_sensors package.
@@ -129,8 +129,8 @@ Summary:	Nagios plugin to test a PostgreSQL DBMS
 Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
 Requires:	nagios-core
-Obsoletes:	%{name}-pgsql
-Provides:	%{name}-pgsql
+Provides:	nagios-plugins-pgsql = %{version}-%{release}
+Obsoletes:	nagios-plugins-pgsql
 
 %description -n nagios-plugin-check_pgsql
 This plugin tests a PostgreSQL DBMS to determine whether it is active
@@ -152,8 +152,8 @@ Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera radius pod k±tem przyjmowani
 Group:		Networking
 Requires:	nagios-core
 Requires:	radiusclient
-Obsoletes:	%{name}-radius
-Provides:	%{name}-radius
+Provides:	nagios-plugins-radius = %{version}-%{release}
+Obsoletes:	nagios-plugins-radius
 
 %description -n nagios-plugin-check_radius
 This plugin tests a radius server to see if it is accepting
@@ -169,8 +169,8 @@ Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu serwerów gier internetowych
 Group:		Networking
 Requires:	nagios-core
 Requires:	qstat
-Obsoletes:	%{name}-qstat
-Provides:	%{name}-qstat
+Provides:	nagios-plugins-qstat = %{version}-%{release}
+Obsoletes:	nagios-plugins-qstat
 
 %description -n nagios-plugin-check_game
 This plugin uses the 'qstat' command, the popular game server status
@@ -201,8 +201,8 @@ Summary:	Nagios plugin to check LDAP servers
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
 Group:		Networking
 Requires:	nagios-core
-Obsoletes:	%{name}-ldap
-Provides:	%{name}-ldap
+Provides:	nagios-plugins-ldap = %{version}-%{release}
+Obsoletes:	nagios-plugins-ldap
 
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
@@ -215,10 +215,10 @@ Summary:	Nagios plugin to check time using NTP protocol
 Summary(pl):	Wtyczka Nagiosa do sprawdzania czasu przy u¿yciu protoko³u NTP
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Requires:	ntp-client
-Obsoletes:	%{name}-ntp
-Provides:	%{name}-ntp
+Provides:	nagios-plugins-ntp = %{version}-%{release}
+Obsoletes:	nagios-plugins-ntp
 
 %description -n nagios-plugin-check_ntp
 Checks the local timestamp offset versus <host> with ntpdate. Checks
@@ -236,8 +236,8 @@ Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu nslookup
 Group:		Networking
 Requires:	bind-utils
 Requires:	nagios-core
-Obsoletes:	%{name}-dns
-Provides:	%{name}-dns
+Provides:	nagios-plugins-dns = %{version}-%{release}
+Obsoletes:	nagios-plugins-dns
 
 %description -n nagios-plugin-check_dns
 This plugin uses the nslookup program to obtain the IP address for the
@@ -257,8 +257,8 @@ Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu programu dig
 Group:		Networking
 Requires:	bind-utils
 Requires:	nagios-core
-Obsoletes:	%{name}-dig
-Provides:	%{name}-dig
+Provides:	nagios-plugins-dig = %{version}-%{release}
+Obsoletes:	nagios-plugins-dig
 
 %description -n nagios-plugin-check_dig
 Test the DNS service on the specified host using dig.
@@ -286,8 +286,8 @@ Summary(pl):	Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps
 Group:		Networking
 Requires:	nagios-core
 Requires:	procps
-Obsoletes:	%{name}-procps
-Provides:	%{name}-procps
+Provides:	nagios-plugins-procps = %{version}-%{release}
+Obsoletes:	nagios-plugins-procps
 
 %description -n nagios-plugin-check_load
 Nagios plugin to check uptime using procps.
@@ -299,10 +299,10 @@ Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps.
 Summary:	Nagios plugin to check host up state with fping
 Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu fping
 Group:		Networking
-Requires:	nagios-core
 Requires:	fping
-Obsoletes:	%{name}-fping
-Provides:	%{name}-fping
+Requires:	nagios-core
+Provides:	nagios-plugins-fping = %{version}-%{release}
+Obsoletes:	nagios-plugins-fping
 
 %description  -n nagios-plugin-check_fping
 This plugin will use the /bin/fping command to ping the specified host
@@ -316,19 +316,19 @@ dany host dzia³a.
 Summary:	Nagios plugin to check host up state with ping
 Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu ping
 Group:		Networking
-Requires:	nagios-core
 Requires:	iputils-ping >= 1:ss021109-3.1
+Requires:	nagios-core
 
 %description  -n nagios-plugin-check_ping
-This plugin will use the /bin/ping command to ping the specified host if the
-host is alive.
+This plugin will use the /bin/ping command to ping the specified host
+if the host is alive.
 
 %package perl
 Summary:	Nagios plugins written in Perl
 Summary(pl):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 # for perl(Exporter)
 Requires:	perl-base
 
@@ -373,7 +373,7 @@ Summary:	Contributed nagios plugins
 Summary(pl):	Wtyczki przekazane do projektu Nagios
 Group:		Networking
 # for utils.pm, utils.sh
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 # check_apache
 Requires:	perl-URI
 Requires:	perl-libwww
