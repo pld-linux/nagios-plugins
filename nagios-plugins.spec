@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
-Release:	2.1
+Release:	2.2
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -37,6 +37,7 @@ Conflicts:	iputils-ping < 1:ss021109-3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_plugindir	%{_libdir}/nagios/plugins
+%define		_noautoreqfiles utils.pm
 # Not available in Ac
 %define		_noautoreq	'perl(DBD::Oracle)' 'perl(Net::Arping)' 'perl(RRD::File)' 'perl(a)' 'perl(packet_utils)' 'perl(snmputil)'
 
@@ -301,6 +302,8 @@ Summary(pl):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+# for perl(Exporter)
+Requires:	perl-base
 
 %description perl
 This package contains Nagios plugins written in Perl.
