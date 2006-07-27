@@ -323,6 +323,10 @@ Requires:	nagios-core
 This plugin will use the /bin/ping command to ping the specified host
 if the host is alive.
 
+%description -n nagios-plugin-check_ping -l pl
+Ta wtyczka u¿ywa polecenia /bin/ping do sprawdzenia, czy dany host
+dzia³a.
+
 %package perl
 Summary:	Nagios plugins written in Perl
 Summary(pl):	Wtyczki Nagiosa napisane w Perlu
