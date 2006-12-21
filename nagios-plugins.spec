@@ -6,7 +6,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -17,6 +17,7 @@ Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
+Patch6:		%{name}-configure.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -417,6 +418,7 @@ Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 # bring contribs into shape...
 cd contrib
