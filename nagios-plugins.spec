@@ -3,7 +3,7 @@
 #   REQUIREMENTS explains the dependencies.
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
-Summary(pl):	Wtyczki do monitorowania hostów/us³ug/sieci dla Nagiosa
+Summary(pl.UTF-8):   Wtyczki do monitorowania hostÃ³w/usÅ‚ug/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.3
 Release:	5
@@ -52,15 +52,15 @@ programs which return the status of the checks to Nagios.
 This package contains the basic plugins necessary for use with the
 nagios package.
 
-%description -l pl
-Nagios to program monitoruj±cy hosty i us³ugi w sieci i powiadamiaj±cy
-poczt± elektroniczn± lub na pager o wyst±pieniu lub rozwi±zaniu
-problemów. Nagios dzia³a na serwerze uniksowym w tle lub jako demon,
-regularnie przeprowadzaj±c kontrolê ró¿nych podanych mu us³ug. Sama
-kontrola us³ug jest wykonywana poprzez oddzielne "wtyczki" - programy
-zwracajace stan danej us³ugi do Nagiosa.
+%description -l pl.UTF-8
+Nagios to program monitorujÄ…cy hosty i usÅ‚ugi w sieci i powiadamiajÄ…cy
+pocztÄ… elektronicznÄ… lub na pager o wystÄ…pieniu lub rozwiÄ…zaniu
+problemÃ³w. Nagios dziaÅ‚a na serwerze uniksowym w tle lub jako demon,
+regularnie przeprowadzajÄ…c kontrolÄ™ rÃ³Å¼nych podanych mu usÅ‚ug. Sama
+kontrola usÅ‚ug jest wykonywana poprzez oddzielne "wtyczki" - programy
+zwracajace stan danej usÅ‚ugi do Nagiosa.
 
-Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
+Ten pakiet zawiera podstawowe wtyczki do uÅ¼ywania z pakietem nagios.
 
 # NOTE for sub package requires:
 # use Requires:	%{name} = %{version}-%{release} for utils.sh or utils.pm
@@ -68,7 +68,7 @@ Ten pakiet zawiera podstawowe wtyczki do u¿ywania z pakietem nagios.
 
 %package snmp
 Summary:	Nagios plugins using SNMP protocol to query information
-Summary(pl):	Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji
+Summary(pl.UTF-8):   Wtyczki Nagiosa uÅ¼ywajÄ…ce protokoÅ‚u SNMP w celu uzyskania informacji
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{version}-%{release}
@@ -78,12 +78,12 @@ Requires:	perl-Net-SNMP
 %description snmp
 Nagios plugins using SNMP protocol to query information.
 
-%description snmp -l pl
-Wtyczki Nagiosa u¿ywaj±ce protoko³u SNMP w celu uzyskania informacji.
+%description snmp -l pl.UTF-8
+Wtyczki Nagiosa uÅ¼ywajÄ…ce protokoÅ‚u SNMP w celu uzyskania informacji.
 
 %package samba
 Summary:	Nagios plugin to check remote disk using smbclient
-Summary(pl):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z u¿yciem smbclienta
+Summary(pl.UTF-8):   Wtyczka Nagiosa do zdalnego sprawdzania dysku z uÅ¼yciem smbclienta
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{version}-%{release}
@@ -92,12 +92,12 @@ Requires:	samba-client
 %description samba
 Perl Check SMB Disk plugin for Nagios.
 
-%description samba -l pl
-Perlowa wtyczka dla Nagiosa sprawdzaj±ca dyski SMB.
+%description samba -l pl.UTF-8
+Perlowa wtyczka dla Nagiosa sprawdzajÄ…ca dyski SMB.
 
 %package -n nagios-plugin-check_sensors
 Summary:	Nagios plugin to check hardware status using the lm_sensors package
-Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu sprzêtu przy u¿yciu pakietu lm_sensors
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania stanu sprzÄ™tu przy uÅ¼yciu pakietu lm_sensors
 Group:		Networking
 # for utils.sh
 Requires:	%{name} = %{version}-%{release}
@@ -108,12 +108,12 @@ Obsoletes:	nagios-plugins-sensors
 %description -n nagios-plugin-check_sensors
 This plugin checks hardware status using the lm_sensors package.
 
-%description -n nagios-plugin-check_sensors -l pl
-Ta wtyczka sprawdza stan sprzêtu przy u¿yciu pakietu lm_sensors.
+%description -n nagios-plugin-check_sensors -l pl.UTF-8
+Ta wtyczka sprawdza stan sprzÄ™tu przy uÅ¼yciu pakietu lm_sensors.
 
 %package mysql
 Summary:	Nagios plugin to test a MySQL DBMS
-Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
 Group:		Networking
 Requires:	nagios-core
 
@@ -121,13 +121,13 @@ Requires:	nagios-core
 This plugin tests a MySQL DBMS to determine whether it is active and
 accepting queries.
 
-%description mysql -l pl
-Ta wtyczka sprawdza serwer baz danych MySQL, aby okre¶liæ, czy jest
+%description mysql -l pl.UTF-8
+Ta wtyczka sprawdza serwer baz danych MySQL, aby okreÅ›liÄ‡, czy jest
 aktywny i przyjmuje zapytania.
 
 %package -n nagios-plugin-check_pgsql
 Summary:	Nagios plugin to test a PostgreSQL DBMS
-Summary(pl):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
 Requires:	nagios-core
 Provides:	nagios-plugins-pgsql = %{version}-%{release}
@@ -140,16 +140,16 @@ the specified database, and then disconnects. If no database is
 specified, it connects to the template1 database, which is present in
 every functioning PostgreSQL DBMS.
 
-%description -n nagios-plugin-check_pgsql -l pl
-Ta wtyczka sprawdza serwer baz danych PostgreSQL, aby okre¶liæ, czy
-jest aktywny i przyjmuje zapytania. Aktualnie po prostu ³±czy siê do
-okre¶lonej bazy danych i roz³±cza. Je¶li nie podano bazy danych, ³±czy
-siê do bazy danych template1, obecnej w ka¿dym dzia³aj±cym systemie
+%description -n nagios-plugin-check_pgsql -l pl.UTF-8
+Ta wtyczka sprawdza serwer baz danych PostgreSQL, aby okreÅ›liÄ‡, czy
+jest aktywny i przyjmuje zapytania. Aktualnie po prostu Å‚Ä…czy siÄ™ do
+okreÅ›lonej bazy danych i rozÅ‚Ä…cza. JeÅ›li nie podano bazy danych, Å‚Ä…czy
+siÄ™ do bazy danych template1, obecnej w kaÅ¼dym dziaÅ‚ajÄ…cym systemie
 PostgreSQL.
 
 %package -n nagios-plugin-check_radius
 Summary:	Nagios plugin to test a radius server to see if it is accepting connections
-Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera radius pod k±tem przyjmowania po³±czeñ
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania serwera radius pod kÄ…tem przyjmowania poÅ‚Ä…czeÅ„
 Group:		Networking
 Requires:	nagios-core
 Requires:	radiusclient
@@ -160,13 +160,13 @@ Obsoletes:	nagios-plugins-radius
 This plugin tests a radius server to see if it is accepting
 connections.
 
-%description -n nagios-plugin-check_radius -l pl
-Ta wtyczka sprawdza serwer us³ugi radius, aby zobaczyæ, czy przyjmuje
-po³±czenia.
+%description -n nagios-plugin-check_radius -l pl.UTF-8
+Ta wtyczka sprawdza serwer usÅ‚ugi radius, aby zobaczyÄ‡, czy przyjmuje
+poÅ‚Ä…czenia.
 
 %package -n nagios-plugin-check_game
 Summary:	Nagios plugin to check status of Internet game servers
-Summary(pl):	Wtyczka Nagiosa do sprawdzania stanu serwerów gier internetowych
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania stanu serwerÃ³w gier internetowych
 Group:		Networking
 Requires:	nagios-core
 Requires:	qstat
@@ -185,21 +185,21 @@ servers running a game, the server name, map name, current number of
 players, and response time are displayed. Server rules and player
 information may also be displayed.
 
-%description -n nagios-plugin-check_game -l pl
-Ta wtyczka u¿ywa polecenia 'qstat' - popularnego narzêdzia do zapytañ
-o stan serwerów gier.
+%description -n nagios-plugin-check_game -l pl.UTF-8
+Ta wtyczka uÅ¼ywa polecenia 'qstat' - popularnego narzÄ™dzia do zapytaÅ„
+o stan serwerÃ³w gier.
 
-QStat to program dzia³aj±cy z linii poleceñ wy¶wietlaj±cy informacje o
+QStat to program dziaÅ‚ajÄ…cy z linii poleceÅ„ wyÅ›wietlajÄ…cy informacje o
 serwerach gier internetowych.
 
-Serwery mog± byæ wy³±czone, nie odpowiadaæ, b±d¼ mieæ uruchomion± grê.
-Dla serwerów z grami wy¶wietlanea s±: nazwa serwera, nazwa mapy,
-aktualna liczba graczy i czas odpowiedzi. Mog± byæ dodatkowo
-wy¶wietlone regu³y serwera i informacje o graczach.
+Serwery mogÄ… byÄ‡ wyÅ‚Ä…czone, nie odpowiadaÄ‡, bÄ…dÅº mieÄ‡ uruchomionÄ… grÄ™.
+Dla serwerÃ³w z grami wyÅ›wietlanea sÄ…: nazwa serwera, nazwa mapy,
+aktualna liczba graczy i czas odpowiedzi. MogÄ… byÄ‡ dodatkowo
+wyÅ›wietlone reguÅ‚y serwera i informacje o graczach.
 
 %package -n nagios-plugin-check_ldap
 Summary:	Nagios plugin to check LDAP servers
-Summary(pl):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania serwerÃ³w LDAP
 Group:		Networking
 Requires:	nagios-core
 Provides:	nagios-plugins-ldap = %{version}-%{release}
@@ -208,12 +208,12 @@ Obsoletes:	nagios-plugins-ldap
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
 
-%description -n nagios-plugin-check_ldap -l pl
-Wtyczka Nagiosa do sprawdzania serwerów LDAP.
+%description -n nagios-plugin-check_ldap -l pl.UTF-8
+Wtyczka Nagiosa do sprawdzania serwerÃ³w LDAP.
 
 %package -n nagios-plugin-check_ntp
 Summary:	Nagios plugin to check time using NTP protocol
-Summary(pl):	Wtyczka Nagiosa do sprawdzania czasu przy u¿yciu protoko³u NTP
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania czasu przy uÅ¼yciu protokoÅ‚u NTP
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{version}-%{release}
@@ -226,14 +226,14 @@ Checks the local timestamp offset versus <host> with ntpdate. Checks
 the jitter/dispersion of clock signal between <host> and its sys.peer
 with ntpq.
 
-%description -n nagios-plugin-check_ntp -l pl
-Ta wtyczka sprawdza przesuniêcie lokalnego czasu wzglêdem danego hosta
-przy u¿yciu ntpdate. Sprawdza wahania/dyspersjê sygna³u zegara
-pomiêdzy hostem a jego sys.peer przy u¿yciu ntpq.
+%description -n nagios-plugin-check_ntp -l pl.UTF-8
+Ta wtyczka sprawdza przesuniÄ™cie lokalnego czasu wzglÄ™dem danego hosta
+przy uÅ¼yciu ntpdate. Sprawdza wahania/dyspersjÄ™ sygnaÅ‚u zegara
+pomiÄ™dzy hostem a jego sys.peer przy uÅ¼yciu ntpq.
 
 %package -n nagios-plugin-check_dns
 Summary:	Nagios plugin to check DNS with nslookup
-Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu nslookup
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania DNS-u przy uÅ¼yciu nslookup
 Group:		Networking
 Requires:	bind-utils
 Requires:	nagios-core
@@ -246,15 +246,15 @@ given host/domain query. A optional DNS server to use may be
 specified. If no DNS server is specified, the default server(s)
 specified in /etc/resolv.conf will be used.
 
-%description -n nagios-plugin-check_dns -l pl
-Ta wtyczka u¿ywa programu nslookup do uzyskania adresu IP danego dla
-danego zapytania o host/domenê. Mo¿na opcjonalnie podaæ serwer DNS,
-który ma byæ u¿yty. Je¶li nie podano serwera DNS, u¿ywany jest
-domy¶lny serwer (lub serwery) podany w /etc/resolv.conf.
+%description -n nagios-plugin-check_dns -l pl.UTF-8
+Ta wtyczka uÅ¼ywa programu nslookup do uzyskania adresu IP danego dla
+danego zapytania o host/domenÄ™. MoÅ¼na opcjonalnie podaÄ‡ serwer DNS,
+ktÃ³ry ma byÄ‡ uÅ¼yty. JeÅ›li nie podano serwera DNS, uÅ¼ywany jest
+domyÅ›lny serwer (lub serwery) podany w /etc/resolv.conf.
 
 %package -n nagios-plugin-check_dig
 Summary:	Nagios plugin to check DNS servers with dig
-Summary(pl):	Wtyczka Nagiosa do sprawdzania DNS-u przy u¿yciu programu dig
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania DNS-u przy uÅ¼yciu programu dig
 Group:		Networking
 Requires:	bind-utils
 Requires:	nagios-core
@@ -264,13 +264,13 @@ Obsoletes:	nagios-plugins-dig
 %description -n nagios-plugin-check_dig
 Test the DNS service on the specified host using dig.
 
-%description -n nagios-plugin-check_dig -l pl
-Ta wtyczka sprawdza us³ugê DNS na podanym ho¶cie przy u¿yciu programu
+%description -n nagios-plugin-check_dig -l pl.UTF-8
+Ta wtyczka sprawdza usÅ‚ugÄ™ DNS na podanym hoÅ›cie przy uÅ¼yciu programu
 dig.
 
 %package ssh
 Summary:	Nagios plugins to check remote services via SSH
-Summary(pl):	Wtyczki Nagiosa do sprawdzania zdalnych us³ug po SSH
+Summary(pl.UTF-8):   Wtyczki Nagiosa do sprawdzania zdalnych usÅ‚ug po SSH
 Group:		Networking
 Requires:	nagios-core
 Requires:	openssh-clients
@@ -278,12 +278,12 @@ Requires:	openssh-clients
 %description ssh
 This plugin uses SSH to execute commands on a remote host.
 
-%description ssh -l pl
-Ta wtyczka u¿ywa SSH do wykonywania poleceñ na zdalnym ho¶cie.
+%description ssh -l pl.UTF-8
+Ta wtyczka uÅ¼ywa SSH do wykonywania poleceÅ„ na zdalnym hoÅ›cie.
 
 %package -n nagios-plugin-check_load
 Summary:	Nagios plugin to check uptime using procps
-Summary(pl):	Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania uptime'u przy uÅ¼yciu procps
 Group:		Networking
 Requires:	nagios-core
 Requires:	procps
@@ -293,12 +293,12 @@ Obsoletes:	nagios-plugins-procps
 %description -n nagios-plugin-check_load
 Nagios plugin to check uptime using procps.
 
-%description -n nagios-plugin-check_load -l pl
-Wtyczka Nagiosa do sprawdzania uptime'u przy u¿yciu procps.
+%description -n nagios-plugin-check_load -l pl.UTF-8
+Wtyczka Nagiosa do sprawdzania uptime'u przy uÅ¼yciu procps.
 
 %package -n nagios-plugin-check_fping
 Summary:	Nagios plugin to check host up state with fping
-Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu fping
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania dziaÅ‚ania hosta przy uÅ¼yciu programu fping
 Group:		Networking
 Requires:	fping
 Requires:	nagios-core
@@ -309,13 +309,13 @@ Obsoletes:	nagios-plugins-fping
 This plugin will use the /bin/fping command to ping the specified host
 for a fast check if the host is alive.
 
-%description -n nagios-plugin-check_fping -l pl
-Ta wtyczka u¿ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
-dany host dzia³a.
+%description -n nagios-plugin-check_fping -l pl.UTF-8
+Ta wtyczka uÅ¼ywa polecenia /bin/fping do szybkiego sprawdzenia, czy
+dany host dziaÅ‚a.
 
 %package -n nagios-plugin-check_ping
 Summary:	Nagios plugin to check host up state with ping
-Summary(pl):	Wtyczka Nagiosa do sprawdzania dzia³ania hosta przy u¿yciu programu ping
+Summary(pl.UTF-8):   Wtyczka Nagiosa do sprawdzania dziaÅ‚ania hosta przy uÅ¼yciu programu ping
 Group:		Networking
 Requires:	iputils-ping >= 1:ss021109-3.1
 Requires:	nagios-core
@@ -324,13 +324,13 @@ Requires:	nagios-core
 This plugin will use the /bin/ping command to ping the specified host
 if the host is alive.
 
-%description -n nagios-plugin-check_ping -l pl
-Ta wtyczka u¿ywa polecenia /bin/ping do sprawdzenia, czy dany host
-dzia³a.
+%description -n nagios-plugin-check_ping -l pl.UTF-8
+Ta wtyczka uÅ¼ywa polecenia /bin/ping do sprawdzenia, czy dany host
+dziaÅ‚a.
 
 %package perl
 Summary:	Nagios plugins written in Perl
-Summary(pl):	Wtyczki Nagiosa napisane w Perlu
+Summary(pl.UTF-8):   Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 # for utils.pm
 Requires:	%{name} = %{version}-%{release}
@@ -340,13 +340,13 @@ Requires:	perl-base
 %description perl
 This package contains Nagios plugins written in Perl.
 
-%description perl -l pl
+%description perl -l pl.UTF-8
 Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 
 # nsclient not packaged in PLD
 #%package nsclient
 #Summary:	Nagios plugin to check NT server with NSClient
-#Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy u¿yciu NSClienta
+#Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy uÅ¼yciu NSClienta
 #Group:		Networking
 #Requires:	%{name} = %{version}-%{release}
 #Requires:	nsclient
@@ -355,7 +355,7 @@ Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 #Nagios plugin to check NT server with NSClient.
 #
 #%description nsclient -l pl
-#Wtyczka Nagiosa do sprawdzania serwera NT przy u¿yciu NSClienta.
+#Wtyczka Nagiosa do sprawdzania serwera NT przy uÅ¼yciu NSClienta.
 
 # requisite not packaged in PLD
 #%package nwstat
@@ -370,12 +370,12 @@ Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 #(http://forge.novell.com/modules/xfmod/project/?mrtgext).
 #
 #%description nsclient -l pl
-#Wtyczka nagiosa u¿ywaj±ca modu³u MRTGEXT
+#Wtyczka nagiosa uÅ¼ywajÄ…ca moduÅ‚u MRTGEXT
 #(http://forge.novell.com/modules/xfmod/project/?mrtgext).
 
 %package contrib
 Summary:	Contributed nagios plugins
-Summary(pl):	Wtyczki przekazane do projektu Nagios
+Summary(pl.UTF-8):   Wtyczki przekazane do projektu Nagios
 Group:		Networking
 # for utils.pm, utils.sh
 Requires:	%{name} = %{version}-%{release}
@@ -407,8 +407,8 @@ Requires:	samba
 Contributed nagios plugins. Some of them work, some do not. Use at
 your own risk.
 
-%description contrib -l pl
-Wtyczki przekazane do projektu Nagios. Czê¶æ z nich dzia³a, czê¶æ nie.
+%description contrib -l pl.UTF-8
+Wtyczki przekazane do projektu Nagios. CzÄ™Å›Ä‡ z nich dziaÅ‚a, czÄ™Å›Ä‡ nie.
 
 %prep
 %setup -q %{?_snap:-n %{name}-HEAD-%{_snap}}
