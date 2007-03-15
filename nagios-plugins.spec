@@ -5,23 +5,22 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.3
-Release:	5
+Version:	1.4.6
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	2c40fc69d51cc979e85150870a1daa93
+# Source0-md5:	ea79fa91092d709aa6b2e732b1d55541
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
-Patch2:		%{name}-gettext.patch
 Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
-Patch6:		%{name}-configure.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel >= 0.14.3
+BuildRequires:	libtool
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	openldap-devel >= 2.3.0
@@ -414,11 +413,9 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %setup -q %{?_snap:-n %{name}-HEAD-%{_snap}}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -452,7 +449,7 @@ rm check_{breeze,wave}.pl
 
 %build
 %{__gettextize}
-%{__aclocal} -I m4
+%{__aclocal} -I gl/m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -483,6 +480,7 @@ rm check_{breeze,wave}.pl
 	--with-snmpget-command=/usr/bin/snmpget \
 	--with-snmpgetnext-command=/usr/bin/snmpgetnext \
 	--with-df-command='/bin/df -P' \
+	--with-mailq=/usr/bin/mailq
 
 %{__make}
 
@@ -492,13 +490,13 @@ cd contrib
 
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
 
-%{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_rbl.c
-%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o
+%{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_rbl.c
+%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o
 
 %{__cc} %{rpmcflags} check_timeout.c -o check_timeout
 
-%{__cc} %{rpmcflags} -I../plugins -I.. -I../lib -c check_uptime.c
-%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o
+%{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_uptime.c
+%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -531,7 +529,7 @@ EOF
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc ACKNOWLEDGEMENTS AUTHORS BUGS CHANGES CODING ChangeLog
+%doc ACKNOWLEDGEMENTS AUTHORS BUGS CODING ChangeLog
 %doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
 %defattr(755,root,root,755)
@@ -667,7 +665,6 @@ EOF
 %{_plugindir}/check_bgpstate.pl
 %{_plugindir}/check_compaq_insight.pl
 %{_plugindir}/check_digitemp.pl
-%{_plugindir}/check_disk_snmp.pl
 %{_plugindir}/check_dlswcircuit.pl
 %{_plugindir}/check_dns_random.pl
 %{_plugindir}/check_email_loop.pl
