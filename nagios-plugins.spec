@@ -16,6 +16,7 @@ Patch1:		%{name}-contrib-API.patch
 Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
+Patch6:		%{name}-path.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -416,7 +417,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-
+%patch6 -p1
 # bring contribs into shape...
 cd contrib
 mv check_compaq_insight.{pl,msg}
