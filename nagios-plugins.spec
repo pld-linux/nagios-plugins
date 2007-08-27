@@ -2,16 +2,17 @@
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
 # - patch6 is not lib64 safe
+# - separate arch and noarch plugins?
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.6
-Release:	1
+Version:	1.4.9
+Release:	0.1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	ea79fa91092d709aa6b2e732b1d55541
+# Source0-md5:	6e617e95cadeedd92870cdbd2f13726c
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
 Patch3:		%{name}-subst.patch
@@ -451,7 +452,7 @@ rm check_{breeze,wave}.pl
 
 %build
 %{__gettextize}
-%{__aclocal} -I gl/m4
+%{__aclocal} -I m4 -I gl/m4
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -542,6 +543,8 @@ EOF
 %{_plugindir}/utils.sh
 
 # plugins
+%{_plugindir}/check_apt
+%{_plugindir}/check_cluster
 %{_plugindir}/check_cluster2
 %{_plugindir}/check_disk
 %{_plugindir}/check_dummy
@@ -716,7 +719,6 @@ EOF
 %{_plugindir}/check_snmp_process_monitor.pl
 %{_plugindir}/check_snmp_procs.pl
 %{_plugindir}/check_sockets.pl
-%{_plugindir}/check_sybase
 %{_plugindir}/check_temp_cpq
 %{_plugindir}/check_temp_fsc
 %{_plugindir}/check_timeout
