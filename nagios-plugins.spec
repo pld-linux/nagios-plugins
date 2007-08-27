@@ -22,6 +22,7 @@ Patch6:		%{name}-path.patch
 URL:		http://nagiosplug.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	file
 BuildRequires:	gettext-devel >= 0.14.3
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
@@ -516,6 +517,11 @@ rm -rf $RPM_BUILD_ROOT
 cd contrib
 # all files with exec permissions are plugins.
 find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_pluginarchdir}
+
+%if "%{_pluginarchdir}" != "%{_pluginlibdir}"
+install -d $RPM_BUILD_ROOT%{_pluginlibdir}
+mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
