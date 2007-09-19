@@ -13,6 +13,7 @@ License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	6e617e95cadeedd92870cdbd2f13726c
+Source1:	nagios-utils.php
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
 Patch3:		%{name}-subst.patch
@@ -512,6 +513,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
+
 %find_lang %{name}
 
 cd contrib
@@ -547,6 +550,7 @@ EOF
 %{_pluginarchdir}/negate
 %{_pluginarchdir}/urlize
 %{_pluginlibdir}/utils.pm
+%{_pluginlibdir}/utils.php
 %{_pluginlibdir}/utils.sh
 
 # plugins
