@@ -8,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.9
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -67,16 +67,22 @@ zwracajace stan danej usługi do Nagiosa.
 
 Ten pakiet zawiera podstawowe wtyczki do używania z pakietem nagios.
 
-# NOTE for sub package requires:
-# use Requires:	%{name} = %{version}-%{release} for utils.sh or utils.pm
-# and Requires:	nagios-core if just plugins directory needed
+%package libs
+Summary:	Nagios plugins base libraries
+Group:		Networking
 
+%description libs
+This package contains nagios plugins base libraries that plugins depend on.
+
+# NOTE for sub package requires:
+# Requires:	nagios-core for plugins directory
+# and add Requires:	%{name}-libs = %{version}-%{release} for utils.{sh,pm,php}
 %package snmp
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl.UTF-8):	Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	net-snmp-utils
 Requires:	perl-Net-SNMP
 
@@ -91,7 +97,7 @@ Summary:	Nagios plugin to check remote disk using smbclient
 Summary(pl.UTF-8):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z użyciem smbclienta
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	samba-client
 
 %description samba
@@ -105,7 +111,7 @@ Summary:	Nagios plugin to check hardware status using the lm_sensors package
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania stanu sprzętu przy użyciu pakietu lm_sensors
 Group:		Networking
 # for utils.sh
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	lm_sensors
 Provides:	nagios-plugins-sensors = %{version}-%{release}
 Obsoletes:	nagios-plugins-sensors
@@ -221,7 +227,7 @@ Summary:	Nagios plugin to check time using NTP protocol
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania czasu przy użyciu protokołu NTP
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	ntp-client
 Provides:	nagios-plugins-ntp = %{version}-%{release}
 Obsoletes:	nagios-plugins-ntp
@@ -338,7 +344,7 @@ Summary:	Nagios plugins written in Perl
 Summary(pl.UTF-8):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 # for utils.pm
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 # for perl(Exporter)
 Requires:	perl-base
 
@@ -353,7 +359,7 @@ Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 #Summary:	Nagios plugin to check NT server with NSClient
 #Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
 #Group:		Networking
-#Requires:	%{name} = %{version}-%{release}
+#Requires:	%{name}-libs = %{version}-%{release}
 #Requires:	nsclient
 #
 #%description nsclient
@@ -367,7 +373,7 @@ Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 #Summary:	Nagios plugin nwstat
 #Summary(pl):	Wtyczka nwstat do Nagiosa
 #Group:		Networking
-#Requires:	%{name} = %{version}-%{release}
+#Requires:	%{name}-libs = %{version}-%{release}
 #Requires:	mrtgext
 #
 #%description nsclient
@@ -383,7 +389,7 @@ Summary:	Contributed nagios plugins
 Summary(pl.UTF-8):	Wtyczki przekazane do projektu Nagios
 Group:		Networking
 # for utils.pm, utils.sh
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 # check_apache
 Requires:	perl-URI
 Requires:	perl-libwww
@@ -513,8 +519,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
-
 %find_lang %{name}
 
 cd contrib
@@ -525,6 +529,8 @@ find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_p
 install -d $RPM_BUILD_ROOT%{_pluginlibdir}
 mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
 %endif
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -546,13 +552,6 @@ EOF
 %doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
 %defattr(755,root,root,755)
-# utils
-%{_pluginarchdir}/negate
-%{_pluginarchdir}/urlize
-%{_pluginlibdir}/utils.pm
-%{_pluginlibdir}/utils.php
-%{_pluginlibdir}/utils.sh
-
 # plugins
 %{_pluginarchdir}/check_apt
 %{_pluginarchdir}/check_cluster
@@ -597,6 +596,14 @@ EOF
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
 %{_pluginlibdir}/check_oracle
+
+%files libs
+%defattr(755,root,root,755)
+%{_pluginarchdir}/negate
+%{_pluginarchdir}/urlize
+%{_pluginlibdir}/utils.pm
+%{_pluginlibdir}/utils.php
+%{_pluginlibdir}/utils.sh
 
 %files perl
 %defattr(755,root,root,755)
