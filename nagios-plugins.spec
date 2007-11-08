@@ -7,12 +7,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.9
+Version:	1.4.10
 Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	6e617e95cadeedd92870cdbd2f13726c
+# Source0-md5:	c67841223864ae1626ab2adb2f0b4c9d
 Source1:	nagios-utils.php
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
@@ -20,7 +20,7 @@ Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch6:		%{name}-path.patch
-URL:		http://nagiosplug.sourceforge.net/
+URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	file
@@ -28,7 +28,7 @@ BuildRequires:	gettext-devel >= 0.14.3
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
-BuildRequires:	openldap-devel >= 2.4.6
+BuildRequires:	openldap-devel >= 2.3.0
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
@@ -559,6 +559,7 @@ EOF
 %{_pluginarchdir}/check_disk
 %{_pluginarchdir}/check_dummy
 %{_pluginarchdir}/check_http
+%{_pluginarchdir}/check_ide_smart
 %{_pluginarchdir}/check_mrtg
 %{_pluginarchdir}/check_mrtgtraf
 %{_pluginarchdir}/check_nagios
