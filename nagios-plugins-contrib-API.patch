@@ -1,6 +1,5 @@
-diff -u nagios-plugins-1.4/contrib/check_rbl.c nagios-plugins-1.4-worked/contrib/check_rbl.c
---- nagios-plugins-1.4/contrib/check_rbl.c	2004-12-02 02:30:32.000000000 +0200
-+++ nagios-plugins-1.4-worked/contrib/check_rbl.c	2005-02-08 19:24:45.000000000 +0200
+--- nagios-plugins-1.4.10/contrib/check_rbl.c~	2007-11-08 23:24:19.000000000 +0200
++++ nagios-plugins-1.4.10/contrib/check_rbl.c	2007-11-08 23:24:56.951629199 +0200
 @@ -21,7 +21,7 @@
  #include "popen.h"
  #include "string.h"
@@ -51,9 +50,8 @@ diff -u nagios-plugins-1.4/contrib/check_rbl.c nagios-plugins-1.4-worked/contrib
  }
  
  
-diff -u nagios-plugins-1.4/contrib/check_uptime.c nagios-plugins-1.4-worked/contrib/check_uptime.c
---- nagios-plugins-1.4/contrib/check_uptime.c	2002-03-01 04:42:56.000000000 +0200
-+++ nagios-plugins-1.4-worked/contrib/check_uptime.c	2005-02-08 19:30:19.000000000 +0200
+--- nagios-plugins-1.4.10/contrib/check_uptime.c~	2007-11-08 23:24:19.000000000 +0200
++++ nagios-plugins-1.4.10/contrib/check_uptime.c	2007-11-08 23:25:46.652415811 +0200
 @@ -26,6 +26,9 @@
  #include "utils.h"
  #include "popen.h"
@@ -64,7 +62,7 @@ diff -u nagios-plugins-1.4/contrib/check_uptime.c nagios-plugins-1.4-worked/cont
  int main(int argc, char **argv)
  {
  
-@@ -43,12 +46,7 @@
+@@ -46,12 +46,7 @@
  
    if(argc != 2){
      printf("Incorrect number of arguments supplied\n");
