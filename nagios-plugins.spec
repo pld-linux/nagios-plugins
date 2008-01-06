@@ -8,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.10
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -445,9 +445,9 @@ sed -i -e '1s,#!.*/bin/bash,#!/bin/sh,' \
 	check_smb.sh
 
 sed -i -e "
-	s,use lib '.*/nagios/libexec/',use lib '%{_pluginarchdir}',
-	s,require '/usr/libexec/nagios/plugins,require '%{_pluginarchdir},
-	s,use lib utils.pm,use lib '%{_pluginarchdir}',
+	s,use lib '.*/nagios/libexec/',use lib '%{_pluginlibdir}',
+	s,require '/usr/libexec/nagios/plugins,require '%{_pluginlibdir},
+	s,use lib utils.pm,use lib '%{_pluginlibdir}', # that's there really a typo
 " *.pl
 
 mv check_appletalk.{pl,orig}
