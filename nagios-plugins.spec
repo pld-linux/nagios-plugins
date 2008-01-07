@@ -8,7 +8,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.10
-Release:	6
+Release:	7
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -582,7 +582,6 @@ EOF
 %{_pluginarchdir}/check_ftp
 %{_pluginarchdir}/check_imap
 %{_pluginarchdir}/check_jabber
-%{_pluginarchdir}/check_ldaps
 %{_pluginarchdir}/check_nntp
 %{_pluginarchdir}/check_nntps
 %{_pluginarchdir}/check_pop
@@ -655,6 +654,7 @@ EOF
 %files -n nagios-plugin-check_ldap
 %defattr(755,root,root,755)
 %{_pluginarchdir}/check_ldap
+%{_pluginarchdir}/check_ldaps
 
 %files -n nagios-plugin-check_ntp
 %defattr(755,root,root,755)
