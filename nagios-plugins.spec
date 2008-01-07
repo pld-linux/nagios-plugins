@@ -2,17 +2,17 @@
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
 # - patch6 is not lib64 safe
-# - separate arch and noarch plugins?
+# - make shared (private) libs: ../lib/libnagiosplug.a ../gl/libgnu.a
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.10
-Release:	7
+Version:	1.4.11
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	c67841223864ae1626ab2adb2f0b4c9d
+# Source0-md5:	042783a2180a6987e0b403870b3d01f7
 Source1:	nagios-utils.php
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
@@ -659,6 +659,8 @@ EOF
 %files -n nagios-plugin-check_ntp
 %defattr(755,root,root,755)
 %{_pluginarchdir}/check_ntp
+%{_pluginarchdir}/check_ntp_peer
+%{_pluginarchdir}/check_ntp_time
 
 %files -n nagios-plugin-check_dns
 %defattr(755,root,root,755)
