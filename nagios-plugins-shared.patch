@@ -1,11 +1,12 @@
 --- nagios-plugins-1.4.11/lib/Makefile.am	2007-12-12 03:27:48.000000000 +0200
-+++ nagios-plugins-1.4.11-shared/lib/Makefile.am	2008-01-09 14:15:14.160115579 +0200
-@@ -2,10 +2,9 @@
++++ nagios-plugins-1.4.11-shared/lib/Makefile.am	2008-01-09 19:33:57.360904945 +0200
+@@ -2,10 +2,10 @@
  
  SUBDIRS = tests
  
 -noinst_LIBRARIES = libnagiosplug.a
-+noinst_LTLIBRARIES = libnagiosplug.la
++inst_LTLIBRARIES = libnagiosplug.la
++instdir = $(libdir)
  
 -
 -libnagiosplug_a_SOURCES = utils_base.c utils_disk.c utils_tcp.c utils_cmd.c base64.c
@@ -14,7 +15,7 @@
  
  INCLUDES = -I$(srcdir) -I$(top_srcdir)/gl -I$(top_srcdir)/intl -I$(top_srcdir)/plugins
 --- nagios-plugins-1.4.11/plugins/Makefile.am	2007-12-12 03:27:48.000000000 +0200
-+++ nagios-plugins-1.4.11-shared/plugins/Makefile.am	2008-01-09 19:22:15.184448656 +0200
++++ nagios-plugins-1.4.11-shared/plugins/Makefile.am	2008-01-09 19:25:31.475759310 +0200
 @@ -32,7 +32,7 @@
  
  PLUGINHDRS = common.h
@@ -24,14 +25,17 @@
  NETOBJS = netutils.o $(BASEOBJS) $(EXTRA_NETOBJS)
  SSLOBJS = sslutils.o
  NETLIBS = $(NETOBJS) $(SOCKETLIBS)
---- nagios-plugins-1.4.11/plugins-root/Makefile.am	2008-01-09 19:23:04.995318940 +0200
-+++ nagios-plugins-1.4.11-shared/plugins-root/Makefile.am	2008-01-09 19:22:11.808254105 +0200
-@@ -15,7 +15,7 @@
+--- nagios-plugins-1.4.11/plugins-root/Makefile.am	2008-01-09 19:38:32.028726994 +0200
++++ nagios-plugins-1.4.11-shared/plugins-root/Makefile.am	2008-01-09 19:32:17.527153680 +0200
+@@ -15,9 +15,9 @@
  
  EXTRA_DIST = pst3.c
  
 -BASEOBJS = ../plugins/utils.o ../lib/libnagiosplug.a ../gl/libgnu.a
-+BASEOBJS = ../plugins/utils.o ../lib/libnagiosplug.la ../gl/libgnu.a
++BASEOBJS = ../plugins/utils.o ../gl/libgnu.a
  NETOBJS = ../plugins/netutils.o $(BASEOBJS) $(EXTRA_NETOBJS)
- NETLIBS = $(NETOBJS) $(SOCKETLIBS)
+-NETLIBS = $(NETOBJS) $(SOCKETLIBS)
++NETLIBS = $(NETOBJS) $(SOCKETLIBS) ../lib/libnagiosplug.la
+ 
+ TESTS_ENVIRONMENT = perl -I $(top_builddir) -I $(top_srcdir)
  
