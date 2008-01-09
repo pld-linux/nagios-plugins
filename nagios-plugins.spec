@@ -2,13 +2,12 @@
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
 # - patch6 is not lib64 safe
-# - make shared (private) libs: ../lib/libnagiosplug.a ../gl/libgnu.a
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.11
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -20,6 +19,7 @@ Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch6:		%{name}-path.patch
+Patch7:		%{name}-shared.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -429,6 +429,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 # bring contribs into shape...
 cd contrib
 mv check_compaq_insight.{pl,msg}
@@ -533,8 +534,13 @@ mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF
 install %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.sh
 
+rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.{la,a}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post	libs	-p /sbin/ldconfig
+%postun	libs	-p /sbin/ldconfig
 
 %triggerun -- %{name} <= 1.4-0.34
 %banner -e %{name} <<EOF
@@ -600,6 +606,7 @@ EOF
 
 %files libs
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
 %attr(755,root,root) %{_pluginarchdir}/negate
 %attr(755,root,root) %{_pluginarchdir}/urlize
 %{_pluginlibdir}/utils.pm
