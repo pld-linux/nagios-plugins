@@ -69,10 +69,16 @@ Ten pakiet zawiera podstawowe wtyczki do używania z pakietem nagios.
 
 %package libs
 Summary:	Nagios plugins base libraries
+Summary(pl.UTF-8):	Podstawowe biblioteki wtyczek Nagiosa
 Group:		Networking
 
 %description libs
-This package contains nagios plugins base libraries that plugins depend on.
+This package contains nagios plugins base libraries that plugins
+depend on.
+
+%description libs -l pl.UTF-8
+Ten pakiet zawiera podstawowe biblioteki wtyczek Nagiosa, wymagane
+przez wtyczki.
 
 # NOTE for sub package requires:
 # Requires:	nagios-core for plugins directory
