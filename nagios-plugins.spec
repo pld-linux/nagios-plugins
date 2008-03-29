@@ -402,7 +402,7 @@ Requires:	perl-libwww
 # check_apc_ups.pl
 Requires:	net-snmp-utils
 # check_arping.pl
-#Requires:	perl(Net::Arping) - not found
+Requires:	perl-Net-Arping
 # check_bgpstate.pl
 Requires:	perl-Net-SNMP
 Requires:	whois
