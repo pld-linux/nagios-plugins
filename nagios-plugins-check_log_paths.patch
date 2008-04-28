@@ -22,7 +22,7 @@ diff -urNad nagios-plugins~/plugins-scripts/check_log.sh nagios-plugins/plugins-
  TOUCH="/bin/touch"
 
 -PROGNAME=`/bin/basename $0`
-+PROGNAME=`/usr/bin/basename $0`
++PROGNAME=`/bin/basename $0`
  PROGPATH=`echo $0 | sed -e 's,[\\/][^\\/][^\\/]*$,,'`
  REVISION=`echo '$Revision$' | sed -e 's/[^0-9.]//g'`
  
