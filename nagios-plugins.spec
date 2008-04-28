@@ -20,7 +20,18 @@ Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch6:		%{name}-path.patch
 Patch7:		%{name}-pgsql.patch
-#Patch:		%{name}-shared.patch # needs finishing
+Patch8:		%{name}-checkircd.patch
+Patch9:		%{name}-check_log_paths.patch
+Patch10:	%{name}-check_game_cmdline.patch
+Patch11:	%{name}-check_smb_hostaddress.patch
+Patch12:	%{name}-implicit-basename.patch
+Patch13:	%{name}-check_radius_segfault.patch
+Patch14:	%{name}-check_ntp_fixsefault_deprecate.patch
+Patch15:	%{name}-fix_check_ntp_options.patch
+Patch16:	%{name}-check_disk_local_option.patch
+Patch17:	%{name}-check_ldap_pointer.patch
+Patch18:	%{name}-misc_typos.patch
+#Patch: %{name}-shared.patch # needs finishing
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -437,6 +448,16 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
+%patch16 -p1
+%patch17 -p1
+%patch18 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -614,7 +635,7 @@ EOF
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
+#%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
 %attr(755,root,root) %{_pluginarchdir}/negate
 %attr(755,root,root) %{_pluginarchdir}/urlize
 %{_pluginlibdir}/utils.pm
