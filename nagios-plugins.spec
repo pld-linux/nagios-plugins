@@ -491,6 +491,7 @@ rm check_{breeze,wave}.pl
 
 %build
 %{__gettextize}
+%{__libtoolize}
 %{__aclocal} -I m4 -I gl/m4
 %{__autoconf}
 %{__autoheader}
