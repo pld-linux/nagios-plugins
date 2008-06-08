@@ -6,12 +6,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.11
-Release:	4
+Version:	1.4.12
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	042783a2180a6987e0b403870b3d01f7
+# Source0-md5:	af68d00bbe2c39de02803d23e5eecca3
 Source1:	nagios-utils.php
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
@@ -26,11 +26,7 @@ Patch10:	%{name}-check_game_cmdline.patch
 Patch11:	%{name}-check_smb_hostaddress.patch
 Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
-Patch14:	%{name}-check_ntp_fixsefault_deprecate.patch
-Patch15:	%{name}-fix_check_ntp_options.patch
-Patch16:	%{name}-check_disk_local_option.patch
 Patch17:	%{name}-check_ldap_pointer.patch
-Patch18:	%{name}-misc_typos.patch
 #Patch: %{name}-shared.patch # needs finishing
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
@@ -453,11 +449,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
 %patch17 -p1
-%patch18 -p1
 
 # bring contribs into shape...
 cd contrib
