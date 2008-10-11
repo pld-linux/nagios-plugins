@@ -1,15 +1,9 @@
-diff -uNr nagios-plugins-1.4.6.orig/contrib/check_dns_random.pl nagios-plugins-1.4.6/contrib/check_dns_random.pl
 --- nagios-plugins-1.4.6.orig/contrib/check_dns_random.pl	2003-01-29 05:27:20.000000000 +0000
 +++ nagios-plugins-1.4.6/contrib/check_dns_random.pl	2007-03-15 11:58:46.000000000 +0000
-@@ -33,9 +33,9 @@
+@@ -33,5 +33,5 @@
  
  my $host = shift || &usage;
  
 -my $domainfile = "/usr/local/nagios/etc/domains.list";
 +my $domainfile = "/etc/nagios/domains.list";
  my $wc = `/usr/bin/wc -l $domainfile`;
--my $check = "/usr/local/nagios/libexec/check_dns";
-+my $check = "/usr/lib/nagios/plugins/check_dns";
- my $x = 0;
- my $srv_file = "";
- my $z = "";
