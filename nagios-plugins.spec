@@ -1,3 +1,6 @@
+# NOTE TO PLD DEVELOPERS:
+# - if you use any plugin from -contrib package, move it to subpackage or main
+#   package so we can support it better!
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
@@ -27,6 +30,8 @@ Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
 Patch17:	%{name}-check_ldap_pointer.patch
 Patch18:	%{name}-configure.patch
+Patch19:	%{name}-perlautodep.patch
+Patch20:	%{name}-cosmetic.patch
 #Patch: %{name}-shared.patch # needs finishing
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
@@ -369,62 +374,62 @@ This package contains Nagios plugins written in Perl.
 Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 
 # nsclient not packaged in PLD
-#%package nsclient
-#Summary:	Nagios plugin to check NT server with NSClient
-#Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
-#Group:		Networking
-#Requires:	%{name}-libs = %{version}-%{release}
-#Requires:	nsclient
-#
-#%description nsclient
-#Nagios plugin to check NT server with NSClient.
-#
-#%description nsclient -l pl
-#Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta.
+%package nsclient
+Summary:	Nagios plugin to check NT server with NSClient
+Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
+Group:		Networking
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	nsclient
+
+%description nsclient
+Nagios plugin to check NT server with NSClient.
+
+%description nsclient -l pl
+Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta.
 
 # requisite not packaged in PLD
-#%package nwstat
-#Summary:	Nagios plugin nwstat
-#Summary(pl):	Wtyczka nwstat do Nagiosa
-#Group:		Networking
-#Requires:	%{name}-libs = %{version}-%{release}
-#Requires:	mrtgext
-#
-#%description nsclient
-#Nagios plugin using MRTGEXT module
-#(http://forge.novell.com/modules/xfmod/project/?mrtgext).
-#
-#%description nsclient -l pl
-#Wtyczka nagiosa używająca modułu MRTGEXT
-#(http://forge.novell.com/modules/xfmod/project/?mrtgext).
+%package nwstat
+Summary:	Nagios plugin nwstat
+Summary(pl):	Wtyczka nwstat do Nagiosa
+Group:		Networking
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	mrtgext
+
+%description nwstat
+Nagios plugin using MRTGEXT module
+<http://forge.novell.com/modules/xfmod/project/?mrtgext>.
+
+%description nwstat -l pl
+Wtyczka nagiosa używająca modułu MRTGEXT
+<http://forge.novell.com/modules/xfmod/project/?mrtgext>.
 
 %package contrib
 Summary:	Contributed nagios plugins
 Summary(pl.UTF-8):	Wtyczki przekazane do projektu Nagios
 Group:		Networking
-# for utils.pm, utils.sh
+# for utils.pm, utils.sh, utils.py
 Requires:	%{name}-libs = %{version}-%{release}
 # check_apache
 Requires:	perl-URI
 Requires:	perl-libwww
-# check_apc_ups.pl
+# check_apc_ups
 Requires:	net-snmp-utils
-# check_arping.pl
+# check_arping
 Requires:	perl-Net-Arping
-# check_bgpstate.pl
+# check_bgpstate
 Requires:	perl-Net-SNMP
 Requires:	whois
-# check_traceroute.pl
+# check_traceroute
 Requires:	traceroute
-# check_traceroute-pure_perl.pl
+# check_traceroute-pure_perl
 Requires:	perl-Net-Traceroute
 # check_temp_fsc
 Requires:	perl-SNMP_Session
-# check_smart.pl
+# check_smart
 Requires:	smartmontools
-# check_smb.sh
+# check_smb
 Requires:	samba
-# check_adptraid.sh
+# check_adptraid
 #Requires:	dptutil
 # unfinished... more deps are actually needed.
 
@@ -451,6 +456,8 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch13 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
+%patch20 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -474,6 +481,10 @@ chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fs
 
 # exists in main
 rm check_{breeze,wave}.pl
+rm check_flexlm.pl
+
+# more appropriate name
+mv contrib/check_nagios{,_mysql}.pl
 
 sed -i -e "
 	s,use lib '.*/nagios/libexec/?',use lib '%{_pluginlibdir}',
@@ -553,18 +564,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %find_lang %{name}
 
-cd contrib
 # all files with exec permissions are plugins.
-find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_pluginarchdir}
-cp -a utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
+install -d $RPM_BUILD_ROOT%{_pluginarchdir}
+find contrib -name 'check_*' -type f -perm +1 | while read a; do
+	s=$RPM_BUILD_ROOT%{_pluginarchdir}/${a##*/}
+	# strip without extensions, if eventually merged to main wouldn't need to rename plugins
+	s=${s%.pl}
+	s=${s%.sh}
+	if [ -f $s ]; then
+		# we don't want file from contrib overwrite one from main
+		: Duplicate file from contrib: $s
+		exit 1
+	fi
+	install $a $s
+done
 
 %if "%{_pluginarchdir}" != "%{_pluginlibdir}"
+# move arch independat files to _pluginlibdir
 install -d $RPM_BUILD_ROOT%{_pluginlibdir}
 mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
+%{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir},' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
 %endif
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
-chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.sh
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
+cp -a contrib/utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
+chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.*
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.{la,a}
 
@@ -735,66 +759,66 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_timeout
 %attr(755,root,root) %{_pluginarchdir}/check_uptime
 
-%attr(755,root,root) %{_pluginlibdir}/check_adptraid.sh
-%attr(755,root,root) %{_pluginlibdir}/check_apache.pl
-%attr(755,root,root) %{_pluginlibdir}/check_apc_ups.pl
-%attr(755,root,root) %{_pluginlibdir}/check_appletalk.pl
-%attr(755,root,root) %{_pluginlibdir}/check_arping.pl
-%attr(755,root,root) %{_pluginlibdir}/check_asterisk.pl
-%attr(755,root,root) %{_pluginlibdir}/check_axis.sh
-%attr(755,root,root) %{_pluginlibdir}/check_backup.pl
-%attr(755,root,root) %{_pluginlibdir}/check_bgpstate.pl
-%attr(755,root,root) %{_pluginlibdir}/check_compaq_insight.pl
-%attr(755,root,root) %{_pluginlibdir}/check_digitemp.pl
-%attr(755,root,root) %{_pluginlibdir}/check_dlswcircuit.pl
-%attr(755,root,root) %{_pluginlibdir}/check_dns_random.pl
-%attr(755,root,root) %{_pluginlibdir}/check_email_loop.pl
+%attr(755,root,root) %{_pluginlibdir}/check_adptraid
+%attr(755,root,root) %{_pluginlibdir}/check_apache
+%attr(755,root,root) %{_pluginlibdir}/check_apc_ups
+%attr(755,root,root) %{_pluginlibdir}/check_appletalk
+%attr(755,root,root) %{_pluginlibdir}/check_arping
+%attr(755,root,root) %{_pluginlibdir}/check_asterisk
+%attr(755,root,root) %{_pluginlibdir}/check_axis
+%attr(755,root,root) %{_pluginlibdir}/check_backup
+%attr(755,root,root) %{_pluginlibdir}/check_bgpstate
+%attr(755,root,root) %{_pluginlibdir}/check_compaq_insight
+%attr(755,root,root) %{_pluginlibdir}/check_digitemp
+%attr(755,root,root) %{_pluginlibdir}/check_dlswcircuit
+%attr(755,root,root) %{_pluginlibdir}/check_dns_random
+%attr(755,root,root) %{_pluginlibdir}/check_email_loop
 %attr(755,root,root) %{_pluginlibdir}/check_fan_cpq_present
 %attr(755,root,root) %{_pluginlibdir}/check_fan_fsc_present
-%attr(755,root,root) %{_pluginlibdir}/check_flexlm.pl
+%attr(755,root,root) %{_pluginlibdir}/check_flexlm
 %attr(755,root,root) %{_pluginlibdir}/check_frontpage
-%attr(755,root,root) %{_pluginlibdir}/check_hprsc.pl
-%attr(755,root,root) %{_pluginlibdir}/check_hw.sh
-%attr(755,root,root) %{_pluginlibdir}/check_ica_master_browser.pl
-%attr(755,root,root) %{_pluginlibdir}/check_ica_metaframe_pub_apps.pl
-%attr(755,root,root) %{_pluginlibdir}/check_ica_program_neigbourhood.pl
-%attr(755,root,root) %{_pluginlibdir}/check_inodes-freebsd.pl
-%attr(755,root,root) %{_pluginlibdir}/check_inodes.pl
-%attr(755,root,root) %{_pluginlibdir}/check_javaproc.pl
-%attr(755,root,root) %{_pluginlibdir}/check_joy.sh
-%attr(755,root,root) %{_pluginlibdir}/check_linux_raid.pl
-%attr(755,root,root) %{_pluginlibdir}/check_lmmon.pl
-%attr(755,root,root) %{_pluginlibdir}/check_log2.pl
-%attr(755,root,root) %{_pluginlibdir}/check_lotus.pl
-%attr(755,root,root) %{_pluginlibdir}/check_maxchannels.pl
-%attr(755,root,root) %{_pluginlibdir}/check_maxwanstate.pl
-%attr(755,root,root) %{_pluginlibdir}/check_mem.pl
-%attr(755,root,root) %{_pluginlibdir}/check_ms_spooler.pl
-%attr(755,root,root) %{_pluginlibdir}/check_mssql.sh
-%attr(755,root,root) %{_pluginlibdir}/check_nagios.pl
-%attr(755,root,root) %{_pluginlibdir}/check_nagios_db.pl
-%attr(755,root,root) %{_pluginlibdir}/check_nagios_db_pg.pl
-%attr(755,root,root) %{_pluginlibdir}/check_netapp.pl
+%attr(755,root,root) %{_pluginlibdir}/check_hprsc
+%attr(755,root,root) %{_pluginlibdir}/check_hw
+%attr(755,root,root) %{_pluginlibdir}/check_ica_master_browser
+%attr(755,root,root) %{_pluginlibdir}/check_ica_metaframe_pub_apps
+%attr(755,root,root) %{_pluginlibdir}/check_ica_program_neigbourhood
+%attr(755,root,root) %{_pluginlibdir}/check_inodes-freebsd
+%attr(755,root,root) %{_pluginlibdir}/check_inodes
+%attr(755,root,root) %{_pluginlibdir}/check_javaproc
+%attr(755,root,root) %{_pluginlibdir}/check_joy
+%attr(755,root,root) %{_pluginlibdir}/check_linux_raid
+%attr(755,root,root) %{_pluginlibdir}/check_lmmon
+%attr(755,root,root) %{_pluginlibdir}/check_log2
+%attr(755,root,root) %{_pluginlibdir}/check_lotus
+%attr(755,root,root) %{_pluginlibdir}/check_maxchannels
+%attr(755,root,root) %{_pluginlibdir}/check_maxwanstate
+%attr(755,root,root) %{_pluginlibdir}/check_mem
+%attr(755,root,root) %{_pluginlibdir}/check_ms_spooler
+%attr(755,root,root) %{_pluginlibdir}/check_mssql
+%attr(755,root,root) %{_pluginlibdir}/check_nagios_db
+%attr(755,root,root) %{_pluginlibdir}/check_nagios_db_pg
+%attr(755,root,root) %{_pluginlibdir}/check_nagios_mysql
+%attr(755,root,root) %{_pluginlibdir}/check_netapp
 %attr(755,root,root) %{_pluginlibdir}/check_nmap.py
-%attr(755,root,root) %{_pluginlibdir}/check_ora_table_space.pl
-%attr(755,root,root) %{_pluginlibdir}/check_oracle_instance.pl
+%attr(755,root,root) %{_pluginlibdir}/check_ora_table_space
+%attr(755,root,root) %{_pluginlibdir}/check_oracle_instance
 %attr(755,root,root) %{_pluginlibdir}/check_oracle_tbs
 %attr(755,root,root) %{_pluginlibdir}/check_pcpmetric.py
 %attr(755,root,root) %{_pluginlibdir}/check_pfstate
-%attr(755,root,root) %{_pluginlibdir}/check_qmailq.pl
-%attr(755,root,root) %{_pluginlibdir}/check_remote_nagios_status.pl
-%attr(755,root,root) %{_pluginlibdir}/check_rrd_data.pl
-%attr(755,root,root) %{_pluginlibdir}/check_sap.sh
-%attr(755,root,root) %{_pluginlibdir}/check_smart.pl
-%attr(755,root,root) %{_pluginlibdir}/check_smb.sh
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_disk_monitor.pl
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_printer.pl
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_process_monitor.pl
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_procs.pl
-%attr(755,root,root) %{_pluginlibdir}/check_sockets.pl
+%attr(755,root,root) %{_pluginlibdir}/check_qmailq
+%attr(755,root,root) %{_pluginlibdir}/check_remote_nagios_status
+%attr(755,root,root) %{_pluginlibdir}/check_rrd_data
+%attr(755,root,root) %{_pluginlibdir}/check_sap
+%attr(755,root,root) %{_pluginlibdir}/check_smart
+%attr(755,root,root) %{_pluginlibdir}/check_smb
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_disk_monitor
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_printer
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_process_monitor
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_procs
+%attr(755,root,root) %{_pluginlibdir}/check_sockets
 %attr(755,root,root) %{_pluginlibdir}/check_temp_cpq
 %attr(755,root,root) %{_pluginlibdir}/check_temp_fsc
-%attr(755,root,root) %{_pluginlibdir}/check_traceroute-pure_perl.pl
-%attr(755,root,root) %{_pluginlibdir}/check_traceroute.pl
-%attr(755,root,root) %{_pluginlibdir}/check_vcs.pl
-%attr(755,root,root) %{_pluginlibdir}/check_wins.pl
+%attr(755,root,root) %{_pluginlibdir}/check_traceroute-pure_perl
+%attr(755,root,root) %{_pluginlibdir}/check_traceroute
+%attr(755,root,root) %{_pluginlibdir}/check_vcs
+%attr(755,root,root) %{_pluginlibdir}/check_wins
