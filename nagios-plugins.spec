@@ -1,17 +1,16 @@
 # TODO:
 # - package requisites for unifished packages -nsclient and -nwstat
 #   REQUIREMENTS explains the dependencies.
-# - patch6 is not lib64 safe
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.12
+Version:	1.4.13
 Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	af68d00bbe2c39de02803d23e5eecca3
+# Source0-md5:	be6cc7699fff3ee29d1fd4d562377386
 Source1:	nagios-utils.php
 Patch0:		%{name}-tainted.patch
 Patch1:		%{name}-contrib-API.patch
@@ -27,6 +26,7 @@ Patch11:	%{name}-check_smb_hostaddress.patch
 Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
 Patch17:	%{name}-check_ldap_pointer.patch
+Patch18:	%{name}-configure.patch
 #Patch: %{name}-shared.patch # needs finishing
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
@@ -450,6 +450,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch12 -p1
 %patch13 -p1
 %patch17 -p1
+%patch18 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -465,13 +466,6 @@ sed -i -e '1s,#!.*/bin/env,#!%{__python},' \
 
 sed -i -e '1s,#!.*/bin/bash,#!/bin/sh,' \
 	check_smb.sh
-
-sed -i -e "
-	s,use lib '.*/nagios/libexec/',use lib '%{_pluginlibdir}',
-	s,require '/usr/libexec/nagios/plugins,require '%{_pluginlibdir},
-	s,use lib utils.pm,use lib '%{_pluginlibdir}', # that's there really a typo
-" *.pl
-
 mv check_appletalk.{pl,orig}
 sed -ne '/---/!p;/---/q' < check_appletalk.orig > check_appletalk.pl
 
@@ -480,6 +474,20 @@ chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fs
 
 # exists in main
 rm check_{breeze,wave}.pl
+
+sed -i -e "
+	s,use lib '.*/nagios/libexec/?',use lib '%{_pluginlibdir}',
+	s,use lib \".*/nagios/libexec/?\",use lib '%{_pluginlibdir}',
+	s,require '/usr/libexec/nagios/plugins,require '%{_pluginlibdir},
+	s,use lib utils.pm,use lib '%{_pluginlibdir}', # subst not applied to contrib/ dir
+	s,/usr/libexec/nagios/plugins,%{_pluginlibdir},
+	s,/usr/local/nagios/libexec,%{_pluginlibdir},
+	s,/opt/nagios/libexec,%{_pluginlibdir},
+	s,/some/path/libexec,%{_pluginlibdir},
+	s,/usr/local/libexec/nagios,%{_pluginlibdir},
+	s,/usr/local/netsaint/libexec,%{_pluginlibdir},
+	s,/usr/local/libexec,%{_pluginlibdir},
+" check_* *.pl
 
 %build
 %{__gettextize}
@@ -515,10 +523,11 @@ rm check_{breeze,wave}.pl
 	--with-snmpget-command=/usr/bin/snmpget \
 	--with-snmpgetnext-command=/usr/bin/snmpgetnext \
 	--with-df-command='/bin/df -P' \
-	--with-mailq=/usr/bin/mailq
+	--with-apt-get-command=/usr/bin/apt-get \
+	--with-qmail-qstat-command=/usr/bin/qmail-qstat \
+	--with-mailq-command=/usr/bin/mailq
 
 %{__make}
-
 
 # contrib. mostly useless. but you'll never know
 cd contrib
@@ -547,6 +556,7 @@ rm -rf $RPM_BUILD_ROOT
 cd contrib
 # all files with exec permissions are plugins.
 find -name 'check_*' -type f -perm +1 | xargs -ri install {} $RPM_BUILD_ROOT%{_pluginarchdir}
+cp -a utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
 
 %if "%{_pluginarchdir}" != "%{_pluginlibdir}"
 install -d $RPM_BUILD_ROOT%{_pluginlibdir}
@@ -582,207 +592,209 @@ EOF
 
 %defattr(755,root,root,755)
 # plugins
-%{_pluginarchdir}/check_apt
-%{_pluginarchdir}/check_cluster
-%{_pluginarchdir}/check_cluster2
-%{_pluginarchdir}/check_disk
-%{_pluginarchdir}/check_dummy
-%{_pluginarchdir}/check_http
-%{_pluginarchdir}/check_ide_smart
-%{_pluginarchdir}/check_mrtg
-%{_pluginarchdir}/check_mrtgtraf
-%{_pluginarchdir}/check_nagios
+%attr(755,root,root) %{_pluginarchdir}/check_apt
+%attr(755,root,root) %{_pluginarchdir}/check_cluster
+%attr(755,root,root) %{_pluginarchdir}/check_cluster2
+%attr(755,root,root) %{_pluginarchdir}/check_disk
+%attr(755,root,root) %{_pluginarchdir}/check_dummy
+%attr(755,root,root) %{_pluginarchdir}/check_http
+%attr(755,root,root) %{_pluginarchdir}/check_ide_smart
+%attr(755,root,root) %{_pluginarchdir}/check_mrtg
+%attr(755,root,root) %{_pluginarchdir}/check_mrtgtraf
+%attr(755,root,root) %{_pluginarchdir}/check_nagios
 # req: over-cr >= 0.99.53 http://www.molitor.org/overcr
-%{_pluginarchdir}/check_overcr
-%{_pluginarchdir}/check_procs
-%{_pluginarchdir}/check_real
-%{_pluginarchdir}/check_smtp
-%{_pluginarchdir}/check_ssh
-%{_pluginarchdir}/check_time
-%{_pluginarchdir}/check_ups
-%{_pluginarchdir}/check_users
-%{_pluginarchdir}/check_swap
-%{_pluginlibdir}/check_log
+%attr(755,root,root) %{_pluginarchdir}/check_overcr
+%attr(755,root,root) %{_pluginarchdir}/check_procs
+%attr(755,root,root) %{_pluginarchdir}/check_real
+%attr(755,root,root) %{_pluginarchdir}/check_smtp
+%attr(755,root,root) %{_pluginarchdir}/check_ssh
+%attr(755,root,root) %{_pluginarchdir}/check_time
+%attr(755,root,root) %{_pluginarchdir}/check_ups
+%attr(755,root,root) %{_pluginarchdir}/check_users
+%attr(755,root,root) %{_pluginarchdir}/check_swap
+%attr(755,root,root) %{_pluginlibdir}/check_log
 
 # check_tcp and symlinks
-%{_pluginarchdir}/check_tcp
-%{_pluginarchdir}/check_clamd
-%{_pluginarchdir}/check_ftp
-%{_pluginarchdir}/check_imap
-%{_pluginarchdir}/check_jabber
-%{_pluginarchdir}/check_nntp
-%{_pluginarchdir}/check_nntps
-%{_pluginarchdir}/check_pop
-%{_pluginarchdir}/check_simap
-%{_pluginarchdir}/check_spop
-%{_pluginarchdir}/check_ssmtp
-%{_pluginarchdir}/check_udp
+%attr(755,root,root) %{_pluginarchdir}/check_tcp
+%attr(755,root,root) %{_pluginarchdir}/check_clamd
+%attr(755,root,root) %{_pluginarchdir}/check_ftp
+%attr(755,root,root) %{_pluginarchdir}/check_imap
+%attr(755,root,root) %{_pluginarchdir}/check_jabber
+%attr(755,root,root) %{_pluginarchdir}/check_nntp
+%attr(755,root,root) %{_pluginarchdir}/check_nntps
+%attr(755,root,root) %{_pluginarchdir}/check_pop
+%attr(755,root,root) %{_pluginarchdir}/check_simap
+%attr(755,root,root) %{_pluginarchdir}/check_spop
+%attr(755,root,root) %{_pluginarchdir}/check_ssmtp
+%attr(755,root,root) %{_pluginarchdir}/check_udp
 
 # these plugins need suid bit to operate
-%{_pluginarchdir}/check_dhcp
-%{_pluginarchdir}/check_icmp
+%attr(755,root,root) %{_pluginarchdir}/check_dhcp
+%attr(755,root,root) %{_pluginarchdir}/check_icmp
 
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
-%{_pluginlibdir}/check_oracle
+%attr(755,root,root) %{_pluginlibdir}/check_oracle
 
 %files libs
 %defattr(644,root,root,755)
 #%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
 %attr(755,root,root) %{_pluginarchdir}/negate
 %attr(755,root,root) %{_pluginarchdir}/urlize
+
 %{_pluginlibdir}/utils.pm
 %{_pluginlibdir}/utils.php
 %{_pluginlibdir}/utils.sh
+%{_pluginlibdir}/utils.py
 
 %files perl
-%defattr(755,root,root,755)
-%{_pluginlibdir}/check_file_age
-%{_pluginlibdir}/check_ircd
-%{_pluginlibdir}/check_mailq
-%{_pluginlibdir}/check_rpc
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_file_age
+%attr(755,root,root) %{_pluginlibdir}/check_ircd
+%attr(755,root,root) %{_pluginlibdir}/check_mailq
+%attr(755,root,root) %{_pluginlibdir}/check_rpc
 
 # requires license.dat
-%{_pluginlibdir}/check_flexlm
+%attr(755,root,root) %{_pluginlibdir}/check_flexlm
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_snmp
-%{_pluginarchdir}/check_hpjd
-%{_pluginlibdir}/check_ifoperstatus
-%{_pluginlibdir}/check_ifstatus
-%{_pluginlibdir}/check_wave
-%{_pluginlibdir}/check_breeze
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_snmp
+%attr(755,root,root) %{_pluginarchdir}/check_hpjd
+%attr(755,root,root) %{_pluginlibdir}/check_ifoperstatus
+%attr(755,root,root) %{_pluginlibdir}/check_ifstatus
+%attr(755,root,root) %{_pluginlibdir}/check_wave
+%attr(755,root,root) %{_pluginlibdir}/check_breeze
 
 %files samba
-%defattr(755,root,root,755)
-%{_pluginlibdir}/check_disk_smb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_disk_smb
 
 %files -n nagios-plugin-check_sensors
-%defattr(755,root,root,755)
-%{_pluginlibdir}/check_sensors
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_sensors
 
 %files mysql
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_mysql
-%{_pluginarchdir}/check_mysql_query
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_mysql
+%attr(755,root,root) %{_pluginarchdir}/check_mysql_query
 
 %files -n nagios-plugin-check_pgsql
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_pgsql
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_pgsql
 
 %files -n nagios-plugin-check_radius
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_radius
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_radius
 
 %files -n nagios-plugin-check_game
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_game
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_game
 
 %files -n nagios-plugin-check_ldap
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_ldap
-%{_pluginarchdir}/check_ldaps
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_ldap
+%attr(755,root,root) %{_pluginarchdir}/check_ldaps
 
 %files -n nagios-plugin-check_ntp
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_ntp
-%{_pluginarchdir}/check_ntp_peer
-%{_pluginarchdir}/check_ntp_time
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_ntp
+%attr(755,root,root) %{_pluginarchdir}/check_ntp_peer
+%attr(755,root,root) %{_pluginarchdir}/check_ntp_time
 
 %files -n nagios-plugin-check_dns
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_dns
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_dns
 
 %files -n nagios-plugin-check_dig
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_dig
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_dig
 
 %files ssh
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_by_ssh
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_by_ssh
 
 %files -n nagios-plugin-check_load
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_load
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_load
 
 %files -n nagios-plugin-check_ping
-%defattr(755,root,root,755)
+%defattr(644,root,root,755)
 %attr(2755,root,adm) %{_pluginarchdir}/check_ping
 
 %files -n nagios-plugin-check_fping
-%defattr(755,root,root,755)
+%defattr(644,root,root,755)
 %attr(2755,root,adm) %{_pluginarchdir}/check_fping
 
 %files contrib
-%defattr(755,root,root,755)
-%{_pluginarchdir}/check_nt
-%{_pluginarchdir}/check_nwstat
-%{_pluginarchdir}/check_rbl
-%{_pluginarchdir}/check_timeout
-%{_pluginarchdir}/check_uptime
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginarchdir}/check_nt
+%attr(755,root,root) %{_pluginarchdir}/check_nwstat
+%attr(755,root,root) %{_pluginarchdir}/check_rbl
+%attr(755,root,root) %{_pluginarchdir}/check_timeout
+%attr(755,root,root) %{_pluginarchdir}/check_uptime
 
-%{_pluginlibdir}/check_adptraid.sh
-%{_pluginlibdir}/check_apache.pl
-%{_pluginlibdir}/check_apc_ups.pl
-%{_pluginlibdir}/check_appletalk.pl
-%{_pluginlibdir}/check_arping.pl
-%{_pluginlibdir}/check_asterisk.pl
-%{_pluginlibdir}/check_axis.sh
-%{_pluginlibdir}/check_backup.pl
-%{_pluginlibdir}/check_bgpstate.pl
-%{_pluginlibdir}/check_compaq_insight.pl
-%{_pluginlibdir}/check_digitemp.pl
-%{_pluginlibdir}/check_dlswcircuit.pl
-%{_pluginlibdir}/check_dns_random.pl
-%{_pluginlibdir}/check_email_loop.pl
-%{_pluginlibdir}/check_fan_cpq_present
-%{_pluginlibdir}/check_fan_fsc_present
-%{_pluginlibdir}/check_flexlm.pl
-%{_pluginlibdir}/check_frontpage
-%{_pluginlibdir}/check_hprsc.pl
-%{_pluginlibdir}/check_hw.sh
-%{_pluginlibdir}/check_ica_master_browser.pl
-%{_pluginlibdir}/check_ica_metaframe_pub_apps.pl
-%{_pluginlibdir}/check_ica_program_neigbourhood.pl
-%{_pluginlibdir}/check_inodes-freebsd.pl
-%{_pluginlibdir}/check_inodes.pl
-%{_pluginlibdir}/check_javaproc.pl
-%{_pluginlibdir}/check_joy.sh
-%{_pluginlibdir}/check_linux_raid.pl
-%{_pluginlibdir}/check_lmmon.pl
-%{_pluginlibdir}/check_log2.pl
-%{_pluginlibdir}/check_lotus.pl
-%{_pluginlibdir}/check_maxchannels.pl
-%{_pluginlibdir}/check_maxwanstate.pl
-%{_pluginlibdir}/check_mem.pl
-%{_pluginlibdir}/check_ms_spooler.pl
-%{_pluginlibdir}/check_mssql.sh
-%{_pluginlibdir}/check_nagios.pl
-%{_pluginlibdir}/check_nagios_db.pl
-%{_pluginlibdir}/check_nagios_db_pg.pl
-%{_pluginlibdir}/check_netapp.pl
-%{_pluginlibdir}/check_nmap.py
-%{_pluginlibdir}/check_ora_table_space.pl
-%{_pluginlibdir}/check_oracle_instance.pl
-%{_pluginlibdir}/check_oracle_tbs
-%{_pluginlibdir}/check_pcpmetric.py
-%{_pluginlibdir}/check_pfstate
-%{_pluginlibdir}/check_qmailq.pl
-%{_pluginlibdir}/check_remote_nagios_status.pl
-%{_pluginlibdir}/check_rrd_data.pl
-%{_pluginlibdir}/check_sap.sh
-%{_pluginlibdir}/check_smart.pl
-%{_pluginlibdir}/check_smb.sh
-%{_pluginlibdir}/check_snmp_disk_monitor.pl
-%{_pluginlibdir}/check_snmp_printer.pl
-%{_pluginlibdir}/check_snmp_process_monitor.pl
-%{_pluginlibdir}/check_snmp_procs.pl
-%{_pluginlibdir}/check_sockets.pl
-%{_pluginlibdir}/check_temp_cpq
-%{_pluginlibdir}/check_temp_fsc
-%{_pluginlibdir}/check_traceroute-pure_perl.pl
-%{_pluginlibdir}/check_traceroute.pl
-%{_pluginlibdir}/check_vcs.pl
-%{_pluginlibdir}/check_wins.pl
+%attr(755,root,root) %{_pluginlibdir}/check_adptraid.sh
+%attr(755,root,root) %{_pluginlibdir}/check_apache.pl
+%attr(755,root,root) %{_pluginlibdir}/check_apc_ups.pl
+%attr(755,root,root) %{_pluginlibdir}/check_appletalk.pl
+%attr(755,root,root) %{_pluginlibdir}/check_arping.pl
+%attr(755,root,root) %{_pluginlibdir}/check_asterisk.pl
+%attr(755,root,root) %{_pluginlibdir}/check_axis.sh
+%attr(755,root,root) %{_pluginlibdir}/check_backup.pl
+%attr(755,root,root) %{_pluginlibdir}/check_bgpstate.pl
+%attr(755,root,root) %{_pluginlibdir}/check_compaq_insight.pl
+%attr(755,root,root) %{_pluginlibdir}/check_digitemp.pl
+%attr(755,root,root) %{_pluginlibdir}/check_dlswcircuit.pl
+%attr(755,root,root) %{_pluginlibdir}/check_dns_random.pl
+%attr(755,root,root) %{_pluginlibdir}/check_email_loop.pl
+%attr(755,root,root) %{_pluginlibdir}/check_fan_cpq_present
+%attr(755,root,root) %{_pluginlibdir}/check_fan_fsc_present
+%attr(755,root,root) %{_pluginlibdir}/check_flexlm.pl
+%attr(755,root,root) %{_pluginlibdir}/check_frontpage
+%attr(755,root,root) %{_pluginlibdir}/check_hprsc.pl
+%attr(755,root,root) %{_pluginlibdir}/check_hw.sh
+%attr(755,root,root) %{_pluginlibdir}/check_ica_master_browser.pl
+%attr(755,root,root) %{_pluginlibdir}/check_ica_metaframe_pub_apps.pl
+%attr(755,root,root) %{_pluginlibdir}/check_ica_program_neigbourhood.pl
+%attr(755,root,root) %{_pluginlibdir}/check_inodes-freebsd.pl
+%attr(755,root,root) %{_pluginlibdir}/check_inodes.pl
+%attr(755,root,root) %{_pluginlibdir}/check_javaproc.pl
+%attr(755,root,root) %{_pluginlibdir}/check_joy.sh
+%attr(755,root,root) %{_pluginlibdir}/check_linux_raid.pl
+%attr(755,root,root) %{_pluginlibdir}/check_lmmon.pl
+%attr(755,root,root) %{_pluginlibdir}/check_log2.pl
+%attr(755,root,root) %{_pluginlibdir}/check_lotus.pl
+%attr(755,root,root) %{_pluginlibdir}/check_maxchannels.pl
+%attr(755,root,root) %{_pluginlibdir}/check_maxwanstate.pl
+%attr(755,root,root) %{_pluginlibdir}/check_mem.pl
+%attr(755,root,root) %{_pluginlibdir}/check_ms_spooler.pl
+%attr(755,root,root) %{_pluginlibdir}/check_mssql.sh
+%attr(755,root,root) %{_pluginlibdir}/check_nagios.pl
+%attr(755,root,root) %{_pluginlibdir}/check_nagios_db.pl
+%attr(755,root,root) %{_pluginlibdir}/check_nagios_db_pg.pl
+%attr(755,root,root) %{_pluginlibdir}/check_netapp.pl
+%attr(755,root,root) %{_pluginlibdir}/check_nmap.py
+%attr(755,root,root) %{_pluginlibdir}/check_ora_table_space.pl
+%attr(755,root,root) %{_pluginlibdir}/check_oracle_instance.pl
+%attr(755,root,root) %{_pluginlibdir}/check_oracle_tbs
+%attr(755,root,root) %{_pluginlibdir}/check_pcpmetric.py
+%attr(755,root,root) %{_pluginlibdir}/check_pfstate
+%attr(755,root,root) %{_pluginlibdir}/check_qmailq.pl
+%attr(755,root,root) %{_pluginlibdir}/check_remote_nagios_status.pl
+%attr(755,root,root) %{_pluginlibdir}/check_rrd_data.pl
+%attr(755,root,root) %{_pluginlibdir}/check_sap.sh
+%attr(755,root,root) %{_pluginlibdir}/check_smart.pl
+%attr(755,root,root) %{_pluginlibdir}/check_smb.sh
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_disk_monitor.pl
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_printer.pl
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_process_monitor.pl
+%attr(755,root,root) %{_pluginlibdir}/check_snmp_procs.pl
+%attr(755,root,root) %{_pluginlibdir}/check_sockets.pl
+%attr(755,root,root) %{_pluginlibdir}/check_temp_cpq
+%attr(755,root,root) %{_pluginlibdir}/check_temp_fsc
+%attr(755,root,root) %{_pluginlibdir}/check_traceroute-pure_perl.pl
+%attr(755,root,root) %{_pluginlibdir}/check_traceroute.pl
+%attr(755,root,root) %{_pluginlibdir}/check_vcs.pl
+%attr(755,root,root) %{_pluginlibdir}/check_wins.pl
