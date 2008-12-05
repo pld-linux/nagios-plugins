@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -32,6 +32,11 @@ Patch17:	%{name}-check_ldap_pointer.patch
 Patch18:	%{name}-configure.patch
 Patch19:	%{name}-perlautodep.patch
 Patch20:	%{name}-cosmetic.patch
+Patch21:	%{name}-check_hpjd-no-paper-out.patch
+Patch22:	%{name}-check_snmp_procs-fix.patch
+Patch23:	%{name}-check_disk_smb-zero-cap.patch
+Patch24:	%{name}-paths.patch
+Patch25:	%{name}-check_snmp_disk_monitor-bulk.patch
 #Patch: %{name}-shared.patch # needs finishing
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
@@ -458,6 +463,11 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p0
+%patch22 -p0
+%patch23 -p0
+%patch24 -p0
+%patch25 -p0
 
 # bring contribs into shape...
 cd contrib
@@ -498,7 +508,7 @@ sed -i -e "
 	s,/usr/local/libexec/nagios,%{_pluginlibdir},
 	s,/usr/local/netsaint/libexec,%{_pluginlibdir},
 	s,/usr/local/libexec,%{_pluginlibdir},
-" check_* *.pl
+" check_* *.pl ../plugins-scripts/*.pl
 
 %build
 %{__gettextize}
@@ -536,7 +546,8 @@ sed -i -e "
 	--with-df-command='/bin/df -P' \
 	--with-apt-get-command=/usr/bin/apt-get \
 	--with-qmail-qstat-command=/usr/bin/qmail-qstat \
-	--with-mailq-command=/usr/bin/mailq
+	--with-mailq-command=/usr/bin/mailq \
+	--without-included-regex
 
 %{__make}
 
