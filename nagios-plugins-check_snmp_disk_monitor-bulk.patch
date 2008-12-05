@@ -1,0 +1,11 @@
+--- contrib/check_snmp_disk_monitor.pl.orig	2008-04-24 13:28:09.277695884 +0000
++++ contrib/check_snmp_disk_monitor.pl	2008-04-24 13:28:21.135459424 +0000
+@@ -111,7 +111,7 @@
+ );
+ 
+ # retrieve the data from the remote host
+-my( $mps, $alloc, $size, $used ) = $snmp_session->bulkwalk( 0, 4, [['hrStorageDescr'],['hrStorageAllocationUnits'],['hrStorageSize'],['hrStorageUsed']] );
++my( $mps, $alloc, $size, $used ) = $snmp_session->bulkwalk( 0, 2, [['hrStorageDescr'],['hrStorageAllocationUnits'],['hrStorageSize'],['hrStorageUsed']] );
+ check_for_errors();
+ 
+ alarm( 0 ); # all done with the network connection
