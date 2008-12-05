@@ -1,0 +1,12 @@
+--- plugins-scripts/check_disk_smb.orig	2008-04-23 12:22:41.792842643 +0000
++++ plugins-scripts/check_disk_smb.pl	2008-04-23 12:23:31.728177767 +0000
+@@ -181,7 +181,8 @@
+ 
+ 	my ($avail) = ($3*$2)/1024;
+ 	my ($avail_bytes) = $avail;
+-	my ($capper) = int(($3/$1)*100);
++	my ($capper);
++	if ($1!=0) { $capper = int(($3/$1)*100) } else { $capper=100 };
+ 	my ($mountpt) = "\\\\$host\\$share";
+ 
+ 
