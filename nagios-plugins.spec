@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	3
+Release:	3.3
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -97,6 +97,15 @@ depend on.
 %description libs -l pl.UTF-8
 Ten pakiet zawiera podstawowe biblioteki wtyczek Nagiosa, wymagane
 przez wtyczki.
+
+%package devel
+Summary:	Include files that Nagios plugins may compile against
+Group:		Development/Libraries
+# doesn't require base
+
+%description devel
+This package provides include files that Nagios plugins may compile
+against.
 
 # NOTE for sub package requires:
 # Requires:	nagios-core for plugins directory
@@ -573,6 +582,20 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# for nagios-plugin-check_mysql_perf (at least)
+cp -a lib/libnagiosplug.a $RPM_BUILD_ROOT%{_libdir}
+cp -a gl/libgnu.a $RPM_BUILD_ROOT%{_libdir}
+cp -a plugins/utils.o $RPM_BUILD_ROOT%{_libdir}
+cp -a plugins/netutils.o $RPM_BUILD_ROOT%{_libdir}
+install -d $RPM_BUILD_ROOT%{_includedir}/nagiosplug/{plugins,gl,lib}
+cp -a *.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug
+cp -a plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
+cp -a gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
+cp -a lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
+
+install -d $RPM_BUILD_ROOT%{_sysconfdir}
+cp -a commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
+
 %find_lang %{name}
 
 # all files with exec permissions are plugins.
@@ -601,7 +624,7 @@ cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 cp -a contrib/utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
 chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.*
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.{la,a}
+rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -609,7 +632,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	libs	-p /sbin/ldconfig
 %postun	libs	-p /sbin/ldconfig
 
-%triggerun -- %{name} <= 1.4-0.34
+%triggerun -- %{name} < 1.4-0.35
 %banner -e %{name} <<EOF
 Several Nagios plugins have been separated to multiple packages to cut
 down unneccessary deps on main package.
@@ -681,6 +704,14 @@ EOF
 %{_pluginlibdir}/utils.php
 %{_pluginlibdir}/utils.sh
 %{_pluginlibdir}/utils.py
+
+%files devel
+%defattr(644,root,root,755)
+%{_libdir}/libgnu.a
+%{_libdir}/libnagiosplug.a
+%{_libdir}/netutils.o
+%{_libdir}/utils.o
+%{_includedir}/nagiosplug
 
 %files perl
 %defattr(644,root,root,755)
