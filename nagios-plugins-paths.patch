@@ -1,5 +1,5 @@
---- contrib/check_snmp_disk_monitor.pl  2008-04-23 14:27:47.390299906 +0000
-+++ contrib/check_snmp_disk_monitor.pl~ 2008-04-23 13:27:18.000000000 +0000
+--- ./contrib/check_snmp_disk_monitor.pl  2008-04-23 14:27:47.390299906 +0000
++++ ./contrib/check_snmp_disk_monitor.pl~ 2008-04-23 13:27:18.000000000 +0000
 @@ -7,7 +7,7 @@
 
  use strict;
@@ -9,8 +9,8 @@
  use utils qw(%ERRORS $TIMEOUT &print_revision &support &usage);
  use SNMP 5.0;
  use Getopt::Long;
---- contrib/check_snmp_procs.pl.orig    2008-04-23 12:13:17.833685899 +0000
-+++ contrib/check_snmp_procs.pl 2008-04-23 12:15:18.456846167 +0000
+--- ./contrib/check_snmp_procs.pl.orig    2008-04-23 12:13:17.833685899 +0000
++++ ./contrib/check_snmp_procs.pl 2008-04-23 12:15:18.456846167 +0000
 @@ -32,10 +32,10 @@
  #    make it work with snmp version 3
  #    Suggestions???
@@ -25,3 +25,25 @@
 
  my $PROGNAME="check_snmp_procs";
 
+--- nagios-plugins-1.4.13/plugins-scripts/check_flexlm.pl	2003-02-04 08:16:16.000000000 +0200
++++ nagios-plugins-1.4.13-pp/plugins-scripts/check_flexlm.pl	2009-02-16 12:28:04.993531068 +0200
+@@ -17,7 +17,7 @@
+ #host[anchor]=any host will do;some.address.com;;check-host-alive;3;120;24x7;1;1;1;
+ #service[anchor]=yodel;24x7;3;5;5;unix-admin;60;24x7;1;1;1;;check_flexlm!/opt/lic/licfiles/yodel_lic
+ #service[anchor]=yeehaw;24x7;3;5;5;unix-admin;60;24x7;1;1;1;;check_flexlm!/opt/lic/licfiles/yeehaw_lic
+-#command[check_flexlm]=/some/path/libexec/check_flexlm.pl $ARG1$
++#command[check_flexlm]=/usr/lib/nagios/plugins/check_flexlm.pl $ARG1$
+ #
+ # Notes:
+ # - you need the lmstat utility which comes with flexlm.
+--- nagios-plugins-1.4.13/plugins-scripts/check_rpc.pl	2003-08-10 15:11:49.000000000 +0300
++++ nagios-plugins-1.4.13-pp/plugins-scripts/check_rpc.pl	2009-02-16 12:28:05.023530932 +0200
+@@ -10,7 +10,7 @@
+ #
+ # Use these hosts.cfg entries as examples
+ #
+-# command[check_nfs]=/some/path/libexec/check_rpc $HOSTADDRESS$ nfs
++# command[check_nfs]=/usr/lib/nagios/plugins/check_rpc $HOSTADDRESS$ nfs
+ # service[check_nfs]=NFS;24x7;3;5;5;unix-admin;60;24x7;1;1;1;;check_rpc
+ #
+ # initial version: 3 May 2000 by Truongchinh Nguyen and Karl DeBisschop
