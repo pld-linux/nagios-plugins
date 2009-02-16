@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -592,9 +592,6 @@ cp -a *.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug
 cp -a plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
 cp -a gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
 cp -a lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
-
-install -d $RPM_BUILD_ROOT%{_sysconfdir}
-cp -a commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
 
 %find_lang %{name}
 
