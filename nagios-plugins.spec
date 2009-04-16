@@ -614,7 +614,7 @@ done
 # move arch independat files to _pluginlibdir
 install -d $RPM_BUILD_ROOT%{_pluginlibdir}
 mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
-%{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir},' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
+%{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir}",' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
 %endif
 
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
