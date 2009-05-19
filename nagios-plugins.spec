@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	7
+Release:	8
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -60,7 +60,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_pluginarchdir	%{_libdir}/nagios/plugins
 %define		_pluginlibdir	%{_prefix}/lib/nagios/plugins
-%define		_noautoreqfiles utils.pm
+%define		_noautoreqfiles		utils.pm
+%define		_noautoprovfiles	utils.pm
 # Not available in Ac
 %define		_noautoreq	'perl(DBD::Oracle)' 'perl(Net::Arping)' 'perl(RRD::File)' 'perl(a)' 'perl(packet_utils)' 'perl(snmputil)'
 
