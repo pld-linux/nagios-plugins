@@ -1,0 +1,21 @@
+--- contrib/check_snmp_disk_monitor.pl	2009-04-03 15:44:39.000000000 +0200
++++ contrib/check_snmp_disk_monitor.pl.new	2009-07-18 10:28:04.835758511 +0200
+@@ -27,7 +27,6 @@
+ %mounts        = ();
+ 
+ sub process_options {
+-    my( $opt_crit, $opt_warn ) = ();
+     Getopt::Long::Configure( 'bundling' );
+     GetOptions(
+         'V'     => \$opt_version,       'version'     => \$opt_version,
+@@ -37,8 +36,8 @@
+         'H:s'   => \$opt_host,          'hostname:s'  => \$opt_host,
+         'p:i'   => \$opt_port,          'port:i'      => \$opt_port,
+         'C:s'   => \$opt_community,     'community:s' => \$opt_community,
+-        'c:i'   => \$opt_crit,          'critical:i'  => \$opt_crit,
+-        'w:i'   => \$opt_warn,          'warning:i'   => \$opt_warn,
++        'c:i'   => \$opt_critical,      'critical:i'  => \$opt_critical,
++        'w:i'   => \$opt_warning,       'warning:i'   => \$opt_warning,
+         't:i'   => \$TIMEOUT,           'timeout:i'   => \$TIMEOUT,    
+         'm:s'   => \$opt_mountpoint,    'mountpoint:s'=> \$opt_mountpoint
+     );

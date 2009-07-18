@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	9
+Release:	10
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -38,6 +38,7 @@ Patch22:	%{name}-check_snmp_procs-fix.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
 Patch24:	%{name}-paths.patch
 Patch25:	%{name}-check_snmp_disk_monitor-bulk.patch
+Patch26:	%{name}-check_snmp_disk_monitor-opts.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -476,6 +477,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %patch23 -p0
 %patch24 -p1
 %patch25 -p0
+%patch26 -p0
 
 # bring contribs into shape...
 cd contrib
