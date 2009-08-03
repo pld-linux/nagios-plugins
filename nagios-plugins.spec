@@ -654,7 +654,6 @@ EOF
 %doc ACKNOWLEDGEMENTS AUTHORS BUGS CODING ChangeLog
 %doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
-%defattr(755,root,root,755)
 # plugins
 %attr(755,root,root) %{_pluginarchdir}/check_apt
 %attr(755,root,root) %{_pluginarchdir}/check_cluster
