@@ -2,14 +2,14 @@
 # - if you use any plugin from -contrib package, move it to subpackage or main
 #   package so we can support it better!
 # TODO:
-# - package requisites for unifished packages -nsclient and -nwstat
+# - package requisites for unifished packages -nwstat
 #   REQUIREMENTS explains the dependencies.
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.13
-Release:	11
+Release:	12
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -391,18 +391,16 @@ This package contains Nagios plugins written in Perl.
 %description perl -l pl.UTF-8
 Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 
-# nsclient not packaged in PLD
-%package nsclient
+%package -n nagios-plugin-check_nt
 Summary:	Nagios plugin to check NT server with NSClient
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
 Group:		Networking
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	nsclient
 
-%description nsclient
+%description -n nagios-plugin-check_nt
 Nagios plugin to check NT server with NSClient.
 
-%description nsclient -l pl
+%description -n nagios-plugin-check_nt -l pl.UTF-8
 Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta.
 
 # requisite not packaged in PLD
@@ -822,10 +820,13 @@ EOF
 %defattr(644,root,root,755)
 %attr(2755,root,adm) %{_pluginarchdir}/check_fping
 
-%files contrib
+%files -n nagios-plugin-check_nt
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_nt
+
+%files contrib
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginarchdir}/check_nwstat
 %attr(755,root,root) %{_pluginarchdir}/check_rbl
 %attr(755,root,root) %{_pluginarchdir}/check_timeout
