@@ -686,7 +686,6 @@ EOF
 # check_tcp and symlinks
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_tcp.cfg
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_telnet.cfg
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_spamd.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_tcp
 %attr(755,root,root) %{_pluginarchdir}/check_clamd
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ftp.cfg
