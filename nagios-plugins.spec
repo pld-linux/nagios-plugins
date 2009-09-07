@@ -159,6 +159,16 @@ This plugin checks hardware status using the lm_sensors package.
 %description -n nagios-plugin-check_sensors -l pl.UTF-8
 Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
 
+%package -n nagios-plugin-check_mailq
+Summary:	Nagios plugin to check the number of messages in the local mail queue
+Group:		Networking
+# for utils.pm
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description -n nagios-plugin-check_mailq
+Checks the number of messages in the mail queue (supports multiple
+sendmail queues, qmail).
+
 %package mysql
 Summary:	Nagios plugin to test a MySQL DBMS
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
@@ -597,9 +607,6 @@ cp -a plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
 cp -a gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
 cp -a lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}
-cp -a commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
-
 %find_lang %{name}
 
 # all files with exec permissions are plugins.
@@ -623,6 +630,14 @@ install -d $RPM_BUILD_ROOT%{_pluginlibdir}
 mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
 %{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir}",' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
 %endif
+
+install -d $RPM_BUILD_ROOT%{_sysconfdir}
+for file in commands/*.cfg; do
+	cfg=${file##*/}
+	plugin=${cfg%.cfg}
+	[ -x $RPM_BUILD_ROOT%{_pluginarchdir}/$plugin ] && libdir=%{_pluginarchdir} || libdir=%{_pluginlibdir}
+	sed -e "s,\\\$USER1\\\$,$libdir," $file > $RPM_BUILD_ROOT%{_sysconfdir}/$cfg
+done
 
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 cp -a contrib/utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
@@ -737,7 +752,6 @@ EOF
 %attr(755,root,root) %{_pluginlibdir}/check_file_age
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
 %attr(755,root,root) %{_pluginlibdir}/check_ircd
-%attr(755,root,root) %{_pluginlibdir}/check_mailq
 %attr(755,root,root) %{_pluginlibdir}/check_rpc
 
 # requires license.dat
@@ -762,6 +776,10 @@ EOF
 %files -n nagios-plugin-check_sensors
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginlibdir}/check_sensors
+
+%files -n nagios-plugin-check_mailq
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_mailq
 
 %files mysql
 %defattr(644,root,root,755)
