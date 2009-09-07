@@ -607,6 +607,9 @@ cp -a plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
 cp -a gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
 cp -a lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
 
+install -d $RPM_BUILD_ROOT%{_sysconfdir}
+cp -a commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
+
 %find_lang %{name}
 
 # all files with exec permissions are plugins.
@@ -631,12 +634,10 @@ mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF
 %{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir}",' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
 %endif
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}
-for file in commands/*.cfg; do
-	cfg=${file##*/}
-	plugin=${cfg%.cfg}
+plugins=$(grep -Eoh 'command_line.*USER1\$/[^ ]+' $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg | awk -F/ '{print $NF}' | sort -u)
+for plugin in $plugins; do
 	[ -x $RPM_BUILD_ROOT%{_pluginarchdir}/$plugin ] && libdir=%{_pluginarchdir} || libdir=%{_pluginlibdir}
-	sed -e "s,\\\$USER1\\\$,$libdir," $file > $RPM_BUILD_ROOT%{_sysconfdir}/$cfg
+	sed -i -e "s,\\\$USER1\\\$,$libdir," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
 done
 
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
