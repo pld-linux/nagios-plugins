@@ -436,27 +436,27 @@ Group:		Networking
 # for utils.pm, utils.sh, utils.py
 Requires:	%{name}-libs = %{version}-%{release}
 # check_apache
-Requires:	perl-URI
-Requires:	perl-libwww
+Suggests:	perl-URI
+Suggests:	perl-libwww
 # check_apc_ups
-Requires:	net-snmp-utils
+Suggests:	net-snmp-utils
 # check_arping
-Requires:	perl-Net-Arping
+Suggests:	perl-Net-Arping
 # check_bgpstate
-Requires:	perl-Net-SNMP
-Requires:	whois
+Suggests:	perl-Net-SNMP
+Suggests:	whois
 # check_traceroute
-Requires:	traceroute
+Suggests:	traceroute
 # check_traceroute-pure_perl
-Requires:	perl-Net-Traceroute
+Suggests:	perl-Net-Traceroute
 # check_temp_fsc
-Requires:	perl-SNMP_Session
+Suggests:	perl-SNMP_Session
 # check_smart
-Requires:	smartmontools
+Suggests:	smartmontools
 # check_smb
-Requires:	samba
+Suggests:	samba
 # check_adptraid
-#Requires:	dptutil
+#Suggests:	dptutil
 # unfinished... more deps are actually needed.
 
 %description contrib
