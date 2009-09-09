@@ -672,56 +672,56 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_apt
 %attr(755,root,root) %{_pluginarchdir}/check_cluster
 %attr(755,root,root) %{_pluginarchdir}/check_cluster2
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_disk.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_disk.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_disk
 %attr(755,root,root) %{_pluginarchdir}/check_dummy
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_http.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_http.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_http
 %attr(755,root,root) %{_pluginarchdir}/check_ide_smart
 %attr(755,root,root) %{_pluginarchdir}/check_mrtg
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mrtgtraf.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mrtgtraf.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_mrtgtraf
 %attr(755,root,root) %{_pluginarchdir}/check_nagios
 # req: over-cr >= 0.99.53 http://www.molitor.org/overcr
 %attr(755,root,root) %{_pluginarchdir}/check_overcr
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_procs.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_procs.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_procs
 %attr(755,root,root) %{_pluginarchdir}/check_real
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_smtp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_smtp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_smtp
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ssh.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ssh.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_ssh
 %attr(755,root,root) %{_pluginarchdir}/check_time
 %attr(755,root,root) %{_pluginarchdir}/check_ups
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_users.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_users.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_users
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_swap.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_swap.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_swap
 %attr(755,root,root) %{_pluginlibdir}/check_log
 
 # check_tcp and symlinks
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_tcp.cfg
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_telnet.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_tcp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_telnet.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_tcp
 %attr(755,root,root) %{_pluginarchdir}/check_clamd
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ftp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ftp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_ftp
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_imap.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_imap.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_imap
 %attr(755,root,root) %{_pluginarchdir}/check_jabber
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nntp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nntp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_nntp
 %attr(755,root,root) %{_pluginarchdir}/check_nntps
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_pop.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_pop.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_pop
 %attr(755,root,root) %{_pluginarchdir}/check_simap
 %attr(755,root,root) %{_pluginarchdir}/check_spop
 %attr(755,root,root) %{_pluginarchdir}/check_ssmtp
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_udp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_udp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_udp
 
 # these plugins need suid bit to operate
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dhcp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dhcp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_dhcp
 %attr(755,root,root) %{_pluginarchdir}/check_icmp
 
@@ -751,7 +751,7 @@ EOF
 %files perl
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginlibdir}/check_file_age
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
 %attr(755,root,root) %{_pluginlibdir}/check_ircd
 %attr(755,root,root) %{_pluginlibdir}/check_rpc
 
@@ -761,9 +761,9 @@ EOF
 # Not to be confused with nagios-snmp-plugins
 %files snmp
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_snmp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_snmp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_snmp
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_hpjd.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_hpjd.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_hpjd
 %attr(755,root,root) %{_pluginlibdir}/check_ifoperstatus
 %attr(755,root,root) %{_pluginlibdir}/check_ifstatus
@@ -784,7 +784,7 @@ EOF
 
 %files mysql
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_mysql
 %attr(755,root,root) %{_pluginarchdir}/check_mysql_query
 
@@ -807,14 +807,14 @@ EOF
 
 %files -n nagios-plugin-check_ntp
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ntp.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ntp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_ntp
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_peer
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_time
 
 %files -n nagios-plugin-check_dns
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dns.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dns.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_dns
 
 %files -n nagios-plugin-check_dig
@@ -827,12 +827,12 @@ EOF
 
 %files -n nagios-plugin-check_load
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_load.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_load.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_load
 
 %files -n nagios-plugin-check_ping
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ping.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ping.cfg
 %attr(2755,root,adm) %{_pluginarchdir}/check_ping
 
 %files -n nagios-plugin-check_fping
@@ -841,7 +841,7 @@ EOF
 
 %files -n nagios-plugin-check_nt
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_nt
 
 %files contrib
