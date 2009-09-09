@@ -14,8 +14,8 @@ License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	be6cc7699fff3ee29d1fd4d562377386
-Source1:	%{name}-config-20090908.tar.bz2
-# Source1-md5:	b9e98cca6647e6329c71da1ff409e467
+Source1:	%{name}-config-20090909.tar.bz2
+# Source1-md5:	997cf4b0b93bca478890a935c20151a9
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
@@ -807,6 +807,7 @@ EOF
 
 %files -n nagios-plugin-check_ntp
 %defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ntp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_ntp
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_peer
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_time
