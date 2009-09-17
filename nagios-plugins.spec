@@ -8,12 +8,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.13
-Release:	19
+Version:	1.4.14
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	be6cc7699fff3ee29d1fd4d562377386
+# Source0-md5:	a1835a48a777863ed2583de3c82446a9
 Source1:	%{name}-config-20090909.tar.bz2
 # Source1-md5:	997cf4b0b93bca478890a935c20151a9
 Source2:	nagios-utils.php
@@ -42,11 +42,13 @@ Patch24:	%{name}-paths.patch
 Patch25:	%{name}-check_snmp_disk_monitor-bulk.patch
 Patch26:	%{name}-check_snmp_disk_monitor-opts.patch
 Patch27:	%{name}-ping.patch
+Patch28:	check_rbl.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	file
 BuildRequires:	gettext-devel >= 0.14.3
+BuildRequires:	libtap-devel
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
@@ -493,6 +495,7 @@ mv nagios-plugins-config-*/* .
 %patch25 -p0
 %patch26 -p0
 %patch27 -p1
+%patch28 -p1
 
 # bring contribs into shape...
 cd contrib
@@ -545,6 +548,7 @@ sed -i -e "
 
 %configure \
 	--libexecdir=%{_pluginarchdir} \
+	--enable-libtap=/usr \
 	--with-cgiurl=/nagios/cgi-bin \
 	--with-mysql=/usr \
 	--with-pgsql=/usr \
