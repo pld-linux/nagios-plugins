@@ -14,8 +14,8 @@ License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	a1835a48a777863ed2583de3c82446a9
-Source1:	%{name}-config-20090917.tar.bz2
-# Source1-md5:	e446a46182a7b8f0495511378c2f6680
+Source1:	%{name}-config-20091012.tar.bz2
+# Source1-md5:	cf48380af40ab7593fc9a2ef63ac8b30
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
