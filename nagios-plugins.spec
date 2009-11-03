@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.14
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking
 Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -643,7 +643,7 @@ mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF
 plugins=$(grep -Eoh 'command_line.*USER1\$/[^ ]+' $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg | awk -F/ '{print $NF}' | sort -u)
 for plugin in $plugins; do
 	[ -x $RPM_BUILD_ROOT%{_pluginarchdir}/$plugin ] && libdir=%{_pluginarchdir} || libdir=%{_pluginlibdir}
-	sed -i -e "s,\\\$USER1\\\$,$libdir," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
+	sed -i -e "s,\\\$USER1\\\$/$plugin ,$libdir/$plugin ," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
 done
 
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
