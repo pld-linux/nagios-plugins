@@ -121,6 +121,7 @@ against.
 Summary:	Nagios plugins using SNMP protocol to query information
 Summary(pl.UTF-8):	Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	net-snmp-utils
@@ -136,6 +137,7 @@ Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji.
 Summary:	Nagios plugin to check remote disk using smbclient
 Summary(pl.UTF-8):	Wtyczka Nagiosa do zdalnego sprawdzania dysku z użyciem smbclienta
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	samba-client
@@ -150,6 +152,7 @@ Perlowa wtyczka dla Nagiosa sprawdzająca dyski SMB.
 Summary:	Nagios plugin to check hardware status using the lm_sensors package
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania stanu sprzętu przy użyciu pakietu lm_sensors
 Group:		Networking
+Requires:	nagios-common
 # for utils.sh
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	lm_sensors
@@ -165,6 +168,7 @@ Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
 %package -n nagios-plugin-check_mailq
 Summary:	Nagios plugin to check the number of messages in the local mail queue
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -276,6 +280,7 @@ Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 Summary:	Nagios plugin to check time using NTP protocol
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania czasu przy użyciu protokołu NTP
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	ntp-client
@@ -393,6 +398,7 @@ działa.
 Summary:	Nagios plugins written in Perl
 Summary(pl.UTF-8):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
 # for perl(Exporter)
@@ -409,6 +415,7 @@ Summary:	Nagios plugin to check NT server with NSClient
 Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
 Group:		Networking
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	nagios-common
 
 %description -n nagios-plugin-check_nt
 Nagios plugin to check NT server with NSClient.
@@ -423,6 +430,7 @@ Summary(pl):	Wtyczka nwstat do Nagiosa
 Group:		Networking
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mrtgext
+Requires:	nagios-common
 
 %description nwstat
 Nagios plugin using MRTGEXT module
@@ -436,6 +444,7 @@ Wtyczka nagiosa używająca modułu MRTGEXT
 Summary:	Contributed nagios plugins
 Summary(pl.UTF-8):	Wtyczki przekazane do projektu Nagios
 Group:		Networking
+Requires:	nagios-common
 # for utils.pm, utils.sh, utils.py
 Requires:	%{name}-libs = %{version}-%{release}
 # check_apache
