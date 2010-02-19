@@ -12,9 +12,9 @@ Version:	1.4.14
 Release:	7
 License:	GPL v2
 Group:		Networking
-Source0:	http://dl.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	a1835a48a777863ed2583de3c82446a9
-Source1:	%{name}-config-20091012.tar.bz2
+Source1:	%{name}-config-20100219.tar.bz2
 # Source1-md5:	cf48380af40ab7593fc9a2ef63ac8b30
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
@@ -818,6 +818,7 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_dns
 
 %files -n nagios-plugin-check_file_age
+%defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_file_age.cfg
 %attr(755,root,root) %{_pluginlibdir}/check_file_age
 
