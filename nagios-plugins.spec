@@ -15,7 +15,7 @@ Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
 # Source0-md5:	a1835a48a777863ed2583de3c82446a9
 Source1:	%{name}-config-20100219.tar.bz2
-# Source1-md5:	cf48380af40ab7593fc9a2ef63ac8b30
+# Source1-md5:	7914664eee7d77be9b8f05347a276e0f
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
