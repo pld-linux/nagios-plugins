@@ -789,27 +789,28 @@ EOF
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginlibdir}/check_disk_smb
 
-%files -n nagios-plugin-check_sensors
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginlibdir}/check_sensors
-
-%files -n nagios-plugin-check_mailq
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginlibdir}/check_mailq
-
 %files mysql
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_mysql
 %attr(755,root,root) %{_pluginarchdir}/check_mysql_query
 
-%files -n nagios-plugin-check_pgsql
+%files ssh
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_pgsql
+%attr(755,root,root) %{_pluginarchdir}/check_by_ssh
 
-%files -n nagios-plugin-check_radius
+%files -n nagios-plugin-check_dig
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_radius
+%attr(755,root,root) %{_pluginarchdir}/check_dig
+
+%files -n nagios-plugin-check_dns
+%defattr(644,root,root,755)
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dns.cfg
+%attr(755,root,root) %{_pluginarchdir}/check_dns
+
+%files -n nagios-plugin-check_fping
+%defattr(644,root,root,755)
+%attr(2755,root,adm) %{_pluginarchdir}/check_fping
 
 %files -n nagios-plugin-check_game
 %defattr(644,root,root,755)
@@ -820,6 +821,20 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_ldap
 %attr(755,root,root) %{_pluginarchdir}/check_ldaps
 
+%files -n nagios-plugin-check_load
+%defattr(644,root,root,755)
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_load.cfg
+%attr(755,root,root) %{_pluginarchdir}/check_load
+
+%files -n nagios-plugin-check_mailq
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_mailq
+
+%files -n nagios-plugin-check_nt
+%defattr(644,root,root,755)
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
+%attr(755,root,root) %{_pluginarchdir}/check_nt
+
 %files -n nagios-plugin-check_ntp
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ntp.cfg
@@ -827,37 +842,22 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_peer
 %attr(755,root,root) %{_pluginarchdir}/check_ntp_time
 
-%files -n nagios-plugin-check_dns
+%files -n nagios-plugin-check_pgsql
 %defattr(644,root,root,755)
-%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dns.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_dns
-
-%files -n nagios-plugin-check_dig
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_dig
-
-%files ssh
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_by_ssh
-
-%files -n nagios-plugin-check_load
-%defattr(644,root,root,755)
-%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_load.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_load
+%attr(755,root,root) %{_pluginarchdir}/check_pgsql
 
 %files -n nagios-plugin-check_ping
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ping.cfg
 %attr(2755,root,adm) %{_pluginarchdir}/check_ping
 
-%files -n nagios-plugin-check_fping
+%files -n nagios-plugin-check_radius
 %defattr(644,root,root,755)
-%attr(2755,root,adm) %{_pluginarchdir}/check_fping
+%attr(755,root,root) %{_pluginarchdir}/check_radius
 
-%files -n nagios-plugin-check_nt
+%files -n nagios-plugin-check_sensors
 %defattr(644,root,root,755)
-%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_nt
+%attr(755,root,root) %{_pluginlibdir}/check_sensors
 
 %files contrib
 %defattr(644,root,root,755)
