@@ -117,21 +117,37 @@ against.
 # NOTE for sub package requires:
 # Requires:	nagios-common for plugins directory and nagios group
 # and add Requires:	%{name}-libs = %{version}-%{release} for utils.{sh,pm,php}
-%package snmp
-Summary:	Nagios plugins using SNMP protocol to query information
-Summary(pl.UTF-8):	Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji
+##############################################################################
+
+%package mysql
+Summary:	Nagios plugin to test a MySQL DBMS
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
+Group:		Networking
+Requires:	nagios-common
+
+%description mysql
+This plugin tests a MySQL DBMS to determine whether it is active and
+accepting queries.
+
+%description mysql -l pl.UTF-8
+Ta wtyczka sprawdza serwer baz danych MySQL, aby określić, czy jest
+aktywny i przyjmuje zapytania.
+
+%package perl
+Summary:	Nagios plugins written in Perl
+Summary(pl.UTF-8):	Wtyczki Nagiosa napisane w Perlu
 Group:		Networking
 Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	net-snmp-utils
-Requires:	perl-Net-SNMP
+# for perl(Exporter)
+Requires:	perl-base
 
-%description snmp
-Nagios plugins using SNMP protocol to query information.
+%description perl
+This package contains Nagios plugins written in Perl.
 
-%description snmp -l pl.UTF-8
-Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji.
+%description perl -l pl.UTF-8
+Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
 
 %package samba
 Summary:	Nagios plugin to check remote disk using smbclient
@@ -148,86 +164,96 @@ Perl Check SMB Disk plugin for Nagios.
 %description samba -l pl.UTF-8
 Perlowa wtyczka dla Nagiosa sprawdzająca dyski SMB.
 
-%package -n nagios-plugin-check_sensors
-Summary:	Nagios plugin to check hardware status using the lm_sensors package
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania stanu sprzętu przy użyciu pakietu lm_sensors
-Group:		Networking
-Requires:	nagios-common
-# for utils.sh
-Requires:	%{name}-libs = %{version}-%{release}
-Requires:	lm_sensors
-Provides:	nagios-plugins-sensors = %{version}-%{release}
-Obsoletes:	nagios-plugins-sensors
-
-%description -n nagios-plugin-check_sensors
-This plugin checks hardware status using the lm_sensors package.
-
-%description -n nagios-plugin-check_sensors -l pl.UTF-8
-Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
-
-%package -n nagios-plugin-check_mailq
-Summary:	Nagios plugin to check the number of messages in the local mail queue
+%package snmp
+Summary:	Nagios plugins using SNMP protocol to query information
+Summary(pl.UTF-8):	Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji
 Group:		Networking
 Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	net-snmp-utils
+Requires:	perl-Net-SNMP
 
-%description -n nagios-plugin-check_mailq
-Checks the number of messages in the mail queue (supports multiple
-sendmail queues, qmail).
+%description snmp
+Nagios plugins using SNMP protocol to query information.
 
-%package mysql
-Summary:	Nagios plugin to test a MySQL DBMS
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania systemu baz danych MySQL
+%description snmp -l pl.UTF-8
+Wtyczki Nagiosa używające protokołu SNMP w celu uzyskania informacji.
+
+%package ssh
+Summary:	Nagios plugins to check remote services via SSH
+Summary(pl.UTF-8):	Wtyczki Nagiosa do sprawdzania zdalnych usług po SSH
+Group:		Networking
+Requires:	nagios-common
+Requires:	openssh-clients
+
+%description ssh
+This plugin uses SSH to execute commands on a remote host.
+
+%description ssh -l pl.UTF-8
+Ta wtyczka używa SSH do wykonywania poleceń na zdalnym hoście.
+
+%package -n nagios-plugin-check_dig
+Summary:	Nagios plugin to check DNS servers with dig
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania DNS-u przy użyciu programu dig
+Group:		Networking
+Requires:	bind-utils
+Requires:	nagios-common
+Provides:	nagios-plugins-dig = %{version}-%{release}
+Obsoletes:	nagios-plugins-dig
+
+%description -n nagios-plugin-check_dig
+Test the DNS service on the specified host using dig.
+
+%description -n nagios-plugin-check_dig -l pl.UTF-8
+Ta wtyczka sprawdza usługę DNS na podanym hoście przy użyciu programu
+dig.
+
+%package -n nagios-plugin-check_dns
+Summary:	Nagios plugin to check DNS with nslookup
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania DNS-u przy użyciu nslookup
+Group:		Networking
+Requires:	bind-utils
+Requires:	nagios-common
+Provides:	nagios-plugins-dns = %{version}-%{release}
+Obsoletes:	nagios-plugins-dns
+
+%description -n nagios-plugin-check_dns
+This plugin uses the nslookup program to obtain the IP address for the
+given host/domain query. A optional DNS server to use may be
+specified. If no DNS server is specified, the default server(s)
+specified in /etc/resolv.conf will be used.
+
+%description -n nagios-plugin-check_dns -l pl.UTF-8
+Ta wtyczka używa programu nslookup do uzyskania adresu IP danego dla
+danego zapytania o host/domenę. Można opcjonalnie podać serwer DNS,
+który ma być użyty. Jeśli nie podano serwera DNS, używany jest
+domyślny serwer (lub serwery) podany w /etc/resolv.conf.
+
+%package -n nagios-plugin-check_file_age
+Summary:	Nagios plugin to check host up state with fping
 Group:		Networking
 Requires:	nagios-common
 
-%description mysql
-This plugin tests a MySQL DBMS to determine whether it is active and
-accepting queries.
+%description -n nagios-plugin-check_file_age
+Nagios plugin to check local file age and size.
 
-%description mysql -l pl.UTF-8
-Ta wtyczka sprawdza serwer baz danych MySQL, aby określić, czy jest
-aktywny i przyjmuje zapytania.
-
-%package -n nagios-plugin-check_pgsql
-Summary:	Nagios plugin to test a PostgreSQL DBMS
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
+%package -n nagios-plugin-check_fping
+Summary:	Nagios plugin to check host up state with fping
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania działania hosta przy użyciu programu fping
 Group:		Networking
+Requires:	fping
 Requires:	nagios-common
-Provides:	nagios-plugins-pgsql = %{version}-%{release}
-Obsoletes:	nagios-plugins-pgsql
+Provides:	nagios-plugins-fping = %{version}-%{release}
+Obsoletes:	nagios-plugins-fping
 
-%description -n nagios-plugin-check_pgsql
-This plugin tests a PostgreSQL DBMS to determine whether it is active
-and accepting queries. In its current operation, it simply connects to
-the specified database, and then disconnects. If no database is
-specified, it connects to the template1 database, which is present in
-every functioning PostgreSQL DBMS.
+%description -n nagios-plugin-check_fping
+This plugin will use the /bin/fping command to ping the specified host
+for a fast check if the host is alive.
 
-%description -n nagios-plugin-check_pgsql -l pl.UTF-8
-Ta wtyczka sprawdza serwer baz danych PostgreSQL, aby określić, czy
-jest aktywny i przyjmuje zapytania. Aktualnie po prostu łączy się do
-określonej bazy danych i rozłącza. Jeśli nie podano bazy danych, łączy
-się do bazy danych template1, obecnej w każdym działającym systemie
-PostgreSQL.
-
-%package -n nagios-plugin-check_radius
-Summary:	Nagios plugin to test a radius server to see if it is accepting connections
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania serwera radius pod kątem przyjmowania połączeń
-Group:		Networking
-Requires:	nagios-common
-Requires:	radiusclient
-Provides:	nagios-plugins-radius = %{version}-%{release}
-Obsoletes:	nagios-plugins-radius
-
-%description -n nagios-plugin-check_radius
-This plugin tests a radius server to see if it is accepting
-connections.
-
-%description -n nagios-plugin-check_radius -l pl.UTF-8
-Ta wtyczka sprawdza serwer usługi radius, aby zobaczyć, czy przyjmuje
-połączenia.
+%description -n nagios-plugin-check_fping -l pl.UTF-8
+Ta wtyczka używa polecenia /bin/fping do szybkiego sprawdzenia, czy
+dany host działa.
 
 %package -n nagios-plugin-check_game
 Summary:	Nagios plugin to check status of Internet game servers
@@ -276,6 +302,45 @@ Nagios plugin to check LDAP servers.
 %description -n nagios-plugin-check_ldap -l pl.UTF-8
 Wtyczka Nagiosa do sprawdzania serwerów LDAP.
 
+%package -n nagios-plugin-check_load
+Summary:	Nagios plugin to check uptime using procps
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania uptime'u przy użyciu procps
+Group:		Networking
+Requires:	nagios-common
+Requires:	procps
+Provides:	nagios-plugins-procps = %{version}-%{release}
+Obsoletes:	nagios-plugins-procps
+
+%description -n nagios-plugin-check_load
+Nagios plugin to check uptime using procps.
+
+%description -n nagios-plugin-check_load -l pl.UTF-8
+Wtyczka Nagiosa do sprawdzania uptime'u przy użyciu procps.
+
+%package -n nagios-plugin-check_mailq
+Summary:	Nagios plugin to check the number of messages in the local mail queue
+Group:		Networking
+Requires:	nagios-common
+# for utils.pm
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description -n nagios-plugin-check_mailq
+Checks the number of messages in the mail queue (supports multiple
+sendmail queues, qmail).
+
+%package -n nagios-plugin-check_nt
+Summary:	Nagios plugin to check NT server with NSClient
+Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
+Group:		Networking
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	nagios-common
+
+%description -n nagios-plugin-check_nt
+Nagios plugin to check NT server with NSClient.
+
+%description -n nagios-plugin-check_nt -l pl.UTF-8
+Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta.
+
 %package -n nagios-plugin-check_ntp
 Summary:	Nagios plugin to check time using NTP protocol
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania czasu przy użyciu protokołu NTP
@@ -297,95 +362,27 @@ Ta wtyczka sprawdza przesunięcie lokalnego czasu względem danego hosta
 przy użyciu ntpdate. Sprawdza wahania/dyspersję sygnału zegara
 pomiędzy hostem a jego sys.peer przy użyciu ntpq.
 
-%package -n nagios-plugin-check_dns
-Summary:	Nagios plugin to check DNS with nslookup
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania DNS-u przy użyciu nslookup
-Group:		Networking
-Requires:	bind-utils
-Requires:	nagios-common
-Provides:	nagios-plugins-dns = %{version}-%{release}
-Obsoletes:	nagios-plugins-dns
-
-%description -n nagios-plugin-check_dns
-This plugin uses the nslookup program to obtain the IP address for the
-given host/domain query. A optional DNS server to use may be
-specified. If no DNS server is specified, the default server(s)
-specified in /etc/resolv.conf will be used.
-
-%description -n nagios-plugin-check_dns -l pl.UTF-8
-Ta wtyczka używa programu nslookup do uzyskania adresu IP danego dla
-danego zapytania o host/domenę. Można opcjonalnie podać serwer DNS,
-który ma być użyty. Jeśli nie podano serwera DNS, używany jest
-domyślny serwer (lub serwery) podany w /etc/resolv.conf.
-
-%package -n nagios-plugin-check_dig
-Summary:	Nagios plugin to check DNS servers with dig
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania DNS-u przy użyciu programu dig
-Group:		Networking
-Requires:	bind-utils
-Requires:	nagios-common
-Provides:	nagios-plugins-dig = %{version}-%{release}
-Obsoletes:	nagios-plugins-dig
-
-%description -n nagios-plugin-check_dig
-Test the DNS service on the specified host using dig.
-
-%description -n nagios-plugin-check_dig -l pl.UTF-8
-Ta wtyczka sprawdza usługę DNS na podanym hoście przy użyciu programu
-dig.
-
-%package ssh
-Summary:	Nagios plugins to check remote services via SSH
-Summary(pl.UTF-8):	Wtyczki Nagiosa do sprawdzania zdalnych usług po SSH
+%package -n nagios-plugin-check_pgsql
+Summary:	Nagios plugin to test a PostgreSQL DBMS
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania systemu baz danych PostgreSQL
 Group:		Networking
 Requires:	nagios-common
-Requires:	openssh-clients
+Provides:	nagios-plugins-pgsql = %{version}-%{release}
+Obsoletes:	nagios-plugins-pgsql
 
-%description ssh
-This plugin uses SSH to execute commands on a remote host.
+%description -n nagios-plugin-check_pgsql
+This plugin tests a PostgreSQL DBMS to determine whether it is active
+and accepting queries. In its current operation, it simply connects to
+the specified database, and then disconnects. If no database is
+specified, it connects to the template1 database, which is present in
+every functioning PostgreSQL DBMS.
 
-%description ssh -l pl.UTF-8
-Ta wtyczka używa SSH do wykonywania poleceń na zdalnym hoście.
-
-%package -n nagios-plugin-check_load
-Summary:	Nagios plugin to check uptime using procps
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania uptime'u przy użyciu procps
-Group:		Networking
-Requires:	nagios-common
-Requires:	procps
-Provides:	nagios-plugins-procps = %{version}-%{release}
-Obsoletes:	nagios-plugins-procps
-
-%description -n nagios-plugin-check_load
-Nagios plugin to check uptime using procps.
-
-%description -n nagios-plugin-check_load -l pl.UTF-8
-Wtyczka Nagiosa do sprawdzania uptime'u przy użyciu procps.
-
-%package -n nagios-plugin-check_file_age
-Summary:	Nagios plugin to check host up state with fping
-Group:		Networking
-Requires:	nagios-common
-
-%description -n nagios-plugin-check_file_age
-Nagios plugin to check local file age and size.
-
-%package -n nagios-plugin-check_fping
-Summary:	Nagios plugin to check host up state with fping
-Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania działania hosta przy użyciu programu fping
-Group:		Networking
-Requires:	fping
-Requires:	nagios-common
-Provides:	nagios-plugins-fping = %{version}-%{release}
-Obsoletes:	nagios-plugins-fping
-
-%description -n nagios-plugin-check_fping
-This plugin will use the /bin/fping command to ping the specified host
-for a fast check if the host is alive.
-
-%description -n nagios-plugin-check_fping -l pl.UTF-8
-Ta wtyczka używa polecenia /bin/fping do szybkiego sprawdzenia, czy
-dany host działa.
+%description -n nagios-plugin-check_pgsql -l pl.UTF-8
+Ta wtyczka sprawdza serwer baz danych PostgreSQL, aby określić, czy
+jest aktywny i przyjmuje zapytania. Aktualnie po prostu łączy się do
+określonej bazy danych i rozłącza. Jeśli nie podano bazy danych, łączy
+się do bazy danych template1, obecnej w każdym działającym systemie
+PostgreSQL.
 
 %package -n nagios-plugin-check_ping
 Summary:	Nagios plugin to check host up state with ping
@@ -402,34 +399,39 @@ if the host is alive.
 Ta wtyczka używa polecenia /bin/ping do sprawdzenia, czy dany host
 działa.
 
-%package perl
-Summary:	Nagios plugins written in Perl
-Summary(pl.UTF-8):	Wtyczki Nagiosa napisane w Perlu
+%package -n nagios-plugin-check_radius
+Summary:	Nagios plugin to test a radius server to see if it is accepting connections
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania serwera radius pod kątem przyjmowania połączeń
 Group:		Networking
 Requires:	nagios-common
-# for utils.pm
-Requires:	%{name}-libs = %{version}-%{release}
-# for perl(Exporter)
-Requires:	perl-base
+Requires:	radiusclient
+Provides:	nagios-plugins-radius = %{version}-%{release}
+Obsoletes:	nagios-plugins-radius
 
-%description perl
-This package contains Nagios plugins written in Perl.
+%description -n nagios-plugin-check_radius
+This plugin tests a radius server to see if it is accepting
+connections.
 
-%description perl -l pl.UTF-8
-Ten pakiet zawiera wtyczki Nagiosa napisane w Perlu.
+%description -n nagios-plugin-check_radius -l pl.UTF-8
+Ta wtyczka sprawdza serwer usługi radius, aby zobaczyć, czy przyjmuje
+połączenia.
 
-%package -n nagios-plugin-check_nt
-Summary:	Nagios plugin to check NT server with NSClient
-Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
+%package -n nagios-plugin-check_sensors
+Summary:	Nagios plugin to check hardware status using the lm_sensors package
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania stanu sprzętu przy użyciu pakietu lm_sensors
 Group:		Networking
-Requires:	%{name}-libs = %{version}-%{release}
 Requires:	nagios-common
+# for utils.sh
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	lm_sensors
+Provides:	nagios-plugins-sensors = %{version}-%{release}
+Obsoletes:	nagios-plugins-sensors
 
-%description -n nagios-plugin-check_nt
-Nagios plugin to check NT server with NSClient.
+%description -n nagios-plugin-check_sensors
+This plugin checks hardware status using the lm_sensors package.
 
-%description -n nagios-plugin-check_nt -l pl.UTF-8
-Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta.
+%description -n nagios-plugin-check_sensors -l pl.UTF-8
+Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
 
 # requisite not packaged in PLD
 %package nwstat
@@ -771,6 +773,12 @@ EOF
 %{_libdir}/utils.o
 %{_includedir}/nagiosplug
 
+%files mysql
+%defattr(644,root,root,755)
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
+%attr(755,root,root) %{_pluginarchdir}/check_mysql
+%attr(755,root,root) %{_pluginarchdir}/check_mysql_query
+
 %files perl
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
@@ -779,6 +787,10 @@ EOF
 
 # requires license.dat
 %attr(755,root,root) %{_pluginlibdir}/check_flexlm
+
+%files samba
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_pluginlibdir}/check_disk_smb
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
@@ -791,16 +803,6 @@ EOF
 %attr(755,root,root) %{_pluginlibdir}/check_ifstatus
 %attr(755,root,root) %{_pluginlibdir}/check_wave
 %attr(755,root,root) %{_pluginlibdir}/check_breeze
-
-%files samba
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginlibdir}/check_disk_smb
-
-%files mysql
-%defattr(644,root,root,755)
-%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_mysql
-%attr(755,root,root) %{_pluginarchdir}/check_mysql_query
 
 %files ssh
 %defattr(644,root,root,755)
