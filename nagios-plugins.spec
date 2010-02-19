@@ -140,8 +140,6 @@ Group:		Networking
 Requires:	nagios-common
 # for utils.pm
 Requires:	%{name}-libs = %{version}-%{release}
-# for perl(Exporter)
-Requires:	perl-base
 
 %description perl
 This package contains Nagios plugins written in Perl.
@@ -234,6 +232,8 @@ domyślny serwer (lub serwery) podany w /etc/resolv.conf.
 Summary:	Nagios plugin to check host up state with fping
 Group:		Networking
 Requires:	nagios-common
+# for utils.pm
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description -n nagios-plugin-check_file_age
 Nagios plugin to check local file age and size.
