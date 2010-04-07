@@ -1,4 +1,4 @@
-<?
+<?php
 
 define('STATE_OK', 0);
 define('STATE_WARNING', 1);
