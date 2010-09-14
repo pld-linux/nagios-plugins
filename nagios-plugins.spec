@@ -8,12 +8,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.14
-Release:	9
+Version:	1.4.15
+Release:	1
 License:	GPL v2
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	a1835a48a777863ed2583de3c82446a9
+# Source0-md5:	56abd6ade8aa860b38c4ca4a6ac5ab0d
 Source1:	%{name}-config-20100219.tar.bz2
 # Source1-md5:	7914664eee7d77be9b8f05347a276e0f
 Source2:	nagios-utils.php
@@ -25,13 +25,9 @@ Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch6:		%{name}-path.patch
 Patch7:		%{name}-pgsql.patch
-Patch8:		%{name}-checkircd.patch
 Patch9:		%{name}-check_log_paths.patch
-Patch10:	%{name}-check_game_cmdline.patch
-Patch11:	%{name}-check_smb_hostaddress.patch
 Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
-Patch17:	%{name}-check_ldap_pointer.patch
 Patch18:	%{name}-configure.patch
 Patch19:	%{name}-perlautodep.patch
 Patch20:	%{name}-cosmetic.patch
@@ -57,6 +53,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.177
@@ -295,6 +292,11 @@ Group:		Networking
 Requires:	nagios-common
 Provides:	nagios-plugins-ldap = %{version}-%{release}
 Obsoletes:	nagios-plugins-ldap
+%if "%{pld_release}" == "ac"
+Requires:	openldap
+%else
+Requires:	openldap-nss-config
+%endif
 
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
@@ -498,16 +500,12 @@ mv nagios-plugins-config-*/* .
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch10 -p1
-%patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
-%patch21 -p0
+%patch21 -p1
 %patch22 -p0
 %patch23 -p0
 %patch24 -p1
@@ -557,13 +555,26 @@ sed -i -e "
 	s,/usr/local/libexec,%{_pluginlibdir},
 " check_* *.pl
 
+cd ..
+
+# remove libtool m4 macro copies, breaks when system libtool is older
+rm -rf gl/m4/libtool.m4 gl/m4/lt*.m4
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
+# force regen in build
+rm -f configure
+
 %build
-%{__gettextize}
-%{__libtoolize}
-%{__aclocal} -I m4 -I gl/m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
+if [ ! -f configure ]; then
+	%{__gettextize}
+	%{__libtoolize}
+	%{__aclocal} -I m4 -I gl/m4
+	%{__autoconf}
+	%{__autoheader}
+	%{__automake}
+fi
 
 %configure \
 	--libexecdir=%{_pluginarchdir} \
@@ -605,12 +616,12 @@ cd contrib
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_rbl.c
-%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o
+%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o ../gl/libgnu.a
 
 %{__cc} %{rpmcflags} check_timeout.c -o check_timeout
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_uptime.c
-%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o
+%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o ../gl/libgnu.a
 
 %install
 rm -rf $RPM_BUILD_ROOT

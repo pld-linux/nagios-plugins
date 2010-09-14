@@ -1,6 +1,5 @@
-diff -aru nagios-plugins-1.4.13.orig/plugins/check_hpjd.c nagios-plugins-1.4.13/plugins/check_hpjd.c
---- plugins/check_hpjd.c	2008-05-07 12:02:42.000000000 +0200
-+++ plugins/check_hpjd.c	2008-12-05 15:19:10.746605526 +0100
+--- nagios-plugins-1.4.15/plugins/check_hpjd.c~	2010-09-14 16:49:38.000000000 +0300
++++ nagios-plugins-1.4.15/plugins/check_hpjd.c	2010-09-14 16:52:30.060156750 +0300
 @@ -70,6 +70,7 @@
  
  char *community = NULL;
@@ -57,12 +56,10 @@ diff -aru nagios-plugins-1.4.13.orig/plugins/check_hpjd.c nagios-plugins-1.4.13/
  	printf ("\n");
  
  #ifdef NP_EXTRA_OPTS
-@@ -421,6 +430,6 @@
- void
+@@ -421,5 +421,5 @@
  print_usage (void)
  {
--  printf (_("Usage:"));
+   printf ("%s\n", _("Usage:"));
 -	printf ("%s -H host [-C community]\n", progname);
-+	printf (_("Usage:"));
-+	printf ("%s -H host [-C community] [-n]\n", progname);
++  printf ("%s -H host [-C community] [-n]\n", progname);
  }
