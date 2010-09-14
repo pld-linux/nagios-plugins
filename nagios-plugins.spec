@@ -57,6 +57,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.177
@@ -295,6 +296,11 @@ Group:		Networking
 Requires:	nagios-common
 Provides:	nagios-plugins-ldap = %{version}-%{release}
 Obsoletes:	nagios-plugins-ldap
+%if "%{pld_release}" == "ac"
+Requires:	openldap
+%else
+Requires:	openldap-nss-config
+%endif
 
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
