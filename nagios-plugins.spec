@@ -563,13 +563,18 @@ rm -rf gl/m4/libtool.m4 gl/m4/lt*.m4
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
+# force regen in build
+rm -f configure
+
 %build
-%{__gettextize}
-%{__libtoolize}
-%{__aclocal} -I m4 -I gl/m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
+if [ ! -f configure ]; then
+	%{__gettextize}
+	%{__libtoolize}
+	%{__aclocal} -I m4 -I gl/m4
+	%{__autoconf}
+	%{__autoheader}
+	%{__automake}
+fi
 
 %configure \
 	--libexecdir=%{_pluginarchdir} \
@@ -611,12 +616,12 @@ cd contrib
 %{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_rbl.c
-%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o
+%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o ../gl/libgnu.a
 
 %{__cc} %{rpmcflags} check_timeout.c -o check_timeout
 
 %{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_uptime.c
-%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o
+%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o ../gl/libgnu.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
