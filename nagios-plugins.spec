@@ -8,12 +8,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.14
-Release:	10
+Version:	1.4.15
+Release:	0.1
 License:	GPL v2
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	a1835a48a777863ed2583de3c82446a9
+# Source0-md5:	56abd6ade8aa860b38c4ca4a6ac5ab0d
 Source1:	%{name}-config-20100219.tar.bz2
 # Source1-md5:	7914664eee7d77be9b8f05347a276e0f
 Source2:	nagios-utils.php
@@ -25,13 +25,9 @@ Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch6:		%{name}-path.patch
 Patch7:		%{name}-pgsql.patch
-Patch8:		%{name}-checkircd.patch
 Patch9:		%{name}-check_log_paths.patch
-Patch10:	%{name}-check_game_cmdline.patch
-Patch11:	%{name}-check_smb_hostaddress.patch
 Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
-Patch17:	%{name}-check_ldap_pointer.patch
 Patch18:	%{name}-configure.patch
 Patch19:	%{name}-perlautodep.patch
 Patch20:	%{name}-cosmetic.patch
@@ -504,16 +500,12 @@ mv nagios-plugins-config-*/* .
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch10 -p1
-%patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
-%patch21 -p0
+%patch21 -p1
 %patch22 -p0
 %patch23 -p0
 %patch24 -p1
@@ -562,6 +554,14 @@ sed -i -e "
 	s,/usr/local/netsaint/libexec,%{_pluginlibdir},
 	s,/usr/local/libexec,%{_pluginlibdir},
 " check_* *.pl
+
+cd ..
+
+# remove libtool m4 macro copies, breaks when system libtool is older
+rm -rf gl/m4/libtool.m4 gl/m4/lt*.m4
+
+# cleanup backups after patching
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
 
 %build
 %{__gettextize}
