@@ -9,7 +9,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.15
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -292,11 +292,7 @@ Group:		Networking
 Requires:	nagios-common
 Provides:	nagios-plugins-ldap = %{version}-%{release}
 Obsoletes:	nagios-plugins-ldap
-%if "%{pld_release}" == "ac"
-Requires:	openldap
-%else
-Requires:	openldap-nss-config
-%endif
+Suggests:	openldap
 
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
