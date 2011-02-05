@@ -444,7 +444,7 @@ Requires:	nagios-common
 Nagios plugin using MRTGEXT module
 <http://forge.novell.com/modules/xfmod/project/?mrtgext>.
 
-%description nwstat -l pl
+%description nwstat -l pl.UTF-8
 Wtyczka nagiosa używająca modułu MRTGEXT
 <http://forge.novell.com/modules/xfmod/project/?mrtgext>.
 
