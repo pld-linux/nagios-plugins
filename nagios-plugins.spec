@@ -328,7 +328,7 @@ sendmail queues, qmail).
 
 %package -n nagios-plugin-check_nt
 Summary:	Nagios plugin to check NT server with NSClient
-Summary(pl):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
+Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania serwera NT przy użyciu NSClienta
 Group:		Networking
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	nagios-common
@@ -434,7 +434,7 @@ Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
 # requisite not packaged in PLD
 %package nwstat
 Summary:	Nagios plugin nwstat
-Summary(pl):	Wtyczka nwstat do Nagiosa
+Summary(pl.UTF-8):	Wtyczka nwstat do Nagiosa
 Group:		Networking
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mrtgext
