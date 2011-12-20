@@ -681,8 +681,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if 0
+# this is for shared lib
 %post	libs	-p /sbin/ldconfig
 %postun	libs	-p /sbin/ldconfig
+%endif
 
 %triggerun -- %{name} < 1.4-0.35
 %banner -e %{name} <<EOF
