@@ -4,6 +4,10 @@
 # TODO:
 # - package requisites for unifished packages -nwstat
 #   REQUIREMENTS explains the dependencies.
+
+# Conditional build:
+%bcond_without	ldap		# build without ldap
+
 %include	/usr/lib/rpm/macros.perl
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
@@ -48,7 +52,7 @@ BuildRequires:	libtap-devel
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
 BuildRequires:	net-snmp-devel
-BuildRequires:	openldap-devel >= 2.3.0
+%{?with_ldap:BuildRequires:	openldap-devel >= 2.3.0}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
@@ -840,10 +844,12 @@ EOF
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginarchdir}/check_game
 
+%if %{with ldap}
 %files -n nagios-plugin-check_ldap
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginarchdir}/check_ldap
 %attr(755,root,root) %{_pluginarchdir}/check_ldaps
+%endif
 
 %files -n nagios-plugin-check_load
 %defattr(644,root,root,755)
