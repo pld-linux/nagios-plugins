@@ -45,6 +45,7 @@ Patch27:	%{name}-ping.patch
 Patch28:	check_rbl.patch
 Patch29:	%{name}-gets.patch
 Patch30:	%{name}-format_string.patch
+Patch31:	%{name}-radiusclient-ng.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -517,6 +518,7 @@ mv nagios-plugins-config-*/* .
 %patch28 -p1
 %patch29 -p1
 %patch30 -p1
+%patch31 -p1
 
 # bring contribs into shape...
 cd contrib
