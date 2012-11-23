@@ -43,6 +43,7 @@ Patch25:	%{name}-check_snmp_disk_monitor-bulk.patch
 Patch26:	%{name}-check_snmp_disk_monitor-opts.patch
 Patch27:	%{name}-ping.patch
 Patch28:	check_rbl.patch
+Patch29:	%{name}-gets.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -513,6 +514,7 @@ mv nagios-plugins-config-*/* .
 %patch26 -p0
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 
 # bring contribs into shape...
 cd contrib
