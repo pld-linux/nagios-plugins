@@ -719,6 +719,7 @@ EOF
 %attr(755,root,root) %{_pluginarchdir}/check_cluster2
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_disk.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_disk
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dummy.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_dummy
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_http.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_http
@@ -918,7 +919,6 @@ EOF
 %attr(755,root,root) %{_pluginlibdir}/check_email_loop
 %attr(755,root,root) %{_pluginlibdir}/check_fan_cpq_present
 %attr(755,root,root) %{_pluginlibdir}/check_fan_fsc_present
-%attr(755,root,root) %{_pluginlibdir}/check_flexlm
 %attr(755,root,root) %{_pluginlibdir}/check_frontpage
 %attr(755,root,root) %{_pluginlibdir}/check_hprsc
 %attr(755,root,root) %{_pluginlibdir}/check_hw
