@@ -1,12 +1,13 @@
---- nagios-plugins-1.4.10/contrib/check_rbl.c~	2007-11-08 23:24:19.000000000 +0200
-+++ nagios-plugins-1.4.10/contrib/check_rbl.c	2007-11-08 23:24:56.951629199 +0200
+diff -dur nagios-plugins-1.4.15.orig/contrib/check_rbl.c nagios-plugins-1.4.15/contrib/check_rbl.c
+--- nagios-plugins-1.4.15.orig/contrib/check_rbl.c	2010-07-27 22:47:15.000000000 +0200
++++ nagios-plugins-1.4.15/contrib/check_rbl.c	2012-11-23 19:25:32.088842066 +0100
 @@ -21,7 +21,7 @@
  #include "popen.h"
  #include "string.h"
  
 -const char progname = "check_rbl";
 +const char *progname = "check_rbl";
- const char *revision = "$Revision$";
+ const char *revision = "$Revision: 970 $";
  //const char *copyright = "2000-2003";
  //const char *email = "nagiosplug-devel@lists.sourceforge.net";
 @@ -58,11 +58,11 @@
@@ -50,8 +51,9 @@
  }
  
  
---- nagios-plugins-1.4.10/contrib/check_uptime.c~	2007-11-08 23:24:19.000000000 +0200
-+++ nagios-plugins-1.4.10/contrib/check_uptime.c	2007-11-08 23:25:46.652415811 +0200
+diff -dur nagios-plugins-1.4.15.orig/contrib/check_uptime.c nagios-plugins-1.4.15/contrib/check_uptime.c
+--- nagios-plugins-1.4.15.orig/contrib/check_uptime.c	2010-07-27 22:47:15.000000000 +0200
++++ nagios-plugins-1.4.15/contrib/check_uptime.c	2012-11-23 19:25:57.915687571 +0100
 @@ -26,6 +26,9 @@
  #include "utils.h"
  #include "popen.h"
@@ -62,17 +64,17 @@
  int main(int argc, char **argv)
  {
  
-@@ -46,12 +46,7 @@
+@@ -43,12 +46,7 @@
  
    if(argc != 2){
      printf("Incorrect number of arguments supplied\n");
 -    printf("\n");
--    print_revision(argv[0],"$Revision$");
+-    print_revision(argv[0],"$Revision: 6 $");
 -    printf("Copyright (c) 2000 Teresa Ramanan (tlr@redowl.org)\n");
 -    printf("\n");
 -    printf("Usage: %s <host_address>\n",argv[0]);
 -    printf("\n");
-+	print_usage();
++    print_usage();
      return STATE_UNKNOWN;
    }
  
