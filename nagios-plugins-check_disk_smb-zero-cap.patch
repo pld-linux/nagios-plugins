@@ -1,12 +1,12 @@
---- plugins-scripts/check_disk_smb.orig	2008-04-23 12:22:41.792842643 +0000
-+++ plugins-scripts/check_disk_smb.pl	2008-04-23 12:23:31.728177767 +0000
-@@ -181,7 +181,8 @@
- 
- 	my ($avail) = ($3*$2)/1024;
- 	my ($avail_bytes) = $avail;
+--- nagios-plugins-1.4.16/plugins-scripts/check_disk_smb.pl~	2012-06-27 20:32:47.000000000 +0300
++++ nagios-plugins-1.4.16/plugins-scripts/check_disk_smb.pl	2012-12-06 16:42:57.696786740 +0200
+@@ -209,7 +209,8 @@
+ 	my ($total_bytes) = $1 * $2;
+ 	my ($occupied_bytes) = $1 * $2 - $avail_bytes;
+ 	my ($avail) = $avail_bytes/1024;
 -	my ($capper) = int(($3/$1)*100);
 +	my ($capper);
 +	if ($1!=0) { $capper = int(($3/$1)*100) } else { $capper=100 };
  	my ($mountpt) = "\\\\$host\\$share";
  
- 
+ 	# TODO : why is the kB the standard unit for args ?

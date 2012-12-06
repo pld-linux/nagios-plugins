@@ -1,4 +1,4 @@
-# NOTE TO PLD DEVELOPERS:
+# NOTE TO PLD LINUX DEVELOPERS:
 # - if you use any plugin from -contrib package, move it to subpackage or main
 #   package so we can support it better!
 # TODO:
@@ -12,12 +12,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.15
-Release:	4
-License:	GPL v2
+Version:	1.4.16
+Release:	1
+License:	GPL v3
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	56abd6ade8aa860b38c4ca4a6ac5ab0d
+# Source0-md5:	862f5e44fb5bc65ce7e5d86d654d4da0
 Source1:	%{name}-config-20100219.tar.bz2
 # Source1-md5:	7914664eee7d77be9b8f05347a276e0f
 Source2:	nagios-utils.php
@@ -44,7 +44,6 @@ Patch26:	%{name}-check_snmp_disk_monitor-opts.patch
 Patch27:	%{name}-ping.patch
 Patch28:	check_rbl.patch
 Patch29:	%{name}-gets.patch
-Patch30:	%{name}-format_string.patch
 Patch31:	%{name}-radiusclient-ng.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
@@ -510,14 +509,13 @@ mv nagios-plugins-config-*/* .
 %patch20 -p1
 %patch21 -p1
 %patch22 -p0
-%patch23 -p0
+%patch23 -p1
 %patch24 -p1
 %patch25 -p0
 %patch26 -p0
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
-%patch30 -p1
 %patch31 -p1
 
 # bring contribs into shape...
