@@ -58,7 +58,11 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
+%if "%{pld_release}" == "ac"
+BuildRequires:	radiusclient-devel
+%else
 BuildRequires:	radiusclient-ng-devel
+%endif
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
@@ -296,9 +300,9 @@ Summary:	Nagios plugin to check LDAP servers
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania serwerów LDAP
 Group:		Networking
 Requires:	nagios-common
+Suggests:	openldap
 Provides:	nagios-plugins-ldap = %{version}-%{release}
 Obsoletes:	nagios-plugins-ldap
-Suggests:	openldap
 
 %description -n nagios-plugin-check_ldap
 Nagios plugin to check LDAP servers.
@@ -516,7 +520,9 @@ mv nagios-plugins-config-*/* .
 %patch27 -p1
 %patch28 -p1
 %patch29 -p1
+%if "%{pld_release}" != "ac"
 %patch31 -p1
+%endif
 
 # bring contribs into shape...
 cd contrib
