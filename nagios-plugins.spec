@@ -13,7 +13,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	1.4.16
-Release:	1
+Release:	2
 License:	GPL v3
 Group:		Networking
 Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
@@ -66,7 +66,7 @@ BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.177
+BuildRequires:	rpmbuild(macros) >= 1.654
 Requires:	nagios-common
 Obsoletes:	netsaint-plugins
 Conflicts:	nagios < 3.1.2-3
@@ -76,7 +76,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_pluginarchdir	%{_libdir}/nagios/plugins
 %define		_pluginlibdir	%{_prefix}/lib/nagios/plugins
 %define		_noautoprovfiles	utils.pm
-%define		_noautoreq	'perl(DBD::Oracle)' 'perl(Net::Arping)' 'perl(RRD::File)' 'perl(a)' 'perl(packet_utils)' 'perl(snmputil)' 'perl(utils)'
+%define		_noautoreq_perl DBD::Oracle RRD::File packet_utils snmputil utils
 
 %description
 Nagios is a program that will monitor hosts and services on your
