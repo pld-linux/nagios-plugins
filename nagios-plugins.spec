@@ -1,9 +1,9 @@
-# NOTE TO PLD LINUX DEVELOPERS:
-# - if you use any plugin from -contrib package, move it to subpackage or main
-#   package so we can support it better!
 # TODO:
 # - package requisites for unifished packages -nwstat
 #   REQUIREMENTS explains the dependencies.
+# - handle --without-dbi (new package)
+# - add --without-radius bcond
+# - check_ide_smart deps
 
 # Conditional build:
 %bcond_without	ldap		# build without ldap
@@ -12,39 +12,29 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.4.16
-Release:	2
+Version:	1.5
+Release:	1
 License:	GPL v3
 Group:		Networking
-Source0:	http://downloads.sourceforge.net/nagiosplug/%{name}-%{version}.tar.gz
-# Source0-md5:	862f5e44fb5bc65ce7e5d86d654d4da0
+Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
+# Source0-md5:	730ac30df4a5e88fed8a766a2311d209
 Source1:	%{name}-config-20100219.tar.bz2
 # Source1-md5:	7914664eee7d77be9b8f05347a276e0f
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
-Patch1:		%{name}-contrib-API.patch
 Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
-Patch6:		%{name}-path.patch
 Patch7:		%{name}-pgsql.patch
 Patch9:		%{name}-check_log_paths.patch
-Patch12:	%{name}-implicit-basename.patch
 Patch13:	%{name}-check_radius_segfault.patch
 Patch18:	%{name}-configure.patch
-Patch19:	%{name}-perlautodep.patch
 Patch20:	%{name}-cosmetic.patch
 Patch21:	%{name}-check_hpjd-no-paper-out.patch
-Patch22:	%{name}-check_snmp_procs-fix.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
 Patch24:	%{name}-paths.patch
-Patch25:	%{name}-check_snmp_disk_monitor-bulk.patch
-Patch26:	%{name}-check_snmp_disk_monitor-opts.patch
 Patch27:	%{name}-ping.patch
-Patch28:	check_rbl.patch
-Patch29:	%{name}-gets.patch
-Patch31:	%{name}-radiusclient-ng.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -62,6 +52,7 @@ BuildRequires:	postgresql-devel
 BuildRequires:	radiusclient-devel
 %else
 BuildRequires:	radiusclient-ng-devel
+BuildConflicts:	radiusclient-devel
 %endif
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
@@ -441,6 +432,20 @@ This plugin checks hardware status using the lm_sensors package.
 %description -n nagios-plugin-check_sensors -l pl.UTF-8
 Ta wtyczka sprawdza stan sprzętu przy użyciu pakietu lm_sensors.
 
+%package -n nagios-plugin-check_dbi
+Summary:	Nagios plugin to check database with libdbi
+Group:		Networking
+Requires:	nagios-common
+Suggests:	libdbi-drivers-firebird
+Suggests:	libdbi-drivers-freetds
+Suggests:	libdbi-drivers-mysql
+Suggests:	libdbi-drivers-pgsql
+Suggests:	libdbi-drivers-sqlite
+Suggests:	libdbi-drivers-sqlite3
+
+%description -n nagios-plugin-check_dbi
+Nagios plugin to check database with libdbi.
+
 # requisite not packaged in PLD
 %package nwstat
 Summary:	Nagios plugin nwstat
@@ -500,75 +505,20 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %setup -q -a1
 mv nagios-plugins-config-*/* .
 %patch0 -p1
-%patch1 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 %patch7 -p1
-%patch12 -p1
 %patch13 -p1
 %patch18 -p1
-%patch19 -p1
 %patch20 -p1
 %patch21 -p1
-%patch22 -p0
 %patch23 -p1
 %patch24 -p1
-%patch25 -p0
-%patch26 -p0
 %patch27 -p1
-%patch28 -p1
-%patch29 -p1
-%if "%{pld_release}" != "ac"
-%patch31 -p1
-%endif
-
-# bring contribs into shape...
-cd contrib
-mv check_compaq_insight.{pl,msg}
-sed -ne '/--- cut ---/,/--- cut ---/{/--- cut ---/!p}' < \
-	check_compaq_insight.msg > check_compaq_insight.pl
-
-sed -i -e '1s,#!.*/bin/perl,#!%{__perl},' \
-	check_{oracle_tbs,{snmp_{{disk,process}_monitor,printer},nagios_db,flexlm}.pl}
-
-sed -i -e '1s,#!.*/bin/env,#!%{__python},' \
-	check_pcpmetric.py
-
-sed -i -e '1s,#!.*/bin/bash,#!/bin/sh,' \
-	check_smb.sh
-mv check_appletalk.{pl,orig}
-sed -ne '/---/!p;/---/q' < check_appletalk.orig > check_appletalk.pl
-
-chmod a+x check_*.{pl,sh,py}
-chmod a+x check_{fan_{cpq,fsc}_present,frontpage,oracle_tbs,pfstate,temp_{cpq,fsc}}
-
-# exists in main
-rm check_{breeze,wave}.pl
-rm check_flexlm.pl
-
-# more appropriate name
-mv check_nagios{,_mysql}.pl
-
-sed -i -e "
-	s,use lib '.*/nagios/libexec/?',use lib '%{_pluginlibdir}',
-	s,use lib \".*/nagios/libexec/?\",use lib '%{_pluginlibdir}',
-	s,require '/usr/libexec/nagios/plugins,require '%{_pluginlibdir},
-	s,use lib utils.pm,use lib '%{_pluginlibdir}', # subst not applied to contrib/ dir
-	s,/usr/libexec/nagios/plugins,%{_pluginlibdir},
-	s,/usr/local/nagios/libexec,%{_pluginlibdir},
-	s,/opt/nagios/libexec,%{_pluginlibdir},
-	s,/some/path/libexec,%{_pluginlibdir},
-	s,/usr/local/libexec/nagios,%{_pluginlibdir},
-	s,/usr/local/netsaint/libexec,%{_pluginlibdir},
-	s,/usr/local/libexec,%{_pluginlibdir},
-" check_* *.pl
-
-cd ..
 
 # remove libtool m4 macro copies, breaks when system libtool is older
-rm -rf gl/m4/libtool.m4 gl/m4/lt*.m4
+%{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
 
 # cleanup backups after patching
 find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
@@ -608,6 +558,7 @@ fi
 	--with-smbclient-command=/usr/bin/smbclient \
 	--with-dig-command=/usr/bin/dig \
 	--with-fping-command=/usr/sbin/fping \
+	--with-fping6-command=/usr/sbin/fping6 \
 	--with-qstat-command=/usr/bin/qstat \
 	--with-ssh-command=/usr/bin/ssh \
 	--with-snmpget-command=/usr/bin/snmpget \
@@ -620,19 +571,6 @@ fi
 
 %{__make}
 
-# contrib. mostly useless. but you'll never know
-cd contrib
-
-%{__cc} %{rpmcflags} check_cluster2.c -o check_cluster2
-
-%{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_rbl.c
-%{__cc} %{rpmcflags} check_rbl.o -o check_rbl ../plugins/popen.o ../plugins/utils.o ../plugins/netutils.o ../lib/utils_base.o ../gl/libgnu.a
-
-%{__cc} %{rpmcflags} check_timeout.c -o check_timeout
-
-%{__cc} %{rpmcflags} -I../plugins -I.. -I../gl -I../lib -c check_uptime.c
-%{__cc} %{rpmcflags} check_uptime.o -o check_uptime ../plugins/popen.o ../plugins/utils.o ../lib/utils_base.o ../gl/libgnu.a
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -642,39 +580,26 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} $RPM_BUILD_ROOT%{_pluginarchdir}/check_nwstat
+
 # for nagios-plugin-check_mysql_perf (at least)
-cp -a lib/libnagiosplug.a $RPM_BUILD_ROOT%{_libdir}
-cp -a gl/libgnu.a $RPM_BUILD_ROOT%{_libdir}
-cp -a plugins/utils.o $RPM_BUILD_ROOT%{_libdir}
-cp -a plugins/netutils.o $RPM_BUILD_ROOT%{_libdir}
+cp -p lib/libnagiosplug.a $RPM_BUILD_ROOT%{_libdir}
+cp -p gl/libgnu.a $RPM_BUILD_ROOT%{_libdir}
+cp -p plugins/utils.o $RPM_BUILD_ROOT%{_libdir}
+cp -p plugins/netutils.o $RPM_BUILD_ROOT%{_libdir}
 install -d $RPM_BUILD_ROOT%{_includedir}/nagiosplug/{plugins,gl,lib}
-cp -a *.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug
-cp -a plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
-cp -a gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
-cp -a lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
+cp -p *.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug
+cp -p plugins/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/plugins
+cp -p gl/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/gl
+cp -p lib/*.h $RPM_BUILD_ROOT%{_includedir}/nagiosplug/lib
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}
-cp -a commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
+cp -p commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
 
 %find_lang %{name}
 
-# all files with exec permissions are plugins.
-install -d $RPM_BUILD_ROOT%{_pluginarchdir}
-find contrib -name 'check_*' -type f -perm +1 | while read a; do
-	s=$RPM_BUILD_ROOT%{_pluginarchdir}/${a##*/}
-	# strip without extensions, if eventually merged to main wouldn't need to rename plugins
-	s=${s%.pl}
-	s=${s%.sh}
-	if [ -f $s ]; then
-		# we don't want file from contrib overwrite one from main
-		: Duplicate file from contrib: $s
-		exit 1
-	fi
-	install $a $s
-done
-
 %if "%{_pluginarchdir}" != "%{_pluginlibdir}"
-# move arch independat files to _pluginlibdir
+# move arch independant files to _pluginlibdir
 install -d $RPM_BUILD_ROOT%{_pluginlibdir}
 mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
 %{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir}",' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
@@ -686,11 +611,8 @@ for plugin in $plugins; do
 	sed -i -e "s,\\\$USER1\\\$/$plugin ,$libdir/$plugin ," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
 done
 
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
-cp -a contrib/utils.py $RPM_BUILD_ROOT%{_pluginlibdir}
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.*
-
-rm -f $RPM_BUILD_ROOT%{_libdir}/libnagiosplug.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -701,26 +623,14 @@ rm -rf $RPM_BUILD_ROOT
 %postun	libs	-p /sbin/ldconfig
 %endif
 
-%triggerun -- %{name} < 1.4-0.35
-%banner -e %{name} <<EOF
-Several Nagios plugins have been separated to multiple packages to cut
-down unneccessary deps on main package.
-
-Please install %{name}-PACKAGE if you need these plugins.
-To revert to previous state just run:
-poldek -u nagios-plugins-{snmp,samba,sensors,mysql,pgsql,radius,qstat,ldap,ntp,dns,ssh,procps,fping}
-
-EOF
-
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc ACKNOWLEDGEMENTS AUTHORS BUGS CODING ChangeLog
+%doc ACKNOWLEDGEMENTS AUTHORS CODING ChangeLog
 %doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
 # plugins
 %attr(755,root,root) %{_pluginarchdir}/check_apt
 %attr(755,root,root) %{_pluginarchdir}/check_cluster
-%attr(755,root,root) %{_pluginarchdir}/check_cluster2
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_disk.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_disk
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dummy.cfg
@@ -788,7 +698,6 @@ EOF
 %{_pluginlibdir}/utils.pm
 %{_pluginlibdir}/utils.php
 %{_pluginlibdir}/utils.sh
-%{_pluginlibdir}/utils.py
 
 %files devel
 %defattr(644,root,root,755)
@@ -900,72 +809,6 @@ EOF
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_pluginlibdir}/check_sensors
 
-%files contrib
+%files -n nagios-plugin-check_dbi
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_nwstat
-%attr(755,root,root) %{_pluginarchdir}/check_rbl
-%attr(755,root,root) %{_pluginarchdir}/check_timeout
-%attr(755,root,root) %{_pluginarchdir}/check_uptime
-
-%attr(755,root,root) %{_pluginlibdir}/check_adptraid
-%attr(755,root,root) %{_pluginlibdir}/check_apache
-%attr(755,root,root) %{_pluginlibdir}/check_apc_ups
-%attr(755,root,root) %{_pluginlibdir}/check_appletalk
-%attr(755,root,root) %{_pluginlibdir}/check_arping
-%attr(755,root,root) %{_pluginlibdir}/check_asterisk
-%attr(755,root,root) %{_pluginlibdir}/check_axis
-%attr(755,root,root) %{_pluginlibdir}/check_backup
-%attr(755,root,root) %{_pluginlibdir}/check_bgpstate
-%attr(755,root,root) %{_pluginlibdir}/check_compaq_insight
-%attr(755,root,root) %{_pluginlibdir}/check_digitemp
-%attr(755,root,root) %{_pluginlibdir}/check_dlswcircuit
-%attr(755,root,root) %{_pluginlibdir}/check_dns_random
-%attr(755,root,root) %{_pluginlibdir}/check_email_loop
-%attr(755,root,root) %{_pluginlibdir}/check_fan_cpq_present
-%attr(755,root,root) %{_pluginlibdir}/check_fan_fsc_present
-%attr(755,root,root) %{_pluginlibdir}/check_frontpage
-%attr(755,root,root) %{_pluginlibdir}/check_hprsc
-%attr(755,root,root) %{_pluginlibdir}/check_hw
-%attr(755,root,root) %{_pluginlibdir}/check_ica_master_browser
-%attr(755,root,root) %{_pluginlibdir}/check_ica_metaframe_pub_apps
-%attr(755,root,root) %{_pluginlibdir}/check_ica_program_neigbourhood
-%attr(755,root,root) %{_pluginlibdir}/check_inodes-freebsd
-%attr(755,root,root) %{_pluginlibdir}/check_inodes
-%attr(755,root,root) %{_pluginlibdir}/check_javaproc
-%attr(755,root,root) %{_pluginlibdir}/check_joy
-%attr(755,root,root) %{_pluginlibdir}/check_linux_raid
-%attr(755,root,root) %{_pluginlibdir}/check_lmmon
-%attr(755,root,root) %{_pluginlibdir}/check_log2
-%attr(755,root,root) %{_pluginlibdir}/check_lotus
-%attr(755,root,root) %{_pluginlibdir}/check_maxchannels
-%attr(755,root,root) %{_pluginlibdir}/check_maxwanstate
-%attr(755,root,root) %{_pluginlibdir}/check_mem
-%attr(755,root,root) %{_pluginlibdir}/check_ms_spooler
-%attr(755,root,root) %{_pluginlibdir}/check_mssql
-%attr(755,root,root) %{_pluginlibdir}/check_nagios_db
-%attr(755,root,root) %{_pluginlibdir}/check_nagios_db_pg
-%attr(755,root,root) %{_pluginlibdir}/check_nagios_mysql
-%attr(755,root,root) %{_pluginlibdir}/check_netapp
-%attr(755,root,root) %{_pluginlibdir}/check_nmap.py
-%attr(755,root,root) %{_pluginlibdir}/check_ora_table_space
-%attr(755,root,root) %{_pluginlibdir}/check_oracle_instance
-%attr(755,root,root) %{_pluginlibdir}/check_oracle_tbs
-%attr(755,root,root) %{_pluginlibdir}/check_pcpmetric.py
-%attr(755,root,root) %{_pluginlibdir}/check_pfstate
-%attr(755,root,root) %{_pluginlibdir}/check_qmailq
-%attr(755,root,root) %{_pluginlibdir}/check_remote_nagios_status
-%attr(755,root,root) %{_pluginlibdir}/check_rrd_data
-%attr(755,root,root) %{_pluginlibdir}/check_sap
-%attr(755,root,root) %{_pluginlibdir}/check_smart
-%attr(755,root,root) %{_pluginlibdir}/check_smb
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_disk_monitor
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_printer
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_process_monitor
-%attr(755,root,root) %{_pluginlibdir}/check_snmp_procs
-%attr(755,root,root) %{_pluginlibdir}/check_sockets
-%attr(755,root,root) %{_pluginlibdir}/check_temp_cpq
-%attr(755,root,root) %{_pluginlibdir}/check_temp_fsc
-%attr(755,root,root) %{_pluginlibdir}/check_traceroute-pure_perl
-%attr(755,root,root) %{_pluginlibdir}/check_traceroute
-%attr(755,root,root) %{_pluginlibdir}/check_vcs
-%attr(755,root,root) %{_pluginlibdir}/check_wins
+%attr(755,root,root) %{_pluginarchdir}/check_dbi
