@@ -39,11 +39,11 @@ URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	file
+BuildRequires:	libdbi-devel
 BuildRequires:	gettext-devel >= 0.14.3
 BuildRequires:	libtap-devel
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
-BuildRequires:	net-snmp-devel
 %{?with_ldap:BuildRequires:	openldap-devel >= 2.3.0}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
@@ -56,7 +56,6 @@ BuildConflicts:	radiusclient-devel
 %endif
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpm-perlprov >= 4.1-13
-BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.654
 Requires:	nagios-common
 Obsoletes:	netsaint-plugins
