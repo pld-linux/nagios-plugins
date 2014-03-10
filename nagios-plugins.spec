@@ -18,6 +18,7 @@ License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
 # Source0-md5:	730ac30df4a5e88fed8a766a2311d209
+# http://git.pld-linux.org/cgi-bin/cgit.cgi/projects/nagios-config.git/
 Source1:	%{name}-config-20140307.tar.bz2
 # Source1-md5:	de5c205501cb89c183193d4088d48222
 Source2:	nagios-utils.php
