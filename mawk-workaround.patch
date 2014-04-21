@@ -7,6 +7,9 @@ mawk: run time error: regular expression compile failed (missing operand)
         FILENAME="check_mailq.pl" FNR=627 NR=627
 
 
+this is resolved differently in monitoring-plugins:
+https://github.com/monitoring-plugins/monitoring-plugins/commit/c08d6a429ba0e0cd3642ba2c2fe85687472ee22f
+
 --- nagios-plugins-2.0.1/plugins-scripts/check_mailq.pl~	2014-04-21 14:33:35.000000000 +0300
 +++ nagios-plugins-2.0.1/plugins-scripts/check_mailq.pl	2014-04-21 14:33:37.760719061 +0300
 @@ -610,17 +610,22 @@
