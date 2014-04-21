@@ -1,15 +1,13 @@
 we don't want message from ping triggering a warning:
 WARNING: failed to install socket filter: Protocol not available
 
---- nagios-plugins-1.4.3/plugins/check_ping.c~	2006-05-21 23:02:33.988927080 +0300
-+++ nagios-plugins-1.4.3/plugins/check_ping.c	2006-05-21 23:04:28.671500218 +0300
-@@ -454,7 +454,8 @@
- 	/* check stderr, setting at least WARNING if there is output here */
- 	/* Add warning into warn_text */
+--- nagios-plugins-2.0/plugins/check_ping.c~	2014-03-04 21:21:36.000000000 +0200
++++ nagios-plugins-2.0/plugins/check_ping.c	2014-04-21 11:54:59.704871496 +0300
+@@ -484,6 +484,7 @@
  	while (fgets (buf, MAX_INPUT_BUFFER - 1, child_stderr)) {
--		if (! strstr(buf,"WARNING - no SO_TIMESTAMP support, falling back to SIOCGSTAMP")) {
-+		if (! strstr(buf,"WARNING - no SO_TIMESTAMP support, falling back to SIOCGSTAMP") &&
-+            ! strstr(buf,"WARNING: failed to install socket filter: Protocol not available")) {
- 			if (verbose >= 3) {
- 				printf("Got stderr: %s", buf);
- 			}
+ 		if (
+ 			! strstr(buf,"WARNING - no SO_TIMESTAMP support, falling back to SIOCGSTAMP")
++            && ! strstr(buf,"WARNING: failed to install socket filter: Protocol not available")
+ 			&& ! strstr(buf,"Warning: time of day goes back")
+ 
+ 		) {

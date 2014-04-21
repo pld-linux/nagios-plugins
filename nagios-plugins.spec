@@ -12,12 +12,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	1.5
-Release:	2
+Version:	2.0
+Release:	1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
-# Source0-md5:	730ac30df4a5e88fed8a766a2311d209
+# Source0-md5:	567592556f59bd64108e28c23aa382d3
 # http://git.pld-linux.org/cgi-bin/cgit.cgi/projects/nagios-config.git/
 Source1:	%{name}-config-20140307.tar.bz2
 # Source1-md5:	de5c205501cb89c183193d4088d48222
@@ -30,7 +30,6 @@ Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch7:		%{name}-pgsql.patch
 Patch9:		%{name}-check_log_paths.patch
 Patch13:	%{name}-check_radius_segfault.patch
-Patch18:	%{name}-configure.patch
 Patch20:	%{name}-cosmetic.patch
 Patch21:	%{name}-check_hpjd-no-paper-out.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
@@ -510,7 +509,6 @@ mv nagios-plugins-config-*/* .
 %patch5 -p1
 %patch7 -p1
 %patch13 -p1
-%patch18 -p1
 %patch20 -p1
 %patch21 -p1
 %patch23 -p1
@@ -679,6 +677,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_pluginarchdir}/check_ssmtp
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_udp.cfg
 %attr(755,root,root) %{_pluginarchdir}/check_udp
+%attr(755,root,root) %{_pluginarchdir}/check_uptime
 
 # these plugins need suid bit to operate
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dhcp.cfg
