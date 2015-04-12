@@ -40,7 +40,7 @@ URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	file
-BuildRequires:	gettext-tools >= 0.14.3
+BuildRequires:	gettext-devel >= 0.14.3
 BuildRequires:	libdbi-devel
 BuildRequires:	libtap-devel
 BuildRequires:	libtool
