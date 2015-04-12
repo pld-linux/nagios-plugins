@@ -19,8 +19,8 @@ Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
 # Source0-md5:	6755765bab88b506181268ef7982595e
 # https://git.pld-linux.org/projects/nagios-config
-Source1:	%{name}-config-20140307.tar.bz2
-# Source1-md5:	de5c205501cb89c183193d4088d48222
+Source1:	%{name}-config-20150412.tar.xz
+# Source1-md5:	2f0f29735345c158d11c2009be3e1478
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
@@ -40,8 +40,8 @@ URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	file
-BuildRequires:	libdbi-devel
 BuildRequires:	gettext-tools >= 0.14.3
+BuildRequires:	libdbi-devel
 BuildRequires:	libtap-devel
 BuildRequires:	libtool
 BuildRequires:	mysql-devel
@@ -49,6 +49,8 @@ BuildRequires:	mysql-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-Net-SNMP
 BuildRequires:	postgresql-devel
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 %if "%{pld_release}" == "ac"
 BuildRequires:	radiusclient-devel
 %else
@@ -66,6 +68,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir		/etc/nagios/plugins
 %define		_pluginarchdir	%{_libdir}/nagios/plugins
 %define		_pluginlibdir	%{_prefix}/lib/nagios/plugins
+%define		nrpeddir		/etc/nagios/nrpe.d
 %define		_noautoprovfiles	utils.pm
 %define		_noautoreq_perl DBD::Oracle RRD::File packet_utils snmputil utils
 
@@ -611,6 +614,9 @@ for plugin in $plugins; do
 	sed -i -e "s,\\\$USER1\\\$/$plugin ,$libdir/$plugin ," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
 done
 
+install -d $RPM_BUILD_ROOT%{nrpeddir}
+touch $RPM_BUILD_ROOT%{nrpeddir}/check_mailq.cfg
+
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
 chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.*
 
@@ -622,6 +628,12 @@ rm -rf $RPM_BUILD_ROOT
 %post	libs	-p /sbin/ldconfig
 %postun	libs	-p /sbin/ldconfig
 %endif
+
+%triggerin -n nagios-plugin-check_mailq -- nagios-nrpe
+%nagios_nrpe -a check_mailq -f %{_sysconfdir}/check_mailq.cfg
+
+%triggerun -n nagios-plugin-check_mailq -- nagios-nrpe
+%nagios_nrpe -d check_mailq -f %{_sysconfdir}/check_mailq.cfg
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
@@ -779,7 +791,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n nagios-plugin-check_mailq
 %defattr(644,root,root,755)
+%attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mailq.cfg
 %attr(755,root,root) %{_pluginlibdir}/check_mailq
+%ghost %{nrpeddir}/check_mailq.cfg
 
 %files -n nagios-plugin-check_nt
 %defattr(644,root,root,755)
