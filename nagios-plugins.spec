@@ -631,6 +631,17 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -n nagios-plugin-check_mailq -- nagios-nrpe
 %nagios_nrpe -d check_mailq -f %{_sysconfdir}/check_mailq.cfg
 
+%if "%{_lib}" != "lib"
+%triggerpostun -- nagios-plugins < 2.0.3-3.2
+# update path to plugin in config if neccessary
+for c in \
+	%{_sysconfdir}/check_{dhcp,disk,dns,dummy,file_age,ftp,hpjd,http,imap,ircd,load,mailq,mrtgtraf,mysql,nntp,nt,ntp,ping,pop,procs,smtp,snmp,ssh,swap,tcp,telnet,udp,users} \
+; do
+	grep -q 'command_line.*%{_prefix}/%{_lib}/nagios/plugins' $c || continue
+	%{__sed} -i -e '/command_line/ s,%{_prefix}/%{_lib}/nagios/plugins,%{plugindir},g' $c
+done
+%endif
+
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc ACKNOWLEDGEMENTS AUTHORS CODING ChangeLog
