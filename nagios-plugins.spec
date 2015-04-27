@@ -1,3 +1,6 @@
+# NOTE:
+# - the former team of nagios-plugins developers has moved to monitoring-plugins,
+#   we have it packaged as monitoring-plugins.spec.
 # TODO:
 # - package requisites for unifished packages -nwstat
 #   REQUIREMENTS explains the dependencies.
