@@ -16,7 +16,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	2.0.3
-Release:	3
+Release:	3.1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
@@ -69,8 +69,7 @@ Conflicts:	nagios < 3.1.2-3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir		/etc/nagios/plugins
-%define		_pluginarchdir	%{_libdir}/nagios/plugins
-%define		_pluginlibdir	%{_prefix}/lib/nagios/plugins
+%define		plugindir		%{_prefix}/lib/nagios/plugins
 %define		nrpeddir		/etc/nagios/nrpe.d
 %define		_noautoprovfiles	utils.pm
 %define		_noautoreq_perl DBD::Oracle RRD::File packet_utils snmputil utils
@@ -543,7 +542,7 @@ if [ ! -f configure ]; then
 fi
 
 %configure \
-	--libexecdir=%{_pluginarchdir} \
+	--libexecdir=%{plugindir} \
 	--enable-libtap=/usr \
 	--with-cgiurl=/nagios/cgi-bin \
 	--with-mysql=/usr \
@@ -586,9 +585,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install-root -C plugins-root \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__rm} $RPM_BUILD_ROOT%{_pluginarchdir}/check_nwstat
+%{__rm} $RPM_BUILD_ROOT%{plugindir}/check_nwstat
 
 # for nagios-plugin-check_mysql_perf (at least)
+install -d $RPM_BUILD_ROOT%{_libdir}
 cp -p lib/libnagiosplug.a $RPM_BUILD_ROOT%{_libdir}
 cp -p gl/libgnu.a $RPM_BUILD_ROOT%{_libdir}
 cp -p plugins/utils.o $RPM_BUILD_ROOT%{_libdir}
@@ -604,24 +604,17 @@ cp -p commands/*.cfg $RPM_BUILD_ROOT%{_sysconfdir}
 
 %find_lang %{name}
 
-%if "%{_pluginarchdir}" != "%{_pluginlibdir}"
-# move arch independant files to _pluginlibdir
-install -d $RPM_BUILD_ROOT%{_pluginlibdir}
-mv $(find $RPM_BUILD_ROOT%{_pluginarchdir} -type f | xargs file | awk -F: '!/ELF/{print $1}') $RPM_BUILD_ROOT%{_pluginlibdir}
-%{__sed} -i -e 's,use lib "%{_pluginarchdir}",use lib "%{_pluginlibdir}",' $RPM_BUILD_ROOT%{_pluginlibdir}/check_*
-%endif
-
+# replace USER1 macro with actual value
 plugins=$(grep -Eoh 'command_line.*USER1\$/[^ ]+' $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg | awk -F/ '{print $NF}' | sort -u)
 for plugin in $plugins; do
-	[ -x $RPM_BUILD_ROOT%{_pluginarchdir}/$plugin ] && libdir=%{_pluginarchdir} || libdir=%{_pluginlibdir}
-	sed -i -e "s,\\\$USER1\\\$/$plugin ,$libdir/$plugin ," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
+	sed -i -e "s,\\\$USER1\\\$/$plugin ,%{plugindir}/$plugin ," $RPM_BUILD_ROOT%{_sysconfdir}/*.cfg
 done
 
 install -d $RPM_BUILD_ROOT%{nrpeddir}
 touch $RPM_BUILD_ROOT%{nrpeddir}/check_mailq.cfg
 
-cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_pluginlibdir}/utils.php
-chmod a-x $RPM_BUILD_ROOT%{_pluginlibdir}/utils.*
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{plugindir}/utils.php
+chmod a-x $RPM_BUILD_ROOT%{plugindir}/utils.*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -644,76 +637,76 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS
 
 # plugins
-%attr(755,root,root) %{_pluginarchdir}/check_apt
-%attr(755,root,root) %{_pluginarchdir}/check_cluster
+%attr(755,root,root) %{plugindir}/check_apt
+%attr(755,root,root) %{plugindir}/check_cluster
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_disk.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_disk
+%attr(755,root,root) %{plugindir}/check_disk
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dummy.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_dummy
+%attr(755,root,root) %{plugindir}/check_dummy
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_http.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_http
-%attr(755,root,root) %{_pluginarchdir}/check_ide_smart
-%attr(755,root,root) %{_pluginarchdir}/check_mrtg
+%attr(755,root,root) %{plugindir}/check_http
+%attr(755,root,root) %{plugindir}/check_ide_smart
+%attr(755,root,root) %{plugindir}/check_mrtg
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mrtgtraf.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_mrtgtraf
-%attr(755,root,root) %{_pluginarchdir}/check_nagios
+%attr(755,root,root) %{plugindir}/check_mrtgtraf
+%attr(755,root,root) %{plugindir}/check_nagios
 # req: over-cr >= 0.99.53 http://www.molitor.org/overcr
-%attr(755,root,root) %{_pluginarchdir}/check_overcr
+%attr(755,root,root) %{plugindir}/check_overcr
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_procs.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_procs
-%attr(755,root,root) %{_pluginarchdir}/check_real
+%attr(755,root,root) %{plugindir}/check_procs
+%attr(755,root,root) %{plugindir}/check_real
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_smtp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_smtp
+%attr(755,root,root) %{plugindir}/check_smtp
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ssh.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_ssh
-%attr(755,root,root) %{_pluginarchdir}/check_time
-%attr(755,root,root) %{_pluginarchdir}/check_ups
+%attr(755,root,root) %{plugindir}/check_ssh
+%attr(755,root,root) %{plugindir}/check_time
+%attr(755,root,root) %{plugindir}/check_ups
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_users.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_users
+%attr(755,root,root) %{plugindir}/check_users
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_swap.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_swap
-%attr(755,root,root) %{_pluginlibdir}/check_log
+%attr(755,root,root) %{plugindir}/check_swap
+%attr(755,root,root) %{plugindir}/check_log
 
 # check_tcp and symlinks
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_tcp.cfg
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_telnet.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_tcp
-%attr(755,root,root) %{_pluginarchdir}/check_clamd
+%attr(755,root,root) %{plugindir}/check_tcp
+%attr(755,root,root) %{plugindir}/check_clamd
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ftp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_ftp
+%attr(755,root,root) %{plugindir}/check_ftp
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_imap.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_imap
-%attr(755,root,root) %{_pluginarchdir}/check_jabber
+%attr(755,root,root) %{plugindir}/check_imap
+%attr(755,root,root) %{plugindir}/check_jabber
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nntp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_nntp
-%attr(755,root,root) %{_pluginarchdir}/check_nntps
+%attr(755,root,root) %{plugindir}/check_nntp
+%attr(755,root,root) %{plugindir}/check_nntps
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_pop.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_pop
-%attr(755,root,root) %{_pluginarchdir}/check_simap
-%attr(755,root,root) %{_pluginarchdir}/check_spop
-%attr(755,root,root) %{_pluginarchdir}/check_ssmtp
+%attr(755,root,root) %{plugindir}/check_pop
+%attr(755,root,root) %{plugindir}/check_simap
+%attr(755,root,root) %{plugindir}/check_spop
+%attr(755,root,root) %{plugindir}/check_ssmtp
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_udp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_udp
-%attr(755,root,root) %{_pluginarchdir}/check_uptime
+%attr(755,root,root) %{plugindir}/check_udp
+%attr(755,root,root) %{plugindir}/check_uptime
 
 # these plugins need suid bit to operate
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dhcp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_dhcp
-%attr(755,root,root) %{_pluginarchdir}/check_icmp
+%attr(755,root,root) %{plugindir}/check_dhcp
+%attr(755,root,root) %{plugindir}/check_icmp
 
 # Cannot determine ORACLE_HOME for sid
 # probably needs some external programs. can't test
-%attr(755,root,root) %{_pluginlibdir}/check_oracle
+%attr(755,root,root) %{plugindir}/check_oracle
 
 %files libs
 %defattr(644,root,root,755)
 #%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
-%attr(755,root,root) %{_pluginarchdir}/negate
-%attr(755,root,root) %{_pluginarchdir}/urlize
+%attr(755,root,root) %{plugindir}/negate
+%attr(755,root,root) %{plugindir}/urlize
 
-%{_pluginlibdir}/utils.pm
-%{_pluginlibdir}/utils.php
-%{_pluginlibdir}/utils.sh
+%{plugindir}/utils.pm
+%{plugindir}/utils.php
+%{plugindir}/utils.sh
 
 %files devel
 %defattr(644,root,root,755)
@@ -726,107 +719,107 @@ rm -rf $RPM_BUILD_ROOT
 %files mysql
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mysql.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_mysql
-%attr(755,root,root) %{_pluginarchdir}/check_mysql_query
+%attr(755,root,root) %{plugindir}/check_mysql
+%attr(755,root,root) %{plugindir}/check_mysql_query
 
 %files perl
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
-%attr(755,root,root) %{_pluginlibdir}/check_ircd
-%attr(755,root,root) %{_pluginlibdir}/check_rpc
+%attr(755,root,root) %{plugindir}/check_ircd
+%attr(755,root,root) %{plugindir}/check_rpc
 
 # requires license.dat
-%attr(755,root,root) %{_pluginlibdir}/check_flexlm
+%attr(755,root,root) %{plugindir}/check_flexlm
 
 %files samba
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginlibdir}/check_disk_smb
+%attr(755,root,root) %{plugindir}/check_disk_smb
 
 # Not to be confused with nagios-snmp-plugins
 %files snmp
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_snmp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_snmp
+%attr(755,root,root) %{plugindir}/check_snmp
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_hpjd.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_hpjd
-%attr(755,root,root) %{_pluginlibdir}/check_ifoperstatus
-%attr(755,root,root) %{_pluginlibdir}/check_ifstatus
-%attr(755,root,root) %{_pluginlibdir}/check_wave
-%attr(755,root,root) %{_pluginlibdir}/check_breeze
+%attr(755,root,root) %{plugindir}/check_hpjd
+%attr(755,root,root) %{plugindir}/check_ifoperstatus
+%attr(755,root,root) %{plugindir}/check_ifstatus
+%attr(755,root,root) %{plugindir}/check_wave
+%attr(755,root,root) %{plugindir}/check_breeze
 
 %files ssh
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_by_ssh
+%attr(755,root,root) %{plugindir}/check_by_ssh
 
 %files -n nagios-plugin-check_dig
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_dig
+%attr(755,root,root) %{plugindir}/check_dig
 
 %files -n nagios-plugin-check_dns
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_dns.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_dns
+%attr(755,root,root) %{plugindir}/check_dns
 
 %files -n nagios-plugin-check_file_age
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_file_age.cfg
-%attr(755,root,root) %{_pluginlibdir}/check_file_age
+%attr(755,root,root) %{plugindir}/check_file_age
 
 %files -n nagios-plugin-check_fping
 %defattr(644,root,root,755)
-%attr(2755,root,adm) %{_pluginarchdir}/check_fping
+%attr(2755,root,adm) %{plugindir}/check_fping
 
 %files -n nagios-plugin-check_game
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_game
+%attr(755,root,root) %{plugindir}/check_game
 
 %if %{with ldap}
 %files -n nagios-plugin-check_ldap
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_ldap
-%attr(755,root,root) %{_pluginarchdir}/check_ldaps
+%attr(755,root,root) %{plugindir}/check_ldap
+%attr(755,root,root) %{plugindir}/check_ldaps
 %endif
 
 %files -n nagios-plugin-check_load
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_load.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_load
+%attr(755,root,root) %{plugindir}/check_load
 
 %files -n nagios-plugin-check_mailq
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_mailq.cfg
-%attr(755,root,root) %{_pluginlibdir}/check_mailq
+%attr(755,root,root) %{plugindir}/check_mailq
 %ghost %{nrpeddir}/check_mailq.cfg
 
 %files -n nagios-plugin-check_nt
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_nt.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_nt
+%attr(755,root,root) %{plugindir}/check_nt
 
 %files -n nagios-plugin-check_ntp
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ntp.cfg
-%attr(755,root,root) %{_pluginarchdir}/check_ntp
-%attr(755,root,root) %{_pluginarchdir}/check_ntp_peer
-%attr(755,root,root) %{_pluginarchdir}/check_ntp_time
+%attr(755,root,root) %{plugindir}/check_ntp
+%attr(755,root,root) %{plugindir}/check_ntp_peer
+%attr(755,root,root) %{plugindir}/check_ntp_time
 
 %files -n nagios-plugin-check_pgsql
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_pgsql
+%attr(755,root,root) %{plugindir}/check_pgsql
 
 %files -n nagios-plugin-check_ping
 %defattr(644,root,root,755)
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ping.cfg
-%attr(2755,root,adm) %{_pluginarchdir}/check_ping
+%attr(2755,root,adm) %{plugindir}/check_ping
 
 %files -n nagios-plugin-check_radius
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_radius
+%attr(755,root,root) %{plugindir}/check_radius
 
 %files -n nagios-plugin-check_sensors
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginlibdir}/check_sensors
+%attr(755,root,root) %{plugindir}/check_sensors
 
 %files -n nagios-plugin-check_dbi
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_pluginarchdir}/check_dbi
+%attr(755,root,root) %{plugindir}/check_dbi
