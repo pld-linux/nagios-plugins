@@ -16,7 +16,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	2.0.3
-Release:	3.1
+Release:	3.7
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
@@ -632,11 +632,12 @@ rm -rf $RPM_BUILD_ROOT
 %nagios_nrpe -d check_mailq -f %{_sysconfdir}/check_mailq.cfg
 
 %if "%{_lib}" != "lib"
-%triggerpostun -- nagios-plugins < 2.0.3-3.2
+%triggerpostun -- nagios-plugins < 2.0.3-3.6, nagios-plugin-check_dns < 2.0.3-3.6, nagios-plugin-check_load < 2.0.3-3.6, nagios-plugin-check_nt < 2.0.3-3.6, nagios-plugin-check_ntp < 2.0.3-3.6, nagios-plugin-check_ping < 2.0.3-3.6, nagios-plugins-mysql < 2.0.3-3.6, nagios-plugins-snmp < 2.0.3-3.6
 # update path to plugin in config if neccessary
 for c in \
-	%{_sysconfdir}/check_{dhcp,disk,dns,dummy,file_age,ftp,hpjd,http,imap,ircd,load,mailq,mrtgtraf,mysql,nntp,nt,ntp,ping,pop,procs,smtp,snmp,ssh,swap,tcp,telnet,udp,users} \
+	%{_sysconfdir}/check_{dhcp,disk,dns,dummy,ftp,hpjd,http,imap,load,mrtgtraf,mysql,nntp,nt,ntp,ping,pop,procs,smtp,snmp,ssh,swap,tcp,telnet,udp,users}.cfg \
 ; do
+	test -f $c || continue
 	grep -q 'command_line.*%{_prefix}/%{_lib}/nagios/plugins' $c || continue
 	%{__sed} -i -e '/command_line/ s,%{_prefix}/%{_lib}/nagios/plugins,%{plugindir},g' $c
 done
