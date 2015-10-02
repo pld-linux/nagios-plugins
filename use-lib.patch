@@ -2,6 +2,9 @@
 upstream link:
 https://github.com/nagios-plugins/nagios-plugins/pull/109
 
+also:
+https://github.com/monitoring-plugins/monitoring-plugins/pull/1360
+
 --- nagios-plugins-2.1.1/plugins-scripts/check_file_age.pl~	2015-08-05 22:45:01.000000000 +0300
 +++ nagios-plugins-2.1.1/plugins-scripts/check_file_age.pl	2015-10-02 13:47:44.633618522 +0300
 @@ -26,7 +26,8 @@
