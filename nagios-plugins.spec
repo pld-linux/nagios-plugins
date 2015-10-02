@@ -16,7 +16,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	2.1.1
-Release:	2
+Release:	3
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
@@ -36,6 +36,7 @@ Patch21:	%{name}-check_hpjd-no-paper-out.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
 Patch24:	%{name}-paths.patch
 Patch27:	%{name}-ping.patch
+Patch28:	use-lib.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -516,6 +517,7 @@ mv nagios-plugins-config-*/* .
 %patch23 -p1
 %patch24 -p1
 %patch27 -p1
+%patch28 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
