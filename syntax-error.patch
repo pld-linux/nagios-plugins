@@ -1,0 +1,30 @@
+upstream:
+https://github.com/nagios-plugins/nagios-plugins/pull/110
+
+commit 842384a9097f30265637040d7f719f619a310118
+Author: Elan Ruusamäe <glen@delfi.ee>
+Date:   Fri Oct 2 15:06:24 2015 +0300
+
+    fix stupid syntax error!
+    
+    can be catched with trival compile only run:
+    
+    $ perl -c check_mailq.pl
+    syntax error at check_mailq.pl line 40, near ")
+    
+    sub print_help ()"
+    check_mailq.pl had compilation errors.
+
+diff --git a/plugins-scripts/check_mailq.pl b/plugins-scripts/check_mailq.pl
+index 65247a2..e503fa9 100755
+--- a/plugins-scripts/check_mailq.pl
++++ b/plugins-scripts/check_mailq.pl
+@@ -35,7 +35,7 @@ use FindBin;
+ use lib "$FindBin::Bin";
+ use utils qw(%ERRORS &print_revision &support &usage );
+ 
+-my ($sudo)
++my ($sudo);
+ 
+ sub print_help ();
+ sub print_usage ();
