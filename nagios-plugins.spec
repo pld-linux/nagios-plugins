@@ -7,7 +7,8 @@
 # - handle --without-dbi (new package)
 # - add --without-radius bcond
 # - check_ide_smart deps
-
+# - check_http 2.1.x corrupts output https://github.com/nagios-plugins/nagios-plugins/issues/103
+#
 # Conditional build:
 %bcond_without	ldap		# build without ldap
 
