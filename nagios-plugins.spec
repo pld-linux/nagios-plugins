@@ -233,7 +233,7 @@ który ma być użyty. Jeśli nie podano serwera DNS, używany jest
 domyślny serwer (lub serwery) podany w /etc/resolv.conf.
 
 %package -n nagios-plugin-check_file_age
-Summary:	Nagios plugin to check host up state with fping
+Summary:	Nagios plugin to check local file age and size
 Group:		Networking
 Requires:	nagios-common
 # for utils.pm
