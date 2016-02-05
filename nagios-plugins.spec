@@ -7,7 +7,8 @@
 # - handle --without-dbi (new package)
 # - add --without-radius bcond
 # - check_ide_smart deps
-
+# - check_http 2.1.x corrupts output https://github.com/nagios-plugins/nagios-plugins/issues/103
+#
 # Conditional build:
 %bcond_without	ldap		# build without ldap
 
@@ -15,30 +16,29 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	2.0.3
-Release:	3.7
+Version:	2.1.1
+Release:	4.1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
-# Source0-md5:	6755765bab88b506181268ef7982595e
+# Source0-md5:	e199ca874df5723bfaca8c43887b1a79
 # https://git.pld-linux.org/projects/nagios-config
-Source1:	%{name}-config-20150412.tar.xz
-# Source1-md5:	2f0f29735345c158d11c2009be3e1478
+Source1:	%{name}-config-20150805.tar.xz
+# Source1-md5:	50c1eff5152ff03948b984631fa0ff61
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
-Patch3:		%{name}-subst.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch7:		%{name}-pgsql.patch
 Patch9:		%{name}-check_log_paths.patch
 Patch13:	%{name}-check_radius_segfault.patch
-Patch20:	%{name}-cosmetic.patch
 Patch21:	%{name}-check_hpjd-no-paper-out.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
 Patch24:	%{name}-paths.patch
 Patch27:	%{name}-ping.patch
-Patch28:	mawk-workaround.patch
+Patch28:	use-lib.patch
+Patch29:	syntax-error.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -232,7 +232,7 @@ który ma być użyty. Jeśli nie podano serwera DNS, używany jest
 domyślny serwer (lub serwery) podany w /etc/resolv.conf.
 
 %package -n nagios-plugin-check_file_age
-Summary:	Nagios plugin to check host up state with fping
+Summary:	Nagios plugin to check local file age and size
 Group:		Networking
 Requires:	nagios-common
 # for utils.pm
@@ -510,17 +510,16 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %setup -q -a1
 mv nagios-plugins-config-*/* .
 %patch0 -p1
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch7 -p1
 %patch13 -p1
-%patch20 -p1
 %patch21 -p1
 %patch23 -p1
 %patch24 -p1
 %patch27 -p1
 %patch28 -p1
+%patch29 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
@@ -572,6 +571,7 @@ fi
 	--with-apt-get-command=/usr/bin/apt-get \
 	--with-qmail-qstat-command=/usr/bin/qmail-qstat \
 	--with-mailq-command=/usr/bin/mailq \
+	--with-sudo-command=/usr/bin/sudo \
 	--without-included-regex
 
 %{__make}
