@@ -9,10 +9,10 @@
  
  #define HPJD_LINE_STATUS           ".1.3.6.1.4.1.11.2.3.9.1.1.2.1"
  #define HPJD_PAPER_STATUS          ".1.3.6.1.4.1.11.2.3.9.1.1.2.2"
-@@ -67,6 +67,7 @@
- char *community = NULL;
+@@ -68,6 +68,7 @@ char *community = NULL;
  char *address = NULL;
  int port = 0;
+ char flawcorrection =0; // There are devices which report offline when that is not the case. Correct that.
 +int nopaperout = 0;
  
  int
@@ -28,33 +28,33 @@
  			strcpy (errmsg, _("Out of Paper"));
  		}
  		else if (line_status == OFFLINE) {
-@@ -317,6 +318,7 @@
+@@ -329,6 +329,7 @@ process_arguments (int argc, char **argv
  /*  		{"critical",       required_argument,0,'c'}, */
  /*  		{"warning",        required_argument,0,'w'}, */
    		{"port", required_argument,0,'p'}, 
 +		{"nopaperout", no_argument, 0, 'n'},
+ 		{"flawcorrection", no_argument, 0, 'N'},
  		{"version", no_argument, 0, 'V'},
  		{"help", no_argument, 0, 'h'},
- 		{0, 0, 0, 0}
 @@ -327,7 +329,7 @@
  
  
  	while (1) {
--		c = getopt_long (argc, argv, "+hVH:C:p:", longopts, &option);
-+		c = getopt_long (argc, argv, "+hnVH:C:p:", longopts, &option);
+-		c = getopt_long (argc, argv, "+hVNH:C:p:", longopts, &option);
++		c = getopt_long (argc, argv, "+hnNVH:C:p:", longopts, &option);
  
  		if (c == -1 || c == EOF || c == 1)
  			break;
-@@ -345,6 +349,9 @@
- 		case 'C':									/* community */
- 			community = strscpy (community, optarg);
+@@ -364,6 +364,9 @@ process_arguments (int argc, char **argv
+ 			else
+ 				port = atoi(optarg);
  			break;
 +		case 'n':									/* nopaperout */
 +			nopaperout = 1;
 +			break;
- 		case 'V':									/* version */
- 			print_revision (progname, revision);
- 			exit (STATE_OK);
+                 case 'N':                                                                       /* flaw correction */
+                         flawcorrection=1;
+                         break;
 @@ -404,7 +411,9 @@
  
  	printf (" %s\n", "-C, --community=STRING");
@@ -69,6 +69,6 @@
  print_usage (void)
  {
    printf ("%s\n", _("Usage:"));
--	printf ("%s -H host [-C community] [-p port]\n", progname);
-+	printf ("%s -H host [-C community] [-p port] [-n]\n", progname);
+-	printf ("%s -H host [-C community] [-p port][-N]\n", progname);
++	printf ("%s -H host [-C community] [-p port] [-N] [-n]\n", progname);
  }
