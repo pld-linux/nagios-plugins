@@ -1,0 +1,44 @@
+From 80ec842a8942fb8c1d10cf68d3e34fe865e081ba Mon Sep 17 00:00:00 2001
+From: Bryan Heden <bheden@nagios.com>
+Date: Sat, 2 Sep 2017 15:05:16 -0500
+Subject: [PATCH] removed conditional 'if result != ok' for certificate
+ checking
+
+---
+ plugins/check_http.c | 9 ++++-----
+ plugins/sslutils.c   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/plugins/check_http.c b/plugins/check_http.c
+index f46935ec..e7bfcb7a 100644
+--- a/plugins/check_http.c
++++ b/plugins/check_http.c
+@@ -1026,11 +1026,10 @@ check_http (void)
+     elapsed_time_ssl = (double)microsec_ssl / 1.0e6;
+     if (check_cert == TRUE) {
+ 			result = np_net_ssl_check_cert(days_till_exp_warn, days_till_exp_crit);
+-			if (result != STATE_OK) {
+-				np_net_ssl_cleanup();
+-				if (sd) close(sd);
+-				return result;
+-			}
++                        if (sd)
++                          close(sd);
++                        np_net_ssl_cleanup();
++                        return result;
+     }
+   }
+ #endif /* HAVE_SSL */
+diff --git a/plugins/sslutils.c b/plugins/sslutils.c
+index 8f59d60c..6fe0e45d 100644
+--- a/plugins/sslutils.c
++++ b/plugins/sslutils.c
+@@ -316,7 +316,7 @@ int np_net_ssl_check_cert(int days_till_exp_warn, int days_till_exp_crit){
+ 		else
+ 			status = STATE_CRITICAL;
+ 	} else {
+-		printf(_("OK - Certificate '%s' will expire on %s. "), cn, timestamp);
++		printf(_("OK - Certificate '%s' will expire on %s.\n"), cn, timestamp);
+ 		status = STATE_OK;
+ 	}
+ 	X509_free(certificate);
