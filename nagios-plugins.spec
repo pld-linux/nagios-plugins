@@ -29,15 +29,15 @@ Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
 Patch1:		http.patch
-Patch2:		nagios-plugins-check_http-ssl.patch
-Patch4:		%{name}-noroot.patch
-Patch5:		%{name}-check_ping-socket-filter-warning.patch
-Patch7:		%{name}-pgsql.patch
-Patch13:	%{name}-check_radius_segfault.patch
-Patch21:	%{name}-check_hpjd-no-paper-out.patch
-Patch23:	%{name}-check_disk_smb-zero-cap.patch
-Patch24:	%{name}-paths.patch
-Patch27:	%{name}-ping.patch
+Patch2:		%{name}-check_http-ssl.patch
+Patch3:		%{name}-noroot.patch
+Patch4:		%{name}-check_ping-socket-filter-warning.patch
+Patch5:		%{name}-pgsql.patch
+Patch6:		%{name}-check_radius_segfault.patch
+Patch7:		%{name}-check_hpjd-no-paper-out.patch
+Patch8:		%{name}-check_disk_smb-zero-cap.patch
+Patch9:		%{name}-paths.patch
+Patch10:	%{name}-ping.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -403,8 +403,8 @@ PostgreSQL.
 Summary:	Nagios plugin to check host up state with ping
 Summary(pl.UTF-8):	Wtyczka Nagiosa do sprawdzania działania hosta przy użyciu programu ping
 Group:		Networking
-Requires:	ping
 Requires:	nagios-common
+Requires:	ping
 
 %description -n nagios-plugin-check_ping
 This plugin will use the /bin/ping command to ping the specified host
@@ -526,20 +526,14 @@ mv nagios-plugins-config-*/* .
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-
+%patch3 -p1
 %patch4 -p1
 %patch5 -p1
-
+%patch6 -p1
 %patch7 -p1
-
-%patch13 -p1
-
-%patch21 -p1
-
-%patch23 -p1
-%patch24 -p1
-
-%patch27 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
