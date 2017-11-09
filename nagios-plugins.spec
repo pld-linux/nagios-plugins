@@ -33,7 +33,6 @@ Patch2:		nagios-plugins-check_http-ssl.patch
 Patch4:		%{name}-noroot.patch
 Patch5:		%{name}-check_ping-socket-filter-warning.patch
 Patch7:		%{name}-pgsql.patch
-Patch9:		%{name}-check_log_paths.patch
 Patch13:	%{name}-check_radius_segfault.patch
 Patch21:	%{name}-check_hpjd-no-paper-out.patch
 Patch23:	%{name}-check_disk_smb-zero-cap.patch
