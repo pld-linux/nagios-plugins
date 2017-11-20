@@ -11,13 +11,13 @@
  define command {
  	command_name    check_https
 -	command_line    $USER1$/check_http -I $HOSTADDRESS$ -f warning -S $ARG1$
-+	command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning -S $ARG1$
++	command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning -S --sni $ARG1$
  }
  
  define command {
  	command_name    check_https.crt
 -	command_line    $USER1$/check_http -I $HOSTADDRESS$ -S -C 14 $ARG1$
-+	command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -S -C 14 $ARG1$
++	command_line    $USER1$/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -S -C 14 --sni $ARG1$
  }
  
  define service {
