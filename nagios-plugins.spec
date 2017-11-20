@@ -17,18 +17,17 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	2.2.1
-Release:	3
+Release:	4
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
 # Source0-md5:	fb521d5c05897f165b0b1862c1e5cb27
 # https://git.pld-linux.org/projects/nagios-config
-Source1:	%{name}-config-20150805.tar.xz
-# Source1-md5:	50c1eff5152ff03948b984631fa0ff61
+Source1:	%{name}-config-20171120.tar.xz
+# Source1-md5:	384c340b1f7579722652acfe90f3d064
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
-Patch1:		http.patch
 Patch2:		%{name}-check_http-ssl.patch
 Patch3:		%{name}-noroot.patch
 Patch4:		%{name}-check_ping-socket-filter-warning.patch
@@ -524,7 +523,6 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %setup -q -a1
 mv nagios-plugins-config-*/* .
 %patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
