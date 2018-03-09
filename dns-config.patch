@@ -1,0 +1,23 @@
+commit cf8bb3b1eb003c921c14bed986c79b03eef215ee
+Author: Arkadiusz Miśkiewicz <arekm@maven.pl>
+Date:   Fri Mar 9 12:33:42 2018 +0100
+
+    check_dns_name for checking if specified name resolves
+
+diff --git a/commands/check_dns.cfg b/commands/check_dns.cfg
+index 092c0a8..01ab269 100644
+--- a/commands/check_dns.cfg
++++ b/commands/check_dns.cfg
+@@ -4,6 +4,12 @@ define command {
+ 	command_line    /usr/lib/nagios/plugins/check_dns -s $HOSTADDRESS$ -H www.yahoo.com $ARG1$
+ }
+ 
++# 'check_dns_name' command definition
++define command {
++	command_name    check_dns_name
++	command_line    /usr/lib/nagios/plugins/check_dns -s $HOSTADDRESS$ -H $ARG1$ $ARG2$
++}
++
+ # check if DNSBL is returning success on test record 127.0.0.2
+ define command {
+ 	command_name    check_dnsbl
