@@ -1,0 +1,23 @@
+--- nagios-plugins-2.2.1/commands/check_http.cfg~	2017-11-20 18:25:36.000000000 +0100
++++ nagios-plugins-2.2.1/commands/check_http.cfg	2019-01-18 00:43:19.843781867 +0100
+@@ -1,17 +1,17 @@
+ # 'check_http' command definition
+ define command {
+ 	command_name    check_http
+-	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning $ARG1$
++	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning -k 'Cache-Control: no-cache' $ARG1$
+ }
+ 
+ define command {
+ 	command_name    check_https
+-	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning -S --sni $ARG1$
++	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -f warning -S --sni -k 'Cache-Control: no-cache' $ARG1$
+ }
+ 
+ define command {
+ 	command_name    check_https.crt
+-	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -S -C 14 --sni $ARG1$
++	command_line    /usr/lib/nagios/plugins/check_http -I $HOSTADDRESS$ -H $HOSTNAME$ -S -C 14 --sni -k 'Cache-Control: no-cache' $ARG1$
+ }
+ 
+ define service {
