@@ -15,19 +15,19 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	2.2.1
-Release:	9
+Version:	2.3.1
+Release:	1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
-# Source0-md5:	fb521d5c05897f165b0b1862c1e5cb27
+# Source0-md5:	57d4e201e2ec90d8f0bda09e320a0439
 # https://git.pld-linux.org/projects/nagios-config
 Source1:	%{name}-config-20171120.tar.xz
 # Source1-md5:	384c340b1f7579722652acfe90f3d064
 Source2:	nagios-utils.php
 #Patch:		%{name}-shared.patch # needs finishing
 Patch0:		%{name}-tainted.patch
-Patch2:		%{name}-check_http-ssl.patch
+
 Patch3:		%{name}-noroot.patch
 Patch4:		%{name}-check_ping-socket-filter-warning.patch
 Patch5:		%{name}-pgsql.patch
@@ -38,7 +38,6 @@ Patch9:		%{name}-paths.patch
 Patch10:	%{name}-ping.patch
 Patch11:	dns-config.patch
 Patch12:	%{name}-check_http-nocache.patch
-Patch13:	sni.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -525,7 +524,7 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %setup -q -a1
 mv nagios-plugins-config-*/* .
 %patch0 -p1
-%patch2 -p1
+
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -536,7 +535,6 @@ mv nagios-plugins-config-*/* .
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
