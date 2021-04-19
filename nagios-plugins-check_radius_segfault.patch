@@ -3,12 +3,12 @@
 ##
 
 @DPATCH@
-diff -urNad nagios-plugins-1.4.5~/plugins/check_radius.c nagios-plugins-1.4.5/plugins/check_radius.c
---- nagios-plugins-1.4.5~/plugins/check_radius.c	2006-10-20 01:53:28.000000000 +0200
-+++ nagios-plugins-1.4.5/plugins/check_radius.c	2006-11-20 20:38:49.000000000 +0100
-@@ -137,6 +137,14 @@
- 			rc_read_dictionary (rc_conf_str (str)))
- 		die (STATE_UNKNOWN, _("Config file error"));
+diff -urNp -x '*.orig' nagios-plugins-2.3.3.org/plugins/check_radius.c nagios-plugins-2.3.3/plugins/check_radius.c
+--- nagios-plugins-2.3.3.org/plugins/check_radius.c	2019-12-04 22:53:08.000000000 +0100
++++ nagios-plugins-2.3.3/plugins/check_radius.c	2021-04-19 12:01:35.422382755 +0200
+@@ -185,6 +185,14 @@ main (int argc, char **argv)
+ 			my_rc_read_dictionary (my_rc_conf_str (str)))
+ 		die (STATE_UNKNOWN, _("Config file error\n"));
  
 +	/* Initialize Value Pair to prevent segfault on rc_avpair_add. 
 +	 * debugging on radiuslib-ng show that the mem isn't allocated,
@@ -20,4 +20,4 @@ diff -urNad nagios-plugins-1.4.5~/plugins/check_radius.c nagios-plugins-1.4.5/pl
 +
  	service = PW_AUTHENTICATE_ONLY;
  
- 	if (!(rc_avpair_add (&data.send_pairs, PW_SERVICE_TYPE, &service, 0) &&
+ 	memset (&data, 0, sizeof(data));

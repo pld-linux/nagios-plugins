@@ -1,6 +1,7 @@
---- ./plugins-root/Makefile.am~	2005-10-19 15:59:55.000000000 +0300
-+++ ./plugins-root/Makefile.am	2005-11-05 03:52:30.000000000 +0200
-@@ -40,10 +40,6 @@
+diff -urNp -x '*.orig' nagios-plugins-2.3.3.org/plugins-root/Makefile.am nagios-plugins-2.3.3/plugins-root/Makefile.am
+--- nagios-plugins-2.3.3.org/plugins-root/Makefile.am	2020-02-20 20:14:52.000000000 +0100
++++ nagios-plugins-2.3.3/plugins-root/Makefile.am	2021-04-19 12:00:59.891325797 +0200
+@@ -46,10 +46,6 @@ INSTALL_SUID = \
  	p=$$f; \
  	echo " $(INSTALL_PROGRAM) $$p $(DESTDIR)$(libexecdir)/$$p"; \
  	$(INSTALL_PROGRAM) $$p $(DESTDIR)$(libexecdir)/$$p; \
@@ -10,4 +11,4 @@
 -	chmod $(setuid_root_mode) $(DESTDIR)$(libexecdir)/$$p; \
  	done
  
- install-root: $(EXTRA_PROGRAMS)
+ INSTALL_NOSUID = \

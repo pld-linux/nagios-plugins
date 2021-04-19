@@ -1,24 +1,26 @@
---- ./plugins-scripts/check_breeze.pl~	2005-03-15 00:05:04.000000000 +0200
-+++ ./plugins-scripts/check_breeze.pl	2005-03-23 20:16:43.123595875 +0200
-@@ -15,6 +15,7 @@
- $ENV{'PATH'}='';
+diff -urNp -x '*.orig' nagios-plugins-2.3.3.org/plugins-scripts/check_breeze.pl nagios-plugins-2.3.3/plugins-scripts/check_breeze.pl
+--- nagios-plugins-2.3.3.org/plugins-scripts/check_breeze.pl	2017-01-16 18:24:03.000000000 +0100
++++ nagios-plugins-2.3.3/plugins-scripts/check_breeze.pl	2021-04-19 12:00:29.523755726 +0200
+@@ -17,6 +17,7 @@ sub print_usage ();
+ $ENV{'PATH'}='@TRUSTED_PATH@';
  $ENV{'BASH_ENV'}=''; 
  $ENV{'ENV'}='';
 +$ENV{'CDPATH'}='';
  
  Getopt::Long::Configure('bundling');
  GetOptions
---- ./plugins-scripts/check_wave.pl~	2005-03-23 20:20:48.076385198 +0200
-+++ ./plugins-scripts/check_wave.pl	2005-03-23 20:21:02.774789652 +0200
-@@ -19,6 +19,7 @@
- $ENV{'PATH'}='';
+diff -urNp -x '*.orig' nagios-plugins-2.3.3.org/plugins-scripts/check_wave.pl nagios-plugins-2.3.3/plugins-scripts/check_wave.pl
+--- nagios-plugins-2.3.3.org/plugins-scripts/check_wave.pl	2019-12-04 22:53:08.000000000 +0100
++++ nagios-plugins-2.3.3/plugins-scripts/check_wave.pl	2021-04-19 12:00:29.523755726 +0200
+@@ -21,6 +21,7 @@ sub print_usage ();
+ $ENV{'PATH'}='@TRUSTED_PATH@';
  $ENV{'BASH_ENV'}='';
  $ENV{'ENV'}='';
 +$ENV{'CDPATH'}='';
  
  Getopt::Long::Configure('bundling');
  GetOptions
-@@ -53,7 +53,7 @@ my $critical = $1 if ($opt_c =~ /([0-9]+
+@@ -52,7 +53,7 @@ my $critical = $1 if ($opt_c =~ /([0-9]+
  ($opt_w) || ($opt_w = shift) || ($opt_w = 60);
  my $warning = $1 if ($opt_w =~ /([0-9]+)/);
  
@@ -27,7 +29,7 @@
  unless ($low1) {
  	print "UNKNOWN - Could not find the 'snmpget' command Please install\n";
  	print "the snmp commands (usually net-snmp) before using $PROGNAME\n";
-@@ -62,30 +62,30 @@ unless ($low1) {
+@@ -61,30 +62,30 @@ unless ($low1) {
  @test = split(/ /,$low1);
  $low1 = $test[2];
  
