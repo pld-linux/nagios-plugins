@@ -38,7 +38,6 @@ Patch9:		%{name}-paths.patch
 Patch10:	%{name}-ping.patch
 Patch11:	dns-config.patch
 Patch12:	%{name}-check_http-nocache.patch
-Patch13:	ipv6.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -526,7 +525,6 @@ mv nagios-plugins-config-*/* .
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-#%patch13 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
