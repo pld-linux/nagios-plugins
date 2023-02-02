@@ -15,12 +15,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	2.3.3
-Release:	2
+Version:	2.4.3
+Release:	1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
-# Source0-md5:	3b10db69a7d3658b8e64ac05ef203338
+# Source0-md5:	83c0cc097320d36a37558c5a39adf093
 # https://git.pld-linux.org/projects/nagios-config
 Source1:	%{name}-config-20171120.tar.xz
 # Source1-md5:	384c340b1f7579722652acfe90f3d064
@@ -744,6 +744,7 @@ done
 %attr(640,root,nagios) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/check_ircd.cfg
 %attr(755,root,root) %{plugindir}/check_ircd
 %attr(755,root,root) %{plugindir}/check_rpc
+%attr(755,root,root) %{plugindir}/check_ssl_validity
 
 # requires license.dat
 %attr(755,root,root) %{plugindir}/check_flexlm
