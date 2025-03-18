@@ -15,12 +15,12 @@
 Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
-Version:	2.4.6
+Version:	2.4.12
 Release:	1
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
-# Source0-md5:	8ec148b7835bf73d6e1ee921955aa46e
+# Source0-md5:	00eba3608a0d75d3434e46ab828635e6
 # https://git.pld-linux.org/projects/nagios-config
 Source1:	%{name}-config-20171120.tar.xz
 # Source1-md5:	384c340b1f7579722652acfe90f3d064
@@ -513,18 +513,18 @@ Wtyczki przekazane do projektu Nagios. Część z nich działa, część nie.
 %prep
 %setup -q -a1
 mv nagios-plugins-config-*/* .
-%patch0 -p1
+%patch -P0 -p1
 
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
+%patch -P11 -p1
+%patch -P12 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
