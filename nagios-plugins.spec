@@ -16,7 +16,7 @@ Summary:	Host/service/network monitoring program plugins for Nagios
 Summary(pl.UTF-8):	Wtyczki do monitorowania hostów/usług/sieci dla Nagiosa
 Name:		nagios-plugins
 Version:	2.5
-Release:	1
+Release:	2
 License:	GPL v3
 Group:		Networking
 Source0:	http://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
@@ -39,6 +39,8 @@ Patch10:	%{name}-ping.patch
 Patch11:	dns-config.patch
 Patch12:	%{name}-check_http-nocache.patch
 Patch13:	%{name}-test_utils-format-security.patch
+# https://github.com/nagios-plugins/nagios-plugins/pull/833
+Patch14:	%{name}-check_icmp-targets-overflow.patch
 URL:		http://www.nagiosplugins.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -527,6 +529,7 @@ mv nagios-plugins-config-*/* .
 %patch -P11 -p1
 %patch -P12 -p1
 %patch -P13 -p1
+%patch -P14 -p1
 
 # remove libtool m4 macro copies, breaks when system libtool is older
 %{__rm} gl/m4/libtool.m4 gl/m4/lt*.m4
@@ -721,6 +724,7 @@ done
 %defattr(644,root,root,755)
 #%attr(755,root,root) %{_libdir}/libnagiosplug.so.0.0.0
 %attr(755,root,root) %{plugindir}/negate
+%attr(755,root,root) %{plugindir}/remove_perfdata
 %attr(755,root,root) %{plugindir}/urlize
 
 %{plugindir}/utils.pm
